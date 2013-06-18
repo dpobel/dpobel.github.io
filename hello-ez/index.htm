@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello app!</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css">
+    <link rel="stylesheet" href="css/core.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://yui.yahooapis.com/3.10.3/build/yui/yui-min.js"></script>
+</head>
+<body>
+    <script>
+    YUI({
+        //filter: 'raw',
+        modules: {
+            'hello-app': {
+                fullpath: "js/hello-app.js",
+                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5']
+            }
+        }
+    }).use('hello-app', function (Y) {
+        var app;
+
+        navigator.getMedia = ( navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia
+        );
+    
+        app = new Y.HelloApp({
+            serverRouting: false,
+            root: '/hello-ez/',
+            viewContainer: '#hello-app',
+            container: '#hello-app',
+            transitions: {
+                navigate: 'slideLeft',
+                toChild: 'slideLeft',
+                toParent: 'slideRight'
+            }
+        });
+        app.render().dispatch();
+    });
+    </script>
+    <div id="hello-app" class="application"></div>
+
+
+    <script type="text/x-handlebars-template" id="homeview-tpl">
+        <h1 class="view-title">Welcome!</h1>
+        <p>bla bla bla bla bla bla</p>
+        <h2>Checks</h2>
+        <p><a href="#/capture" class="pure-button pure-button-primary " data-icon="&#xe002;">Start</a></p>
+    </script>
+
+    <script type="text/x-handlebars-template" id="captureview-tpl">
+    <h1 class="view-title">Please smile!</h1>
+    <div class="pure-g-r">
+        <section class="webcam-view pure-u-1-2">
+            <p class="preview">
+                <video id="webcam-video"></video>
+                <canvas></canvas>
+            </p>
+            <p class="help">You can take several picture until you feel satisfied with the one on the right!</p>
+            <p class="button-bar">
+                <button id="capture-button" class="pure-button pure-button-primary " data-icon="&#xe000;" disabled>Take a picture</button>
+            </p>
+        </section><!--
+        --><section class="picture-view pure-u-1-2">
+            <p class="preview image-result"><img src="{{#if picture}}{{picture}}{{else}}img/smiley.png{{/if}}" alt="" /></p>
+            <p class="help help-next">Happy, with the result?</p>
+            <p class="button-bar button-bar-next">
+                <a href="#/details" id="next-step-button" class="pure-button pure-button-primary " data-icon="&#xe002;" disabled>Go to the next step</a>
+            </p>
+        </section>
+    </div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="detailsview-tpl">
+    <h1 class="view-title">Your profile</h1>
+    <div class="pure-g-r">
+        <section class="picture-view pure-u-1-2">
+            <p>Your picture:</p>
+            <p class="image-result"><img src="{{picture}}" alt="Your picture"></p>
+        </form>
+        </section><!--
+        --><section class="pure-u-1-2">
+            <form class="pure-form pure-form-stacked">
+                <fieldset class="pure-g-r">
+                    <p class="pure-u-1-2">
+                        <label for="name">Your name*:</label>
+                        <input type="text" id="name" name="name" value="{{name}}" required placeholder="Please fill your name" class="pure-u-3-4">
+                    </p><!--
+                    --><p class="pure-u-1-2">
+                        <label for="twitter">Your Twitter account:</label>
+                        <input type="text" id="twitter" name="twitter" value="{{twitter}}" placeholder="@login" class="pure-u-3-4">
+                    </p>
+                </fieldset>
+                <fieldset>
+                    <label for="mood">Any thought?</label>
+                    <textarea id="mood" name="mood" rows="3" placeholder="You can write here whatever you want (please no ads, no offensive sentence, ...)" class="pure-input-1">{{mood}}</textarea>
+                    <p class="button-bar button-bar-next">
+                        <button id="another-picture" class="pure-button" data-icon="&#xe000;">Take another picture</button>
+                        <button id="send-ezpublish" class="pure-button pure-button-primary" data-icon="&#xe002;" disabled>Send to eZ Publish</button>
+                    </p>
+                </fieldset>
+            </form>
+        </section>
+    </div>
+
+    </script>
+</body>
+</html>

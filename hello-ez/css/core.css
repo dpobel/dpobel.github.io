@@ -1,0 +1,85 @@
+body {
+    background: #ddd;
+    font-family:'Open Sans',Tahoma,Arial,Helvetica,sans-serif;
+    color:#666;
+}
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot');
+	src:url('fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+		url('fonts/icomoon.woff') format('woff'),
+		url('fonts/icomoon.ttf') format('truetype'),
+		url('fonts/icomoon.svg#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'icomoon';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+    padding-right:0.4em;
+}
+
+canvas {
+    display: none;
+}
+
+.pure-form label {
+    color: #666;
+}
+
+.application {
+    background: #fff;
+    margin: 1em;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 0 1em 1em 1em;
+    max-width: 1280px;
+}
+
+.view-title {
+    font-weight: normal;
+    border-bottom: 1px solid #aaa;
+}
+
+.help {
+    font-size:90%;
+}
+
+.help-next {
+    text-align: right;
+}
+
+.button-bar .help {
+    margin-top:0;
+}
+
+.preview {
+    min-height: 420px;
+}
+
+.webcam-view video,
+.picture-view img {
+    max-width: 95%;
+    margin: 0;
+}
+
+.picture-view .image-result {
+    text-align: center;
+}
+
+.picture-view .image-result-captured {
+    text-align: right;
+}
+
+.button-bar-next {
+    text-align: right;
+}
