@@ -233,10 +233,14 @@ YUI.add('hello-app', function (Y) {
             this.showView('checks', {
                 'stream': this.get('stream'),
                 'configuration': this.get('configuration')
+            }, {
+                callback: function (view) {
+                    console.log(this, view);
+                    this._getWebcamAccess(view);
+                    this._geolocate(view);
+                }
             });
 
-            this._getWebcamAccess(this.get('activeView'));
-            this._geolocate(this.get('activeView'));
         },
 
         handleCapture: function () {
