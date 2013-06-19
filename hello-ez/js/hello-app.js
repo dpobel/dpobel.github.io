@@ -113,11 +113,10 @@ YUI.add('hello-app', function (Y) {
             this.set('canvas', this.get('container').one('canvas'));
 
             video.on('playing', Y.bind('_enableCaptureButton', this));
-            this._handleWebcam();
             return this;
         },
 
-        play: function () {
+        _play: function () {
             this.get('video').getDOMNode().play();
         },
 
@@ -148,7 +147,7 @@ YUI.add('hello-app', function (Y) {
                 .removeAttribute('disabled');
         },
 
-        _handleWebcam: function () {
+        handleWebcam: function () {
             var vendorURL,
                 video = this.get('video').getDOMNode();
 
@@ -158,7 +157,7 @@ YUI.add('hello-app', function (Y) {
                 vendorURL = Y.config.win.URL || Y.config.win.webkitURL;
                 video.src = vendorURL.createObjectURL(this.get('stream'));
             }
-            this.play();
+            this._play();
         },
 
         _enableCaptureButton: function () {
@@ -277,8 +276,9 @@ YUI.add('hello-app', function (Y) {
                 'message': this.get('message'),
                 'stream': this.get('stream')
             }, {
+                update: true,
                 callback: function (view) {
-                    view.play();
+                    view.handleWebcam();
                 }
             });
         },
@@ -304,6 +304,10 @@ YUI.add('hello-app', function (Y) {
                 },
                 function (err) {
                     checkView.set('webcam', false);
+                    if ( that.get('stream') ) {
+                        that.get('stream').stop();
+                        that.set('stream', null);
+                    }
                 }
             );
         },
