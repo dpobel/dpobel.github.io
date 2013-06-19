@@ -82,7 +82,7 @@
                 </div>
             </section>
         </div>
-        <p class="button-bar button-bar-next"><a class="pure-button pure-button-primary" data-icon="&#xe002;" href="#/capture">Go the next step</a></p>
+        <p class="button-bar button-bar-next"><button class="pure-button pure-button-primary" data-icon="&#xe002;" id="capture-details-button">Go the next step</button></p>
     </script>
 
     <script type="text/x-handlebars-template" id="captureview-tpl">
@@ -112,8 +112,12 @@
     <h1 class="view-title">Your profile</h1>
     <div class="pure-g-r">
         <section class="picture-view pure-u-1-2">
+            {{#if picture}}
             <p>Your picture:</p>
             <p class="image-result"><img src="{{picture}}" alt="Your picture"></p>
+            {{else}}
+            <p>Don't have a webcam? Or maybe you are too shy, if you change your mind, it is still time <a href="#/checks">to enable it</a> and take a beautiful picture :-)</p>
+            {{/if}}
         </form>
         </section><!--
         --><section class="pure-u-1-2">

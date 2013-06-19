@@ -51,7 +51,13 @@ YUI.add('hello-app', function (Y) {
 
     ChecksView = Y.Base.create('checksView', TemplateView, [], {
         events: {
+            '#capture-details-button': {'click': '_nextStep'}
+        },
 
+        initializer: function () {
+            this.on(['webcamChange', 'geolocChange'], function (e) {
+                this._setCheckState(e.attrName, e.newVal);
+            });
         },
 
         render: function () {
@@ -63,12 +69,12 @@ YUI.add('hello-app', function (Y) {
             return this;
         },
 
-        setWebcamState: function (ok) {
-            this._setCheckState('webcam', ok);
-        },
-
-        setGeolocationState: function (ok) {
-            this._setCheckState('geoloc', ok);
+        _nextStep: function (e) {
+            if ( this.get('webcam') ) {
+                this.fire('capture');
+            } else {
+                this.fire('captured', {next: true});
+            }
         },
 
         _setCheckState: function (id, ok) {
@@ -81,6 +87,15 @@ YUI.add('hello-app', function (Y) {
         }
 
     }, {
+        ATTRS: {
+            webcam: {
+                value: false
+            },
+
+            geoloc: {
+                value: false
+            }
+        }
 
     });
 
@@ -216,11 +231,18 @@ YUI.add('hello-app', function (Y) {
 
         initializer: function () {
             this.on('*:captured', function (e) {
-                this.get('message').set('picture', e.imageBase64);
+                if ( e.imageBase64 ) {
+                    this.get('message').set('picture', e.imageBase64);
+                }
+                if ( e.next ) {
+                    this.navigate('#/details');
+                }
             });
 
             this.on('*:capture', function (e) {
-                this.get('message').setAttrs(e.message);
+                if ( e.message ) {
+                    this.get('message').setAttrs(e.message);
+                }
                 this.navigate('#/capture');
             });
         },
@@ -251,15 +273,15 @@ YUI.add('hello-app', function (Y) {
             this.showView('capture', {
                 'message': this.get('message'),
                 'stream': this.get('stream')
+            }, {
+                callback: function (view) {
+                    view.play();
+                }
             });
         },
 
         handleDetails: function () {
-            var message = this.get('message');
-            if ( !message.get('picture') ) {
-                this.navigate('#/capture');
-            }
-            this.showView('details', {'message': message});
+            this.showView('details', {'message': this.get('message')});
         },
 
         handleResult: function () {
@@ -275,10 +297,10 @@ YUI.add('hello-app', function (Y) {
                 },
                 function (stream) {
                     that.set('stream', stream);
-                    checkView.setWebcamState(true);
+                    checkView.set('webcam', true);
                 },
                 function (err) {
-                    checkView.setWebcamState(false);
+                    checkView.set('webcam', false);
                 }
             );
         },
@@ -292,10 +314,13 @@ YUI.add('hello-app', function (Y) {
                         lat: position.coords.latitude,
                         lon: position.coords.longitude
                     });
-                    checkView.setGeolocationState(true);
+                    checkView.set('geoloc', true);
+                },
+                function (err) {
+                    checkView.set('geoloc', false);
                 });
             } else {
-                checkView.setGeolocationState(false);
+                checkView.set('geoloc', false);
             }
         }
     }, {
