@@ -235,7 +235,6 @@ YUI.add('hello-app', function (Y) {
                 'configuration': this.get('configuration')
             }, {
                 callback: function (view) {
-                    console.log(this, view);
                     this._getWebcamAccess(view);
                     this._geolocate(view);
                 }
