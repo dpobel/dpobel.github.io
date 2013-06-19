@@ -1,7 +1,9 @@
 YUI.add('hello-app', function (Y) {
     "use strict";
 
-    var Message, TemplateView, HomeView, CaptureView, DetailsView, ResultView;
+    var Message, Configuration,
+        TemplateView, HomeView, ChecksView, CaptureView,
+        DetailsView, ResultView;
 
     Message = Y.Base.create('message', Y.Model, [], {
 
@@ -12,6 +14,17 @@ YUI.add('hello-app', function (Y) {
             mood: {value: null},
             lat: {value: null},
             lon: {value: null}
+        }
+    });
+
+    Configuration = Y.Base.create('configuration', Y.Model, [], {
+
+
+    }, {
+        ATTRS: {
+            restUrl: {value: 'http://ezpublish5.loc/api/ezp/v2/'},
+            login: {value: 'admin'},
+            password: {value: 'ezpublish'}
         }
     });
 
@@ -32,6 +45,41 @@ YUI.add('hello-app', function (Y) {
     HomeView = Y.Base.create('homeView', TemplateView, [], {
         events: {
         }
+    }, {
+
+    });
+
+    ChecksView = Y.Base.create('checksView', TemplateView, [], {
+        events: {
+
+        },
+
+        render: function () {
+            this.get('container').setHTML(
+                this.template({
+                    'configuration': this.get('configuration').toJSON()
+                })
+            );
+            return this;
+        },
+
+        setWebcamState: function (ok) {
+            this._setCheckState('webcam', ok);
+        },
+
+        setGeolocationState: function (ok) {
+            this._setCheckState('geoloc', ok);
+        },
+
+        _setCheckState: function (id, ok) {
+            var wc = this.get('container').one('#' + id + '-check');
+            if ( ok ) {
+                wc.removeClass('is-denied').addClass('is-granted');
+            } else {
+                wc.removeClass('is-granted').addClass('is-denied');
+            }
+        }
+
     }, {
 
     });
@@ -83,28 +131,16 @@ YUI.add('hello-app', function (Y) {
         },
 
         _handleWebcam: function () {
-            var that = this;
+            var vendorURL,
+                video = this.get('video').getDOMNode();
 
-            navigator.getMedia({
-                    video: true,
-                    audio: false
-                },
-                function (stream) {
-                    var vendorURL,
-                        video = that.get('video').getDOMNode();
-
-                    if (navigator.mozGetUserMedia) {
-                        video.mozSrcObject = stream;
-                    } else {
-                        vendorURL = Y.config.win.URL || Y.config.win.webkitURL;
-                        video.src = vendorURL.createObjectURL(stream);
-                    }
-                    video.play();
-                },
-                function (err) {
-                    console.log("An error occured!", err);
-                }
-            );
+            if (navigator.mozGetUserMedia) {
+                video.mozSrcObject = this.get('stream');
+            } else {
+                vendorURL = Y.config.win.URL || Y.config.win.webkitURL;
+                video.src = vendorURL.createObjectURL(this.get('stream'));
+            }
+            video.play();
         },
 
         _enableCaptureButton: function () {
@@ -161,6 +197,10 @@ YUI.add('hello-app', function (Y) {
             home: {
                 type: HomeView
             },
+            checks: {
+                preserve: true,
+                type: ChecksView
+            },
             capture: {
                 preserve: true,
                 type: CaptureView
@@ -189,8 +229,21 @@ YUI.add('hello-app', function (Y) {
             this.showView('home');
         },
 
+        handleChecks: function () {
+            this.showView('checks', {
+                'stream': this.get('stream'),
+                'configuration': this.get('configuration')
+            });
+
+            this._getWebcamAccess(this.get('activeView'));
+            this._geolocate(this.get('activeView'));
+        },
+
         handleCapture: function () {
-            this.showView('capture', {'message': this.get('message')});
+            this.showView('capture', {
+                'message': this.get('message'),
+                'stream': this.get('stream')
+            });
         },
 
         handleDetails: function () {
@@ -203,12 +256,46 @@ YUI.add('hello-app', function (Y) {
 
         handleResult: function () {
             this.showView('result');
+        },
+
+        _getWebcamAccess: function (checkView) {
+            var that = this;
+
+            navigator.getMedia({
+                    video: true,
+                    audio: false,
+                },
+                function (stream) {
+                    that.set('stream', stream);
+                    checkView.setWebcamState(true);
+                },
+                function (err) {
+                    checkView.setWebcamState(false);
+                }
+            );
+        },
+
+        _geolocate: function (checkView) {
+            var that = this;
+
+            if ( "geolocation" in navigator ) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    that.get('message').setAttrs({
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    });
+                    checkView.setGeolocationState(true);
+                });
+            } else {
+                checkView.setGeolocationState(false);
+            }
         }
     }, {
         ATTRS: {
             routes: {
                 value: [
                     {path: '/', callback: 'handleHome'},
+                    {path: '/checks', callback: 'handleChecks'},
                     {path: '/capture', callback: 'handleCapture'},
                     {path: '/details', callback: 'handleDetails'},
                     {path: '/result', callback: 'handleResult'}
@@ -216,6 +303,14 @@ YUI.add('hello-app', function (Y) {
             },
             message: {
                 value: new Message()
+            },
+
+            configuration: {
+                value: new Configuration()
+            },
+
+            stream: {
+                value: null
             }
         }
     });

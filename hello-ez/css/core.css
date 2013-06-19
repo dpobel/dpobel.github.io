@@ -15,6 +15,47 @@ body {
 	font-style: normal;
 }
 
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+@-ms-keyframes spin {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before {
 	font-family: 'icomoon';
@@ -58,6 +99,14 @@ canvas {
     text-align: right;
 }
 
+.inner-content-right {
+    margin: 0 1em 0 0;
+}
+
+.inner-content-left {
+    margin: 0 0 0 1em;
+}
+
 .button-bar .help {
     margin-top:0;
 }
@@ -82,4 +131,60 @@ canvas {
 
 .button-bar-next {
     text-align: right;
+}
+
+.system-check {
+    list-style-type: none;
+    line-height: 2em;
+    padding-left: 0;
+}
+
+.system-check li {
+    margin-top:2px;
+    background: #f3f3f3;
+}
+
+.system-check li:before {
+    content: "\e00d";
+	font-family: 'icomoon';
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+    width: 2em;
+    text-align:center;
+
+    -moz-animation: spin 2s infinite linear;
+    -o-animation: spin 2s infinite linear;
+    -webkit-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+    display: inline-block;
+
+}
+.system-check .is-granted:before {
+    content: "\e00b";
+    color: #1CB841;
+    -moz-animation: none;
+    -o-animation: none;
+    -webkit-animation: none;
+    animation: none;
+}
+
+.system-check .is-granted {
+    background: #DAEDDE;
+}
+
+.system-check .is-denied:before {
+    content: "\e00c";
+    color: #CA3C3C;
+    -moz-animation: none;
+    -o-animation: none;
+    -webkit-animation: none;
+    animation: none;
+}
+
+.system-check .is-denied {
+    background: #F2E1E1;
 }

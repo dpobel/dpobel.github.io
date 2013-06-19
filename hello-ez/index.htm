@@ -47,9 +47,42 @@
 
     <script type="text/x-handlebars-template" id="homeview-tpl">
         <h1 class="view-title">Welcome!</h1>
-        <p>bla bla bla bla bla bla</p>
-        <h2>Checks</h2>
-        <p><a href="#/capture" class="pure-button pure-button-primary " data-icon="&#xe002;">Start</a></p>
+        <p>Haec dum oriens diu perferret, caeli reserato tepore Constantius consulatu suo septies et Caesaris ter egressus Arelate Valentiam petit, in Gundomadum et Vadomarium fratres Alamannorum reges arma moturus, quorum crebris excursibus vastabantur confines limitibus terrae Gallorum.</p>
+        <p class="button-bar button-bar-next"><a href="#/checks" class="pure-button pure-button-primary" data-icon="&#xe002;">Start</a></p>
+    </script>
+
+    <script type="text/x-handlebars-template" id="checksview-tpl">
+        <h1 class="view-title">Configuration</h1>
+        <div class="pure-g-r">
+            <section class="pure-u-1-2">
+                <div class="inner-content-right">
+                    <p>Please allow your browser to access the following resources, if you don't do that (or those resources are not available), the demo will still works but it will be less fun :-)</p>
+                    <ul class="system-check">
+                        <li id="webcam-check">Your webcam</li>
+                        <li id="geoloc-check">Your location</li>
+                    </ul>
+                </div>
+            </section><!--
+            --><section class="pure-u-1-2">
+                <div class="inner-content-left">
+                    <form class="pure-form pure-form-stacked">
+                        <fieldset>
+                            <legend>eZ Publish backend</legend>
+                            <label for="resturl">REST root URL</label>
+                            <input type="text" name="resturl" id="resturl" class="pure-input-1" required value="{{configuration.restUrl}}">
+                            <label for="login">Login</label>
+                            <input type="text" name="login" id="login" class="pure-input-1" required value="{{configuration.login}}">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" class="pure-input-1" value="{{configuration.password}}">
+                        </fieldset>
+                    </form>
+                    <ul class="system-check">
+                        <li class="ezpublish-check">Access to eZ Publish</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        <p class="button-bar button-bar-next"><a class="pure-button pure-button-primary" data-icon="&#xe002;" href="#/capture">Go the next step</a></p>
     </script>
 
     <script type="text/x-handlebars-template" id="captureview-tpl">
