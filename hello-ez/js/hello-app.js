@@ -114,8 +114,11 @@ YUI.add('hello-app', function (Y) {
 
             video.on('playing', Y.bind('_enableCaptureButton', this));
             this._handleWebcam();
-            video.getDOMNode().play();
             return this;
+        },
+
+        play: function () {
+            this.get('video').getDOMNode().play();
         },
 
         _capture: function () {
@@ -155,7 +158,7 @@ YUI.add('hello-app', function (Y) {
                 vendorURL = Y.config.win.URL || Y.config.win.webkitURL;
                 video.src = vendorURL.createObjectURL(this.get('stream'));
             }
-            video.play();
+            this.play();
         },
 
         _enableCaptureButton: function () {
