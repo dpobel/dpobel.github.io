@@ -244,6 +244,11 @@ YUI.add('hello-app', function (Y) {
         },
 
         handleCapture: function () {
+            var stream = this.get('stream');
+
+            if ( !stream ) {
+                this.navigate('#/checks');
+            }
             this.showView('capture', {
                 'message': this.get('message'),
                 'stream': this.get('stream')
