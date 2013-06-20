@@ -15,6 +15,16 @@ body {
 	font-style: normal;
 }
 
+.text a, .text a:visited {
+    color: #0000dd;
+    text-decoration: none;
+    border-bottom: 1px solid #0000dd;
+}
+
+.text a:visited {
+    border-bottom: 1px solid #000033;
+}
+
 @-moz-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
