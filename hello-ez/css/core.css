@@ -198,3 +198,9 @@ canvas {
 .system-check .is-denied {
     background: #F2E1E1;
 }
+
+.map {
+    height: 300px;
+    width: 100%;
+    position: relative;
+}

@@ -1,7 +1,13 @@
 YUI.add('hello-app', function (Y) {
     "use strict";
 
-    var Message, Configuration,
+    var L = Y.Lang,
+
+        BING_MAP_KEY = 'AqIpjTxk7nDvUqZagpzdNX73I1QRT0EVmto4oITUOd-ALPKcl3G4CKzq_r8zh9Cd',
+        LAT_OFFSET = 0.025, LON_OFFSET = 0.020,
+        INFOBOX_TPL = '<img src="{image}" alt="You!" style="display: block; margin: 0 auto;">',
+
+        Message, Configuration,
         TemplateView, HomeView, ChecksView, CaptureView,
         DetailsView, ResultView;
 
@@ -183,7 +189,41 @@ YUI.add('hello-app', function (Y) {
 
         render: function () {
             this.get('container').setHTML(this.template(this.get('message').toJSON()));
+            this._showMap();
             return this;
+        },
+
+        /* global Microsoft */
+        _showMap: function () {
+            var msg = this.get('message'),
+                mapEl = this.get('container').one('#map-location'),
+                map, info, loc, center;
+
+            if ( msg.get('lat') && msg.get('lon') && mapEl ) {
+                loc = new Microsoft.Maps.Location(
+                    msg.get('lat'), msg.get('lon')
+                );
+                center = new Microsoft.Maps.Location(
+                    msg.get('lat') + LAT_OFFSET,
+                    msg.get('lon') + LON_OFFSET
+                );
+                map = new Microsoft.Maps.Map(
+                    mapEl.getDOMNode(), {
+                        credentials: BING_MAP_KEY,
+                        mapTypeId: Microsoft.Maps.MapTypeId.road,
+                        center: center,
+                        zoom: 12,
+                        showMapTypeSelector: false
+                    }
+                );
+                info = new Microsoft.Maps.Infobox(loc, {
+                    visible: true,
+                    height: 200,
+                    showCloseButton: false,
+                    description: L.sub(INFOBOX_TPL, {image: msg.get('picture')})
+                });
+                map.entities.push(info);
+            }
         },
 
         _anotherPicture: function (e) {

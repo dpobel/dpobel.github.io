@@ -14,9 +14,12 @@
     YUI({
         //filter: 'raw',
         modules: {
+            'bing-map': {
+                fullpath: "http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"
+            },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5']
+                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5', 'bing-map']
             }
         }
     }).use('hello-app', function (Y) {
@@ -124,11 +127,16 @@
     <h1 class="view-title">Your profile</h1>
     <div class="pure-g-r">
         <section class="picture-view pure-u-1-2">
-            {{#if picture}}
-            <p>Your picture:</p>
-            <p class="image-result"><img src="{{picture}}" alt="Your picture"></p>
+            {{#if lat}}
+                <label>Location</label>
+                <div id="map-location" class="map"></div>
             {{else}}
-            <p>Don't have a webcam? Or maybe you are too shy, if you change your mind, it is still time <a href="#/checks">to enable it</a> and take a beautiful picture :-)</p>
+                {{#if picture}}
+                    <p>Your picture:</p>
+                    <p class="image-result"><img src="{{picture}}" alt="Your picture"></p>
+                {{else}}
+                    <p>Don't have a webcam? Or maybe you are too shy, if you change your mind, it is still time <a href="#/checks">to enable it</a> and take a beautiful picture :-)</p>
+                {{/if}}
             {{/if}}
         </form>
         </section><!--
@@ -147,14 +155,14 @@
                 <fieldset>
                     <label for="mood">Any thought?</label>
                     <textarea id="mood" name="mood" rows="3" placeholder="You can write here whatever you want (please no ads, no offensive sentence, ...)" class="pure-input-1">{{mood}}</textarea>
-                    <p class="button-bar button-bar-next">
-                        <button id="another-picture" class="pure-button" data-icon="&#xe000;">Take another picture</button>
-                        <button id="send-ezpublish" class="pure-button pure-button-primary" data-icon="&#xe002;" disabled>Send to eZ Publish</button>
-                    </p>
                 </fieldset>
             </form>
         </section>
     </div>
+    <p class="button-bar button-bar-next">
+        <button id="another-picture" class="pure-button" data-icon="&#xe000;">Take another picture</button>
+        <button id="send-ezpublish" class="pure-button pure-button-primary" data-icon="&#xe002;" disabled>Send to eZ Publish</button>
+    </p>
 
     </script>
 </body>
