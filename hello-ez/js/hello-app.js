@@ -8,7 +8,7 @@ YUI.add('hello-app', function (Y) {
         INFOBOX_TPL = '<img src="{image}" alt="You!" style="display: block; margin: 0 auto; max-height: 190px;">',
         DEFAULT_PICTURE = 'img/smiley.png',
 
-        Message, Configuration,
+        Message,
         TemplateView, HomeView, ChecksView, CaptureView,
         DetailsView, ResultView;
 
@@ -21,17 +21,6 @@ YUI.add('hello-app', function (Y) {
             mood: {value: null},
             lat: {value: null},
             lon: {value: null}
-        }
-    });
-
-    Configuration = Y.Base.create('configuration', Y.Model, [], {
-
-
-    }, {
-        ATTRS: {
-            restUrl: {value: 'http://ezpublish5.loc/api/ezp/v2/'},
-            login: {value: 'admin'},
-            password: {value: 'ezpublish'}
         }
     });
 
@@ -65,12 +54,16 @@ YUI.add('hello-app', function (Y) {
             this.on(['webcamChange', 'geolocChange'], function (e) {
                 this._setCheckState(e.attrName, e.newVal);
             });
+            this.on('ezpublishChange', function (e) {
+                this._setCheckState(e.attrName, e.newVal);
+                // TODO handle next button
+            });
         },
 
         render: function () {
             this.get('container').setHTML(
                 this.template({
-                    'configuration': this.get('configuration').toJSON()
+                    'configuration': this.get('configuration')
                 })
             );
             return this;
@@ -100,6 +93,10 @@ YUI.add('hello-app', function (Y) {
             },
 
             geoloc: {
+                value: false
+            },
+
+            ezpublish: {
                 value: false
             }
         }
@@ -304,11 +301,12 @@ YUI.add('hello-app', function (Y) {
         handleChecks: function () {
             this.showView('checks', {
                 'stream': this.get('stream'),
-                'configuration': this.get('configuration')
+                'configuration': this.get('api').toJSON()
             }, {
                 callback: function (view) {
                     this._getWebcamAccess(view);
                     this._geolocate(view);
+                    this._checkRestApi(view);
                 }
             });
 
@@ -337,6 +335,15 @@ YUI.add('hello-app', function (Y) {
 
         handleResult: function () {
             this.showView('result');
+        },
+
+        _checkRestApi: function(checkView) {
+            this.get('api').GET('/', {}, function (xhr) {
+                checkView.set('ezpublish', true);
+            },
+            function (xhr) {
+                checkView.set('ezpublish', false);
+            });
         },
 
         _getWebcamAccess: function (checkView) {
@@ -393,8 +400,12 @@ YUI.add('hello-app', function (Y) {
                 value: new Message()
             },
 
-            configuration: {
-                value: new Configuration()
+            api: {
+                value: new Y.RestClient({
+                    restUrl: 'http://ezpublish5.loc/api/ezp/v2/',
+                    login: 'admin',
+                    password: 'ezpublish'
+                })
             },
 
             stream: {

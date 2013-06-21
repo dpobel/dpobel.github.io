@@ -15,9 +15,16 @@
     YUI({
         //filter: 'raw',
         modules: {
+            'gallery-base64': {
+                fullpath: "js/gallery-base64-min.js"
+            },
+            'ezp-rest-client': {
+                fullpath: "js/ezp-rest-client.js",
+                requires: ['io', 'io-xdr', 'json', 'gallery-base64']
+            },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5']
+                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5', 'ezp-rest-client']
             }
         }
     }).use('hello-app', function (Y) {
@@ -90,7 +97,7 @@
                         </fieldset>
                     </form>
                     <ul class="system-check">
-                        <li class="ezpublish-check">Access to eZ Publish</li>
+                        <li id="ezpublish-check">Access to eZ Publish</li>
                     </ul>
                 </div>
             </section>
