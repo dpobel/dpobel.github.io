@@ -5,7 +5,8 @@ YUI.add('hello-app', function (Y) {
 
         BING_MAP_KEY = 'AqIpjTxk7nDvUqZagpzdNX73I1QRT0EVmto4oITUOd-ALPKcl3G4CKzq_r8zh9Cd',
         LAT_OFFSET = 0.025, LON_OFFSET = 0.020,
-        INFOBOX_TPL = '<img src="{image}" alt="You!" style="display: block; margin: 0 auto;">',
+        INFOBOX_TPL = '<img src="{image}" alt="You!" style="display: block; margin: 0 auto; max-height: 190px;">',
+        DEFAULT_PICTURE = 'img/smiley.png',
 
         Message, Configuration,
         TemplateView, HomeView, ChecksView, CaptureView,
@@ -110,9 +111,14 @@ YUI.add('hello-app', function (Y) {
             '#capture-button': {'click': '_capture'},
         },
         render: function () {
-            var video;
+            var video,
+                tplVars = this.get('message').toJSON();
 
-            this.get('container').setHTML(this.template(this.get('message').toJSON()));
+            if ( !tplVars.picture ) {
+                tplVars.picture = DEFAULT_PICTURE;
+            }
+
+            this.get('container').setHTML(this.template(tplVars));
             video = this.get('container').one('video');
 
             this.set('video', video);
@@ -220,7 +226,9 @@ YUI.add('hello-app', function (Y) {
                     visible: true,
                     height: 200,
                     showCloseButton: false,
-                    description: L.sub(INFOBOX_TPL, {image: msg.get('picture')})
+                    description: L.sub(INFOBOX_TPL, {
+                        image: msg.get('picture') ? msg.get('picture') : DEFAULT_PICTURE
+                    })
                 });
                 map.entities.push(info);
             }
