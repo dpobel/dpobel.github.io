@@ -8,18 +8,16 @@
     <link rel="stylesheet" href="css/core.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="http://yui.yahooapis.com/3.10.3/build/yui/yui-min.js"></script>
+    <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
 </head>
 <body>
     <script>
     YUI({
         //filter: 'raw',
         modules: {
-            'bing-map': {
-                fullpath: "http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"
-            },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5', 'bing-map']
+                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5']
             }
         }
     }).use('hello-app', function (Y) {
