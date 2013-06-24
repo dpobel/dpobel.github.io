@@ -56,7 +56,7 @@ YUI.add('hello-app', function (Y) {
             });
             this.on('ezpublishChange', function (e) {
                 this._setCheckState(e.attrName, e.newVal);
-                // TODO handle next button
+                this.get('container').one('#capture-details-button').set('disabled', false);
             });
         },
 
@@ -70,10 +70,12 @@ YUI.add('hello-app', function (Y) {
         },
 
         _nextStep: function (e) {
-            if ( this.get('webcam') ) {
-                this.fire('capture');
-            } else {
-                this.fire('captured', {next: true});
+            if ( !e.target.get('disabled') ) {
+                if ( this.get('webcam') ) {
+                    this.fire('capture');
+                } else {
+                    this.fire('captured', {next: true});
+                }
             }
         },
 
