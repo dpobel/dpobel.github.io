@@ -9,7 +9,7 @@ YUI.add('hello-app', function (Y) {
         DEFAULT_PICTURE = 'img/smiley.png',
 
         Message,
-        TemplateView, HomeView, ChecksView, CaptureView,
+        HomeView, ChecksView, CaptureView,
         DetailsView, ResultView;
 
     Message = Y.Base.create('message', Y.Model, [], {
@@ -24,28 +24,14 @@ YUI.add('hello-app', function (Y) {
         }
     });
 
-    TemplateView = Y.Base.create('templateView', Y.View, [], {
-        initializer: function () {
-            var baseId = this.name.toLowerCase();
-            this.template = Y.Handlebars.compile(
-                Y.one('#' + baseId + '-tpl').getHTML()
-            );
-        },
-
-        render: function () {
-            this.get('container').setHTML(this.template());
-            return this;
-        }
-    });
-
-    HomeView = Y.Base.create('homeView', TemplateView, [], {
+    HomeView = Y.Base.create('homeView', Y.TemplateView, [], {
         events: {
         }
     }, {
 
     });
 
-    ChecksView = Y.Base.create('checksView', TemplateView, [], {
+    ChecksView = Y.Base.create('checksView', Y.TemplateView, [], {
         events: {
             '#capture-details-button': {'click': '_nextStep'}
         },
@@ -105,7 +91,7 @@ YUI.add('hello-app', function (Y) {
 
     });
 
-    CaptureView = Y.Base.create('captureView', TemplateView, [], {
+    CaptureView = Y.Base.create('captureView', Y.TemplateView, [], {
         events: {
             '#capture-button': {'click': '_capture'},
         },
@@ -187,7 +173,7 @@ YUI.add('hello-app', function (Y) {
         }
     });
 
-    DetailsView = Y.Base.create('detailsView', TemplateView, [], {
+    DetailsView = Y.Base.create('detailsView', Y.TemplateView, [], {
         events: {
             '#another-picture': {'click': '_anotherPicture'}
         },
@@ -249,7 +235,7 @@ YUI.add('hello-app', function (Y) {
 
     });
 
-    ResultView = Y.Base.create('resultView', TemplateView, [], {
+    ResultView = Y.Base.create('resultView', Y.TemplateView, [], {
         events: {
         }
     }, {

@@ -24,7 +24,11 @@
             },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'handlebars', 'node-event-html5', 'ezp-rest-client']
+                requires: ['app', 'app-transitions', 'transition', 'node-event-html5', 'ezp-rest-client', 'template-view']
+            },
+            'template-view': {
+                fullpath: "js/template-view.js",
+                requires: ['view', 'node', 'handlebars']
             }
         }
     }).use('hello-app', function (Y) {
