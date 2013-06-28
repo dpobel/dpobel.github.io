@@ -80,9 +80,11 @@ YUI.add('hello-app', function (Y) {
                 'configuration': this.get('api').toJSON()
             }, {
                 callback: function (view) {
-                    this._getWebcamAccess(view);
-                    this._geolocate(view);
-                    this._checkRestApi(view);
+                    this._getWebcamAccess(view, function () {
+                        this._geolocate(view, function () {
+                            this._checkRestApi(view);
+                        });
+                    });
                 }
             });
 
@@ -122,7 +124,7 @@ YUI.add('hello-app', function (Y) {
             });
         },
 
-        _getWebcamAccess: function (checkView) {
+        _getWebcamAccess: function (checkView, callback) {
             var that = this;
 
             navigator.getMedia({
@@ -132,6 +134,7 @@ YUI.add('hello-app', function (Y) {
                 function (stream) {
                     that.set('stream', stream);
                     checkView.set('webcam', true);
+                    callback.apply(that);
                 },
                 function (err) {
                     checkView.set('webcam', false);
@@ -139,11 +142,12 @@ YUI.add('hello-app', function (Y) {
                         that.get('stream').stop();
                         that.set('stream', null);
                     }
+                    callback.apply(that);
                 }
             );
         },
 
-        _geolocate: function (checkView) {
+        _geolocate: function (checkView, callback) {
             var that = this;
 
             if ( "geolocation" in navigator ) {
@@ -153,12 +157,15 @@ YUI.add('hello-app', function (Y) {
                         lon: position.coords.longitude
                     });
                     checkView.set('geoloc', true);
+                    callback.apply(that);
                 },
                 function (err) {
                     checkView.set('geoloc', false);
+                    callback.apply(that);
                 });
             } else {
                 checkView.set('geoloc', false);
+                callback.apply(that);
             }
         }
     }, {
