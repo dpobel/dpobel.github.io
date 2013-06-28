@@ -24,12 +24,17 @@
             },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'node-event-html5', 'ezp-rest-client', 'template-view']
+                requires: ['app', 'app-transitions', 'transition', 'node-event-html5', 'ezp-rest-client', 'checks-view']
             },
             'template-view': {
                 fullpath: "js/template-view.js",
                 requires: ['view', 'node', 'handlebars']
+            },
+            'checks-view': {
+                fullpath: "js/checks-view.js",
+                requires: ['template-view']
             }
+
         }
     }).use('hello-app', function (Y) {
         var app;
