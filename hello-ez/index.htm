@@ -24,7 +24,7 @@
             },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'node-event-html5', 'ezp-rest-client', 'checks-view', 'capture-view']
+                requires: ['app', 'app-transitions', 'transition', 'node-event-html5', 'ezp-rest-client', 'checks-view', 'capture-view', 'detail-view']
             },
             'template-view': {
                 fullpath: "js/template-view.js",
@@ -36,6 +36,10 @@
             },
             'capture-view': {
                 fullpath: "js/capture-view.js",
+                requires: ['template-view']
+            },
+            'detail-view': {
+                fullpath: "js/detail-view.js",
                 requires: ['template-view']
             }
         }
