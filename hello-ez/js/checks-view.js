@@ -3,7 +3,8 @@ YUI.add('checks-view', function (Y) {
 
     Y.ChecksView = Y.Base.create('checksView', Y.TemplateView, [], {
         events: {
-            '#capture-details-button': {'click': '_nextStep'}
+            '#capture-details-button': {'click': '_nextStep'},
+            'input[type=text], input[type=password]': {'keyup': '_checkRestApi'}
         },
 
         initializer: function () {
@@ -25,6 +26,14 @@ YUI.add('checks-view', function (Y) {
             return this;
         },
 
+        _checkRestApi: function (e) {
+            console.log('ChecksView._checkRestApi');
+            this.set('ezpublish', undefined);
+            this.fire('checkRestApi', {
+                'view': this
+            });
+        },
+
         _nextStep: function (e) {
             if ( !e.target.get('disabled') ) {
                 if ( this.get('webcam') ) {
@@ -37,10 +46,12 @@ YUI.add('checks-view', function (Y) {
 
         _setCheckState: function (id, ok) {
             var wc = this.get('container').one('#' + id + '-check');
-            if ( ok ) {
+            if ( ok === true ) {
                 wc.removeClass('is-denied').addClass('is-granted');
-            } else {
+            } else if ( ok === false ) {
                 wc.removeClass('is-granted').addClass('is-denied');
+            } else {
+                wc.removeClass('is-granted').removeClass('is-denied');
             }
         }
     }, {

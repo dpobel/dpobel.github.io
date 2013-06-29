@@ -47,6 +47,10 @@ YUI.add('hello-app', function (Y) {
             this.on('*:save', function (e) {
                 e.logFn("Not implemented yet!");
             });
+
+            this.on('*:checkRestApi', function (e) {
+                this._checkRestApi(e.view);
+            });
         },
 
         handleHome: function () {
