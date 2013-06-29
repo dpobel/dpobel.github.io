@@ -71,7 +71,7 @@ YUI.add('ezp-rest-client', function (Y) {
                             callback.call(this, xhr);
                         }
                     },
-                    falilure: function (id, xhr) {
+                    failure: function (id, xhr) {
                         if ( errback ) {
                             errback.call(this, xhr);
                         }
