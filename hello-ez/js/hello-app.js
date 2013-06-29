@@ -1,16 +1,6 @@
 YUI.add('hello-app', function (Y) {
     "use strict";
 
-    var ResultView;
-
-
-    ResultView = Y.Base.create('resultView', Y.TemplateView, [], {
-        events: {
-        }
-    }, {
-
-    });
-
     Y.HelloApp = Y.Base.create('helloApp', Y.App, [], {
         views: {
             home: {
@@ -28,7 +18,7 @@ YUI.add('hello-app', function (Y) {
                 type: Y.DetailsView
             },
             result: {
-                type: ResultView,
+                type: Y.ResultView,
                 parent: 'home'
             }
         },
@@ -48,6 +38,14 @@ YUI.add('hello-app', function (Y) {
                     this.get('message').setAttrs(e.message);
                 }
                 this.navigate('#/capture');
+            });
+
+            this.on('*:details', function (e) {
+                this.get('message').setAttrs(e.message);
+            });
+
+            this.on('*:save', function (e) {
+                e.logFn("Not implemented yet!");
             });
         },
 
@@ -93,7 +91,13 @@ YUI.add('hello-app', function (Y) {
         },
 
         handleResult: function () {
-            this.showView('result');
+            if ( !this.get('message').get('name') ) {
+                this.navigate('#/details');
+            }
+            this.showView('result', {
+                'message': this.get('message'),
+                'api': this.get('api')
+            });
         },
 
         _checkRestApi: function(checkView) {

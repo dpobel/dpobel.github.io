@@ -27,7 +27,7 @@
                 requires: [
                     'app', 'app-transitions', 'transition', 'node-event-html5',
                     'ezp-rest-client', 'message-model',
-                    'home-view', 'checks-view', 'capture-view', 'detail-view'
+                    'home-view', 'checks-view', 'capture-view', 'detail-view', 'result-view'
                 ]
             },
             'message-model': {
@@ -54,6 +54,10 @@
             },
             'detail-view': {
                 fullpath: "js/detail-view.js",
+                requires: ['template-view', 'event-valuechange']
+            },
+            'result-view': {
+                fullpath: "js/result-view.js",
                 requires: ['template-view']
             }
         }
@@ -198,9 +202,46 @@
     </div>
     <p class="button-bar button-bar-next">
         <button id="another-picture" class="pure-button" data-icon="&#xe000;">Take another picture</button>
-        <button id="send-ezpublish" class="pure-button pure-button-primary" data-icon="&#xe002;" disabled>Send to eZ Publish</button>
+        <a href="#/result" id="result-step" class="pure-button pure-button-primary" data-icon="&#xe002;" disabled>Send to eZ Publish</a>
     </p>
 
+    </script>
+
+    <script type="text/x-handlebars-template" id="resultview-tpl">
+    <h1 class="view-title">Results</h1>
+    <div class="pure-g-r">
+        <section class="picture-view pure-u-1-4">
+            <div class="inner-content-right">
+                <h2>Raw data</h2>
+                <dl class="raw-data pure-g">
+                    <dt class="pure-u-1-3">Name</dt><dd class="pure-u-2-3">{{message.name}}</dd>
+                    {{# if message.lat}}
+                    <dt class="pure-u-1-3">Location</dt><dd class="pure-u-2-3">Lat: {{message.lat}} Lon: {{message.lon}}</dd>
+                    {{/if}}
+                    {{# if message.twitter}}
+                    <dt class="pure-u-1-3">Twitter</dt><dd class="pure-u-2-3">{{message.twitter}}</dd>
+                    {{/if}}
+                    {{# if message.mood}}
+                    <dt class="pure-u-1-3">Mood</dt><dd class="pure-u-2-3">{{message.mood}}</dd>
+                    {{/if}}
+                    {{# if message.picture}}
+                    <dt class="pure-u-1">Image</dt>
+                    <dd class="pure-u-1 image"><img src="{{message.picture}}" alt="You"></dd>
+                    {{/if}}
+                </dl>
+                <p><button data-icon="&#xe00e" class="pure-button pure-button-primary" id="save-rest">Save with the REST API</button></p>
+            </div>
+        </form>
+        </section><!--
+        --><section class="pure-u-3-4">
+            <div class="inner-content-left">
+                <div class="rest-log">
+                    <h3 class="log-title">Requests to {{api.restUrl}}</h3>
+                    <pre class="log-content"></pre>
+                </div>
+            </div>
+        </section>
+    </div>
     </script>
 </body>
 </html>

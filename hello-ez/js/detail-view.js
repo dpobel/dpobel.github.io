@@ -11,13 +11,46 @@ YUI.add('detail-view', function (Y) {
 
     Y.DetailsView = Y.Base.create('detailsView', Y.TemplateView, [], {
         events: {
-            '#another-picture': {'click': '_anotherPicture'}
+            '#another-picture': {'click': '_anotherPicture'},
+            '#name': {'change': '_handleResultButtonState'},
+            '#result-step': {'click': '_handleResultButton'}
         },
 
         render: function () {
             this.get('container').setHTML(this.template(this.get('message').toJSON()));
             this._showMap();
             return this;
+        },
+
+        _handleResultButton: function (e) {
+            var c = this.get('container'),
+                twitter;
+
+            if ( e.target.getAttribute('disabled') ) {
+                e.preventDefault();
+            } else {
+                twitter = c.one('#twitter').get('value');
+                if ( twitter.indexOf('@') !== 0 ) {
+                    twitter = '@' + twitter;
+                }
+                this.fire('details', {
+                    'message': {
+                        'name': c.one('#name').get('value'),
+                        'mood': c.one('#mood').get('value'),
+                        'twitter': twitter
+                    }
+                });
+            }
+        },
+
+        _handleResultButtonState: function (e) {
+            var result = this.get('container').one('#result-step');
+
+            if ( e.target.get('value') === '' ) {
+                result.addAttribute('disabled', 'disabled');
+            } else {
+                result.removeAttribute('disabled');
+            }
         },
 
         /* global Microsoft */
