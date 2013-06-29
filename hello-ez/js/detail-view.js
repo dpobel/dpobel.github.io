@@ -30,7 +30,7 @@ YUI.add('detail-view', function (Y) {
                 e.halt();
             } else {
                 twitter = c.one('#twitter').get('value');
-                if ( twitter.indexOf('@') !== 0 ) {
+                if ( twitter === '' && twitter.indexOf('@') !== 0 ) {
                     twitter = '@' + twitter;
                 }
                 this.fire('details', {
