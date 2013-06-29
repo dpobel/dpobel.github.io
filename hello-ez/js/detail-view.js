@@ -12,7 +12,7 @@ YUI.add('detail-view', function (Y) {
     Y.DetailsView = Y.Base.create('detailsView', Y.TemplateView, [], {
         events: {
             '#another-picture': {'click': '_anotherPicture'},
-            '#name': {'change': '_handleResultButtonState'},
+            '#name': {'keyup': '_handleResultButtonState'},
             '#result-step': {'click': '_handleResultButton'}
         },
 
@@ -26,8 +26,8 @@ YUI.add('detail-view', function (Y) {
             var c = this.get('container'),
                 twitter;
 
-            if ( e.target.getAttribute('disabled') ) {
-                e.preventDefault();
+            if ( e.target.hasAttribute('disabled') ) {
+                e.halt();
             } else {
                 twitter = c.one('#twitter').get('value');
                 if ( twitter.indexOf('@') !== 0 ) {
@@ -47,7 +47,7 @@ YUI.add('detail-view', function (Y) {
             var result = this.get('container').one('#result-step');
 
             if ( e.target.get('value') === '' ) {
-                result.addAttribute('disabled', 'disabled');
+                result.setAttribute('disabled', 'disabled');
             } else {
                 result.removeAttribute('disabled');
             }
