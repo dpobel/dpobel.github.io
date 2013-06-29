@@ -8,6 +8,10 @@ pre {
     font-family: monospace;
 }
 
+h2 {
+    border-bottom: 1px solid #ddd;
+}
+
 @font-face {
 	font-family: 'icomoon';
 	src:url('fonts/icomoon.eot');
@@ -262,6 +266,10 @@ canvas {
 
 .raw-data .image {
     text-align: center;
+}
+
+.raw-data dt {
+    font-weight: bold;
 }
 
 .raw-data dd, .raw-data dt {
