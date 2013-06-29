@@ -140,17 +140,16 @@
     </script>
 
     <script type="text/x-handlebars-template" id="captureview-tpl">
-    <h1 class="view-title">Please smile!</h1>
+    <h1 class="view-title">Please smile and click to take a picture</h1>
     <div class="pure-g-r">
         <section class="webcam-view pure-u-1-2">
-            <p class="preview">
-                <video id="webcam-video"></video>
+            <div class="preview">
+                <div class="camera-overlay camera-overlay-hidden" id="capture-button" title="Click to take a picture">&#xe000;</div>
+                <video id="webcam-video">
+                </video>
                 <canvas></canvas>
-            </p>
+            </div>
             <p class="help">You can take several picture until you feel satisfied with the one on the right!</p>
-            <p class="button-bar">
-                <button id="capture-button" class="pure-button pure-button-primary " data-icon="&#xe000;" disabled>Take a picture</button>
-            </p>
         </section><!--
         --><section class="picture-view pure-u-1-2">
             <p class="preview image-result"><img src="{{picture}}" alt="" /></p>

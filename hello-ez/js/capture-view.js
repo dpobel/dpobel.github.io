@@ -70,9 +70,16 @@ YUI.add('capture-view', function (Y) {
         },
 
         _enableCaptureButton: function () {
-            this.get('container')
-                .one('#capture-button')
-                .removeAttribute('disabled');
+            var videoRegion = this.get('video').get('region'),
+                // {top, bottom, left, right, width, height}
+                button = this.get('container').one('#capture-button');
+
+            button.removeClass('camera-overlay-hidden')
+                .setStyles({
+                    'width': videoRegion.width + 'px',
+                    'height': videoRegion.height + 'px',
+                    'lineHeight': videoRegion.height + 'px'
+                });
         }
     }, {
         ATTRS: {

@@ -102,6 +102,7 @@ canvas {
 
 .view-title {
     font-weight: normal;
+    font-size:1.6em;
     border-bottom: 1px solid #aaa;
 }
 
@@ -127,12 +128,36 @@ canvas {
 
 .preview {
     min-height: 420px;
+    margin: 0;
 }
 
 .webcam-view video,
 .picture-view img {
     max-width: 95%;
     margin: 0;
+}
+
+.webcam-view video {
+    position: relative;
+    z-index:1;
+}
+
+.camera-overlay {
+	font-family: 'icomoon';
+    font-size: 200px;
+    position: absolute;
+    text-align: center;
+    color: #fff;
+    opacity: 0.4;
+    z-index:10;
+}
+
+.webcam-view .camera-overlay:hover {
+    cursor: pointer;
+}
+
+.webcam-view .camera-overlay-hidden {
+    display: none;
 }
 
 .picture-view .image-result {
