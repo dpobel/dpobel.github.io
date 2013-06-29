@@ -27,7 +27,7 @@
                 requires: [
                     'app', 'app-transitions', 'transition', 'node-event-html5',
                     'ezp-rest-client', 'message-model',
-                    'checks-view', 'capture-view', 'detail-view'
+                    'home-view', 'checks-view', 'capture-view', 'detail-view'
                 ]
             },
             'message-model': {
@@ -39,6 +39,10 @@
             'template-view': {
                 fullpath: "js/template-view.js",
                 requires: ['view', 'node', 'handlebars']
+            },
+            'home-view': {
+                fullpath: "js/home-view.js",
+                requires: ['template-view']
             },
             'checks-view': {
                 fullpath: "js/checks-view.js",

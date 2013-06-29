@@ -1,15 +1,8 @@
 YUI.add('hello-app', function (Y) {
     "use strict";
 
-    var HomeView, ResultView;
+    var ResultView;
 
-
-    HomeView = Y.Base.create('homeView', Y.TemplateView, [], {
-        events: {
-        }
-    }, {
-
-    });
 
     ResultView = Y.Base.create('resultView', Y.TemplateView, [], {
         events: {
@@ -21,7 +14,7 @@ YUI.add('hello-app', function (Y) {
     Y.HelloApp = Y.Base.create('helloApp', Y.App, [], {
         views: {
             home: {
-                type: HomeView
+                type: Y.HomeView
             },
             checks: {
                 preserve: true,
