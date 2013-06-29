@@ -1,20 +1,8 @@
 YUI.add('hello-app', function (Y) {
     "use strict";
 
-    var Message,
-        HomeView, ResultView;
+    var HomeView, ResultView;
 
-    Message = Y.Base.create('message', Y.Model, [], {
-
-    }, {
-        ATTRS: {
-            name: {value: null},
-            picture: {value: null},
-            mood: {value: null},
-            lat: {value: null},
-            lon: {value: null}
-        }
-    });
 
     HomeView = Y.Base.create('homeView', Y.TemplateView, [], {
         events: {
@@ -180,7 +168,7 @@ YUI.add('hello-app', function (Y) {
                 ]
             },
             message: {
-                value: new Message()
+                value: new Y.Message()
             },
 
             api: {

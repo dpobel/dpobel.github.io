@@ -24,8 +24,18 @@
             },
             'hello-app': {
                 fullpath: "js/hello-app.js",
-                requires: ['app', 'app-transitions', 'transition', 'node-event-html5', 'ezp-rest-client', 'checks-view', 'capture-view', 'detail-view']
+                requires: [
+                    'app', 'app-transitions', 'transition', 'node-event-html5',
+                    'ezp-rest-client', 'message-model',
+                    'checks-view', 'capture-view', 'detail-view'
+                ]
             },
+            'message-model': {
+                fullpath: "js/message-model.js",
+                requires: ['model']
+            },
+
+            // views
             'template-view': {
                 fullpath: "js/template-view.js",
                 requires: ['view', 'node', 'handlebars']
