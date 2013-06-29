@@ -27,10 +27,16 @@ YUI.add('checks-view', function (Y) {
         },
 
         _checkRestApi: function (e) {
-            console.log('ChecksView._checkRestApi');
+            var c = this.get('container');
+
             this.set('ezpublish', undefined);
             this.fire('checkRestApi', {
-                'view': this
+                'view': this,
+                'api': {
+                    'login': c.one('#login').get('value'),
+                    'password': c.one('#password').get('value'),
+                    'restUrl': c.one('#resturl').get('value')
+                }
             });
         },
 
