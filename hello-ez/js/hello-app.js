@@ -112,24 +112,29 @@ YUI.add('hello-app', function (Y) {
         _getWebcamAccess: function (checkView, callback) {
             var that = this;
 
-            navigator.getMedia({
-                    video: true,
-                    audio: false,
-                },
-                function (stream) {
-                    that.set('stream', stream);
-                    checkView.set('webcam', true);
-                    callback.apply(that);
-                },
-                function (err) {
-                    checkView.set('webcam', false);
-                    if ( that.get('stream') ) {
-                        that.get('stream').stop();
-                        that.set('stream', null);
+            if ( navigator.getMedia ) {
+                navigator.getMedia({
+                        video: true,
+                        audio: false,
+                    },
+                    function (stream) {
+                        that.set('stream', stream);
+                        checkView.set('webcam', true);
+                        callback.apply(that);
+                    },
+                    function (err) {
+                        checkView.set('webcam', false);
+                        if ( that.get('stream') ) {
+                            that.get('stream').stop();
+                            that.set('stream', null);
+                        }
+                        callback.apply(that);
                     }
-                    callback.apply(that);
-                }
-            );
+                );
+            } else {
+                checkView.set('webcam', false);
+                callback.apply(this);
+            }
         },
 
         _geolocate: function (checkView, callback) {
