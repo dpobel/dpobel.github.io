@@ -106,12 +106,15 @@ YUI.add('hello-app', function (Y) {
         },
 
         _checkRestApi: function(checkView) {
-            this.get('api').GET('/', {}, function (xhr) {
-                checkView.set('ezpublish', true);
-            },
-            function (xhr) {
-                checkView.set('ezpublish', false);
-            });
+            var handlers = {
+                success: function (xhr) {
+                    checkView.set('ezpublish', true);
+                },
+                failure: function (xhr) {
+                    checkView.set('ezpublish', false);
+                }
+            };
+            this.get('api').GET('/', {}, handlers);
         },
 
         _getWebcamAccess: function (checkView, callback) {

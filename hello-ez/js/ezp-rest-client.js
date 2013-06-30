@@ -9,7 +9,7 @@ YUI.add('ezp-rest-client', function (Y) {
          * TODO: report issue in browsers trackers
          */
         /*
-        login: function (callback, errback) {
+        login: function (handlers) {
             var headers, body;
 
             headers = {
@@ -44,19 +44,19 @@ YUI.add('ezp-rest-client', function (Y) {
         },
         */
 
-        GET: function (uri, headers, callback, errback) {
-            this._doRequest('GET', uri, headers, null, callback, errback);
+        GET: function (uri, headers, handlers) {
+            this._doRequest('GET', uri, headers, null, handlers);
         },
 
-        POST: function (uri, headers, body, callback, errback) {
-            this._doRequest('POST', uri, headers, body, callback, errback);
+        POST: function (uri, headers, body, handlers) {
+            this._doRequest('POST', uri, headers, body, handlers);
         },
 
-        PUBLISH: function (uri, headers, body, callback, errback) {
-            this._doRequest('PUBLISH', uri, headers, body, callback, errback);
+        PUBLISH: function (uri, headers, body, handlers) {
+            this._doRequest('PUBLISH', uri, headers, body, handlers);
         },
 
-        _doRequest: function(method, uri, headers, body, callback, errback) {
+        _doRequest: function(method, uri, headers, body, handlers) {
             if ( !headers.Accept ) {
                 headers.Accept = 'application/json';
             }
@@ -65,18 +65,7 @@ YUI.add('ezp-rest-client', function (Y) {
                 method: method,
                 data: body,
                 headers: headers,
-                on: {
-                    success: function (id, xhr) {
-                        if ( callback ) {
-                            callback.call(this, xhr);
-                        }
-                    },
-                    failure: function (id, xhr) {
-                        if ( errback ) {
-                            errback.call(this, xhr);
-                        }
-                    }
-                },
+                on: handlers,
                 context: this,
                 xdr: {
                     use: 'native',
