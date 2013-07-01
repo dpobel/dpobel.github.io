@@ -126,8 +126,10 @@
                     <form class="pure-form pure-form-stacked">
                         <fieldset>
                             <legend>eZ Publish backend</legend>
-                            <label for="resturl">REST root URL</label>
+                            <label for="resturl">eZ Publish URL</label>
                             <input type="text" name="resturl" id="resturl" class="pure-input-1" required value="{{configuration.restUrl}}">
+                            <label for="prefix">REST prefix</label>
+                            <input type="text" name="prefix" id="prefix" class="pure-input-1" required value="{{configuration.prefix}}">
                             <label for="login">Login</label>
                             <input type="text" name="login" id="login" class="pure-input-1" required value="{{configuration.login}}">
                             <label for="password">Password</label>

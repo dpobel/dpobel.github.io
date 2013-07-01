@@ -110,14 +110,14 @@ YUI.add('hello-app', function (Y) {
 
         _checkRestApi: function(checkView) {
             var handlers = {
-                success: function (xhr) {
-                    checkView.set('ezpublish', true);
-                },
-                failure: function (xhr) {
-                    checkView.set('ezpublish', false);
-                }
-            };
-            this.get('api').GET('/', {}, handlers);
+                    success: function () {
+                        checkView.set('ezpublish', true);
+                    },
+                    failure: function () {
+                        checkView.set('ezpublish', false);
+                    }
+                };
+            this.get('api').root(handlers);
         },
 
         _getWebcamAccess: function (checkView, callback) {
@@ -186,7 +186,8 @@ YUI.add('hello-app', function (Y) {
 
             api: {
                 value: new Y.RestClient({
-                    restUrl: 'http://ezpublish5.loc/api/ezp/v2/',
+                    restUrl: 'http://ezpublish5.loc',
+                    prefix: '/api/ezp/v2/',
                     login: 'admin',
                     password: 'ezpublish'
                 })

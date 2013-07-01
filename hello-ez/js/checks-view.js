@@ -35,7 +35,8 @@ YUI.add('checks-view', function (Y) {
                 'api': {
                     'login': c.one('#login').get('value'),
                     'password': c.one('#password').get('value'),
-                    'restUrl': c.one('#resturl').get('value')
+                    'restUrl': c.one('#resturl').get('value'),
+                    'prefix': c.one('#prefix').get('value')
                 }
             });
         },

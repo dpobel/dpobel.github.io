@@ -175,8 +175,24 @@ YUI.add('message-model', function (Y) {
     Y.Message = Y.Base.create('message', Y.Model, [], {
 
         sync: function (action, options, callback) {
+            var api = options.api,
+                log = options.logFn,
+                that = this;
+
             if ( action === 'create' ) {
-                this._createMessage(options, callback);
+                if ( !this.get('rootStruct') ) {
+                    api.root({
+                        success: function (id, xhr, args) {
+                            that._createMessage(options, callback);
+                        },
+                        failure: function (id, xhr, args) {
+                            log("Fatal error", false, 'error');
+                            callback("Fatal error (status " + xhr.status + ")");
+                        }
+                    });
+                } else {
+                    this._createMessage(options, callback);
+                }
             }
         },
 
@@ -186,7 +202,7 @@ YUI.add('message-model', function (Y) {
                 that = this;
 
             api.GET(
-                '/content/types?remoteId=' + TYPE_REMOTE_ID,
+                api.get('rootStruct').Root.contentTypes._href + '?remoteId=' + TYPE_REMOTE_ID,
                 {}, {
                     start: function (id, args) {
                         log("Checking whether the content type exists");
@@ -224,7 +240,7 @@ YUI.add('message-model', function (Y) {
 
             createStruct = this._getContentCreateStruct(contentType);
             api.POST(
-                '/content/objects', {
+                api.get('rootStruct').Root.content._href, {
                     'Content-Type': 'application/vnd.ez.api.ContentCreate+json',
                     'Accept': 'application/vnd.ez.api.Content+json'
                 }, createStruct, {
@@ -304,7 +320,7 @@ YUI.add('message-model', function (Y) {
                 that = this;
 
             api.POST(
-                '/content/typegroups/1/types?publish=true',
+                api.get('prefix') + 'content/typegroups/1/types?publish=true',
                 {'Content-Type': 'application/vnd.ez.api.ContentTypeCreate+json'},
                 typeCreateStruct, {
                     start: function (id, args) {

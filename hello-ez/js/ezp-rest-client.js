@@ -46,6 +46,18 @@ YUI.add('ezp-rest-client', function (Y) {
         },
         */
 
+        root: function (handlers) {
+            var that = this,
+                origSuccess = handlers.success || function () {};
+
+            handlers.success = function (id, xhr, args) {
+                that.set('rootStruct', Y.JSON.parse(xhr.responseText));
+                origSuccess(id, xhr, args);
+            };
+
+            this.GET(this.get('prefix'), {}, handlers);
+        },
+
         GET: function (uri, headers, handlers) {
             this._doRequest('GET', uri, headers, null, handlers);
         },
@@ -115,6 +127,9 @@ YUI.add('ezp-rest-client', function (Y) {
                 restUrl: {
                     value: null
                 },
+                prefix: {
+                    value: null
+                },
                 login: {
                     value: null
                 },
@@ -123,6 +138,9 @@ YUI.add('ezp-rest-client', function (Y) {
                 },
                 timeout: {
                     value: 1000
+                },
+                rootStruct: {
+                    value: null
                 }
             }
         }
