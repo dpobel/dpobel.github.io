@@ -72,12 +72,32 @@ YUI.add('ezp-rest-client', function (Y) {
                 headers: headers,
                 on: handlers,
                 context: this,
+                arguments: {
+                    'formattedRequest': this._formatRequest(
+                        method, uri, headers, body
+                    ),
+                    'method': method,
+                    'uri': uri,
+                    'headers': headers,
+                    'body': body
+                },
                 xdr: {
                     use: 'native',
                     credentials: true
                 },
                 timeout: this.get('timeout')
             });
+        },
+
+
+        _formatRequest: function(method, uri, headers, body, handlers) {
+            var res = method + ' ' + uri;
+            Y.Object.each(headers, function(val, key) {
+                if ( key.toLowerCase() !== 'authorization' ) {
+                    res += "\n" + key + ": " + val;
+                }
+            });
+            return res;
         },
 
         _getAuthorizationHeader: function () {
