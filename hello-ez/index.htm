@@ -22,6 +22,10 @@
                 fullpath: "js/ezp-rest-client.js",
                 requires: ['io', 'io-xdr', 'json', 'gallery-base64']
             },
+            'logger': {
+                fullpath: "js/logger.js",
+                requires: ['node']
+            },
             'hello-app': {
                 fullpath: "js/hello-app.js",
                 requires: [
@@ -58,7 +62,7 @@
             },
             'result-view': {
                 fullpath: "js/result-view.js",
-                requires: ['template-view']
+                requires: ['template-view', 'logger']
             }
         }
     }).use('hello-app', function (Y) {
@@ -236,7 +240,7 @@
             <div class="inner-content-left">
                 <div class="rest-log">
                     <h3 class="log-title">Requests to {{api.restUrl}}</h3>
-                    <pre class="log-content"></pre>
+                    <ul class="log-content"></ul>
                 </div>
             </div>
         </section>

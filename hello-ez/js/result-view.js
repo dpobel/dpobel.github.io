@@ -12,8 +12,8 @@ YUI.add('result-view', function (Y) {
             });
         },
 
-        log: function (text) {
-            this.get('container').one('pre').append(text + "<br>");
+        log: function (text, append, level) {
+            this.get('logger').log(text, append, level);
         },
 
         render: function () {
@@ -23,9 +23,16 @@ YUI.add('result-view', function (Y) {
                     'api': this.get('api').toJSON()
                 })
             );
+            this.get('logger').set(
+                'root', this.get('container').one('.log-content')
+            );
         }
     }, {
-
+        ATTRS: {
+            logger: {
+                value: new Y.Logger()
+            }
+        }
     });
 
 }, '0.0.1');
