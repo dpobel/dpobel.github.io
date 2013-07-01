@@ -1,5 +1,7 @@
 YUI.add('ezp-rest-client', function (Y) {
 
+    var L = Y.Lang;
+
     Y.RestClient = Y.Base.create("ezpRestClient", Y.Model, [], {
 
         /*
@@ -59,6 +61,9 @@ YUI.add('ezp-rest-client', function (Y) {
         _doRequest: function(method, uri, headers, body, handlers) {
             if ( !headers.Accept ) {
                 headers.Accept = 'application/json';
+            }
+            if ( L.isObject(body) ) {
+                body = Y.JSON.stringify(body);
             }
             headers.Authorization = this._getAuthorizationHeader();
             Y.io(this._buildUri(uri), {
