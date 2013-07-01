@@ -57,9 +57,10 @@ YUI.add('detail-view', function (Y) {
         _showMap: function () {
             var msg = this.get('message'),
                 mapEl = this.get('container').one('#map-location'),
-                map, info, loc, center;
+                map, info, loc, center,
+                hasBing = (typeof Microsoft !== 'undefined');
 
-            if ( msg.get('lat') && msg.get('lon') && mapEl ) {
+            if ( hasBing && msg.get('lat') && msg.get('lon') && mapEl ) {
                 loc = new Microsoft.Maps.Location(
                     msg.get('lat'), msg.get('lon')
                 );
