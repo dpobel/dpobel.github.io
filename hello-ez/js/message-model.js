@@ -72,6 +72,28 @@ YUI.add('message-model', function (Y) {
                         "isSearchable": "false",
                         "defaultValue": ""
                     }, {
+                        "identifier": "image",
+                        "fieldType": "ezimage",
+                        "names": {
+                            "value": [{
+                                "_languageCode": LANG_CODE,
+                                "#text": "Image"
+                            }]
+                        },
+                        "descriptions": {
+                            "value": [{
+                                "_languageCode": LANG_CODE,
+                                "#text": ""
+                            }]
+                        },
+                        "fieldGroup": "content",
+                        "position": "3",
+                        "isTranslatable": "false",
+                        "isRequired": "false",
+                        "isInfoCollector": "false",
+                        "isSearchable": "false",
+                        "defaultValue": null
+                    }, {
                         "identifier": "mood",
                         "fieldType": "eztext",
                         "names": {
@@ -87,7 +109,7 @@ YUI.add('message-model', function (Y) {
                             }]
                         },
                         "fieldGroup": "content",
-                        "position": "3",
+                        "position": "4",
                         "isTranslatable": "false",
                         "isRequired": "false",
                         "isInfoCollector": "false",
@@ -109,7 +131,7 @@ YUI.add('message-model', function (Y) {
                             }]
                         },
                         "fieldGroup": "content",
-                        "position": "4",
+                        "position": "5",
                         "isTranslatable": "false",
                         "isRequired": "false",
                         "isInfoCollector": "false",
@@ -328,6 +350,24 @@ YUI.add('message-model', function (Y) {
                         'address': ''
                     };
                 }
+            },
+
+            image: {
+                readOnly: true,
+                getter: function () {
+                    var b64;
+
+                    if ( this.get('picture') === null ) {
+                        return null;
+                    }
+                    b64 = this.get('picture').replace(/^.*base64,/, '');
+                    return {
+                        'data': b64,
+                        'fileName': this.get('name') + '.jpg',
+                        'fileSize': Y.Base64.decode(b64).length
+                    };
+                }
+
             }
         }
     });
