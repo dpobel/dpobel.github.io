@@ -2,7 +2,15 @@ YUI.add('message-model', function (Y) {
     "use strict";
 
     var TYPE_REMOTE_ID = "hello-ez-type-v1",
+        TYPE_GROUP_IDENTIFIER = 'Hello eZ Demo Types',
+        TYPE_GROUP_URI = 'content/typegroups', // TODO should be referenced in the root struct, report the issue
         LANG_CODE = 'eng-GB', // TODO allow to change this in the conf.
+
+        typeGroupCreateStruct = {
+            "ContentTypeGroupInput": {
+                "identifier": TYPE_GROUP_IDENTIFIER
+            }
+        },
         typeCreateStruct = {
             "ContentTypeCreate": {
                 "identifier": "hello-ez-demo-message",
@@ -168,8 +176,12 @@ YUI.add('message-model', function (Y) {
         };
 
     function logResponse(logFn, xhr) {
-        logFn("\n\nHTTP/1.1 " + xhr.status + " " + xhr.statusText + "\n", true);
-        logFn(xhr.getAllResponseHeaders(), true);
+        if ( xhr.status ) {
+            logFn("\n\nHTTP/1.1 " + xhr.status + " " + xhr.statusText + "\n", true);
+            logFn(xhr.getAllResponseHeaders(), true);
+        } else {
+            logFn("\n\n<em>No response</em>", true);
+        }
     }
 
     Y.Message = Y.Base.create('message', Y.Model, [], {
@@ -202,6 +214,116 @@ YUI.add('message-model', function (Y) {
                 that = this;
 
             api.GET(
+                api.get('prefix') + TYPE_GROUP_URI + '?identifier=' + TYPE_GROUP_IDENTIFIER,
+                {}, {
+                    start: function (id, args) {
+                        log("Checking whether the content type groups exists");
+                        log(args.formattedRequest, false, 'request');
+                    },
+                    success: function (id, xhr, args) {
+                        var struct = Y.JSON.parse(xhr.responseText);
+
+                        that._checkType(struct, options, callback);
+                    },
+                    failure: function (id, xhr, args) {
+                        if ( xhr.status === 404 ) {
+                            that._createContentTypeGroup(options, callback);
+                        } else if ( xhr.status === 0 ) {
+                            log("No response available in the XHR object", false, 'notice');
+                            log(
+                                "Most likely, the content type group exists and" +
+                                    " your browser has a bug in the handling of" +
+                                    " 30X response of a CORS request...",
+                                true
+                            );
+                            that._checkContentTypeGroupFromList(options, callback);
+                        } else {
+                            log("Fatal error", false, 'error');
+                            callback("Fatal error (status " + xhr.status + ")");
+                        }
+                    },
+                    complete: function (id, xhr, args) {
+                        logResponse(log, xhr);
+                    }
+                }
+            );
+        },
+
+        _checkContentTypeGroupFromList: function(options, callback) {
+            var api = options.api,
+                log = options.logFn,
+                that = this;
+
+            api.GET(
+                api.get('prefix') + TYPE_GROUP_URI,
+                {}, {
+                    start: function (id, args) {
+                        log("Getting the content type groups from the full list of content type groups");
+                        log(args.formattedRequest, false, 'request');
+                    },
+                    success: function (id, xhr, args) {
+                        var struct = Y.JSON.parse(xhr.responseText);
+
+                        struct.ContentTypeGroupList.ContentTypeGroup.forEach(function(contentTypeGroup) {
+                            if ( contentTypeGroup.identifier === TYPE_GROUP_IDENTIFIER ) {
+                                that._checkType(contentTypeGroup, options, callback);
+                            }
+                        });
+                    },
+                    failure: function (id, xhr, args) {
+                        log(
+                            "Unable to list the content type groups (" + xhr.status + " " + xhr.statusText + ")",
+                            false, 'error'
+                        );
+                        callback("Unable to create the content type group (status " + xhr.status + ")");
+                    },
+                    complete: function (id, xhr, args) {
+                        logResponse(log, xhr);
+                    }
+                }
+            );
+
+
+        },
+
+        _createContentTypeGroup: function (options, callback) {
+            var api = options.api,
+                log = options.logFn,
+                that = this;
+
+            api.POST(
+                api.get('prefix') + TYPE_GROUP_URI, {
+                    'Content-Type': 'application/vnd.ez.api.ContentTypeGroupInput+json'
+                }, typeGroupCreateStruct, {
+                    start: function (id, args) {
+                        log("Creating the content type groups");
+                        log(args.formattedRequest, false, 'request');
+                    },
+                    success: function (id, xhr, args) {
+                        var struct = Y.JSON.parse(xhr.responseText);
+
+                        that._checkType(struct.ContentTypeGroup, options, callback);
+                    },
+                    failure: function (id, xhr, args) {
+                        log(
+                            "Unable to create the content type group (" + xhr.status + " " + xhr.statusText + ")",
+                            false, 'error'
+                        );
+                        callback("Unable to create the content type group (status " + xhr.status + ")");
+                    },
+                    complete: function (id, xhr, args) {
+                        logResponse(log, xhr);
+                    }
+                }
+            );
+        },
+
+        _checkType: function(contentTypeGroup, options, callback) {
+            var api = options.api,
+                log = options.logFn,
+                that = this;
+
+            api.GET(
                 api.get('rootStruct').Root.contentTypes._href + '?remoteId=' + TYPE_REMOTE_ID,
                 {}, {
                     start: function (id, args) {
@@ -219,7 +341,7 @@ YUI.add('message-model', function (Y) {
                     },
                     failure: function (id, xhr, args) {
                         if ( xhr.status === 404 ) {
-                            that._createContentType(options, callback);
+                            that._createContentType(contentTypeGroup, options, callback);
                         } else {
                             log("Fatal error", false, 'error');
                             callback("Fatal error (status " + xhr.status + ")");
@@ -314,13 +436,13 @@ YUI.add('message-model', function (Y) {
             );
         },
 
-        _createContentType: function (options, callback) {
+        _createContentType: function (contentTypeGroup, options, callback) {
             var api = options.api,
                 log = options.logFn,
                 that = this;
 
             api.POST(
-                api.get('prefix') + 'content/typegroups/1/types?publish=true',
+                contentTypeGroup.ContentTypes._href + '?publish=true',
                 {'Content-Type': 'application/vnd.ez.api.ContentTypeCreate+json'},
                 typeCreateStruct, {
                     start: function (id, args) {

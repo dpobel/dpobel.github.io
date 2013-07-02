@@ -275,6 +275,15 @@ canvas {
     line-height: 1.4em;
 }
 
+.rest-log .notice {
+    font-style: italic;
+    padding: 0.2em;
+    background: #FCEECD;
+}
+.rest-log .notice code {
+    display: block;
+}
+
 .rest-log .request {
     background: #fff;
     padding-left:2em;
