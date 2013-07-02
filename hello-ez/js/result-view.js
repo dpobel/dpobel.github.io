@@ -7,9 +7,12 @@ YUI.add('result-view', function (Y) {
         },
 
         _saveRest: function (e) {
-            this.fire('save', {
-                'logFn': Y.bind(this.log, this)
-            });
+            if ( !e.target.get('disabled') ) {
+                this.fire('save', {
+                    'logFn': Y.bind(this.log, this)
+                });
+                e.target.set('disabled', 'disabled');
+            }
         },
 
         log: function (text, append, level) {
