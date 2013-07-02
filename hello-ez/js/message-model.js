@@ -474,7 +474,7 @@ YUI.add('message-model', function (Y) {
             picture: {value: null},
             mood: {value: null},
             lat: {value: null},
-            lon: {value: null}
+            lon: {value: null},
 
             location: {
                 readOnly: true,
