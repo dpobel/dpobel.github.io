@@ -3,6 +3,7 @@ YUI.add('result-view', function (Y) {
 
     Y.ResultView = Y.Base.create('resultView', Y.TemplateView, [], {
         events: {
+            '.pure-menu-disabled a': {'click': '_disableClick'},
             '#save-rest': {'click': '_saveRest'}
         },
 
@@ -20,22 +21,27 @@ YUI.add('result-view', function (Y) {
         },
 
         render: function () {
-            this.get('container').setHTML(
-                this.template({
-                    'message': this.get('message').toJSON(),
-                    'api': this.get('api').toJSON()
-                })
-            );
+            this.get('container').setHTML(this._renderTemplate());
             this.get('logger').set(
                 'root', this.get('container').one('.log-content')
             );
+        },
+
+        _renderTemplate: function () {
+            return this.template({
+                'breadcrumbs': this.get('breadcrumbs'),
+                'message': this.get('message').toJSON(),
+                'api': this.get('api').toJSON()
+            });
         }
     }, {
         ATTRS: {
             logger: {
                 value: new Y.Logger()
             }
-        }
+        },
+
+        VIEW_NAME: "Result"
     });
 
 }, '0.0.1');

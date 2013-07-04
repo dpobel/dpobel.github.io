@@ -8,18 +8,21 @@ YUI.add('hello-app', function (Y) {
             },
             checks: {
                 preserve: true,
-                type: Y.ChecksView
+                type: Y.ChecksView,
+                parent: 'home'
             },
             capture: {
                 preserve: true,
-                type: Y.CaptureView
+                type: Y.CaptureView,
+                parent: 'checks'
             },
             details: {
-                type: Y.DetailsView
+                type: Y.DetailsView,
+                parent: 'capture'
             },
             result: {
                 type: Y.ResultView,
-                parent: 'home'
+                parent: 'details'
             }
         },
 
@@ -58,11 +61,14 @@ YUI.add('hello-app', function (Y) {
         },
 
         handleHome: function () {
-            this.showView('home');
+            this.showView('home', {
+                'breadcrumbs': this._breadcrumbs('home')
+            });
         },
 
         handleChecks: function () {
             this.showView('checks', {
+                'breadcrumbs': this._breadcrumbs('checks'),
                 'stream': this.get('stream'),
                 'configuration': this.get('api').toJSON()
             }, {
@@ -84,6 +90,7 @@ YUI.add('hello-app', function (Y) {
                 this.navigate('#/checks');
             }
             this.showView('capture', {
+                'breadcrumbs': this._breadcrumbs('capture'),
                 'message': this.get('message'),
                 'stream': this.get('stream')
             }, {
@@ -95,7 +102,10 @@ YUI.add('hello-app', function (Y) {
         },
 
         handleDetails: function () {
-            this.showView('details', {'message': this.get('message')});
+            this.showView('details', {
+                'breadcrumbs': this._breadcrumbs('details'),
+                'message': this.get('message')
+            });
         },
 
         handleResult: function () {
@@ -103,6 +113,7 @@ YUI.add('hello-app', function (Y) {
                 this.navigate('#/details');
             }
             this.showView('result', {
+                'breadcrumbs': this._breadcrumbs('result'),
                 'message': this.get('message'),
                 'api': this.get('api')
             });
@@ -168,12 +179,38 @@ YUI.add('hello-app', function (Y) {
                 checkView.set('geoloc', false);
                 callback.apply(that);
             }
+        },
+
+        _breadcrumbs: function (viewId) {
+            var path = [], enabled = true,
+                k, viewInfo, i = 1;
+
+            for (k in this.views) {
+                if ( this.views.hasOwnProperty(k) ) {
+                    viewInfo = this.views[k];
+                    path.push({
+                        step: i++,
+                        name: viewInfo.type.VIEW_NAME,
+                        class: viewInfo.type.NAME.toLowerCase(),
+                        uri: '#/' + k,
+                        enabled: enabled,
+                        active: (k === viewId)
+                    });
+                    if ( enabled && k === viewId ) {
+                        enabled = false;
+                    }
+                }
+            }
+            console.log(path);
+            return path;
+
         }
     }, {
         ATTRS: {
             routes: {
                 value: [
                     {path: '/', callback: 'handleHome'},
+                    {path: '/home', callback: 'handleHome'},
                     {path: '/checks', callback: 'handleChecks'},
                     {path: '/capture', callback: 'handleCapture'},
                     {path: '/details', callback: 'handleDetails'},

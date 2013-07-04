@@ -11,15 +11,23 @@ YUI.add('detail-view', function (Y) {
 
     Y.DetailsView = Y.Base.create('detailsView', Y.TemplateView, [], {
         events: {
+            '.pure-menu-disabled a': {'click': '_disableClick'},
             '#another-picture': {'click': '_anotherPicture'},
             '#name': {'keyup': '_handleResultButtonState'},
             '#result-step': {'click': '_handleResultButton'}
         },
 
         render: function () {
-            this.get('container').setHTML(this.template(this.get('message').toJSON()));
+            this.get('container').setHTML(this._renderTemplate());
             this._showMap();
             return this;
+        },
+
+        _renderTemplate: function () {
+            return this.template({
+                'breadcrumbs': this.get('breadcrumbs'),
+                'message': this.get('message').toJSON()
+            });
         },
 
         _handleResultButton: function (e) {
@@ -102,7 +110,7 @@ YUI.add('detail-view', function (Y) {
             });
         }
     }, {
-
+        VIEW_NAME: "Details"
     });
 
 

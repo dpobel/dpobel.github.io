@@ -5,17 +5,14 @@ YUI.add('capture-view', function (Y) {
 
     Y.CaptureView = Y.Base.create('captureView', Y.TemplateView, [], {
         events: {
+            '.pure-menu-disabled a': {'click': '_disableClick'},
             '#capture-button': {'click': '_capture'},
         },
         render: function () {
-            var video,
-                tplVars = this.get('message').toJSON();
+            var video;
 
-            if ( !tplVars.picture ) {
-                tplVars.picture = DEFAULT_PICTURE;
-            }
+            this.get('container').setHTML(this._renderTemplate());
 
-            this.get('container').setHTML(this.template(tplVars));
             video = this.get('container').one('video');
 
             this.set('video', video);
@@ -23,6 +20,19 @@ YUI.add('capture-view', function (Y) {
 
             video.on('playing', Y.bind('_enableCaptureButton', this));
             return this;
+        },
+
+        _renderTemplate: function () {
+            var message = this.get('message').toJSON();
+
+            if ( !message.picture ) {
+                message.picture = DEFAULT_PICTURE;
+            }
+
+            return this.template({
+                'message': message,
+                'breadcrumbs': this.get('breadcrumbs')
+            });
         },
 
         _play: function () {
@@ -89,7 +99,9 @@ YUI.add('capture-view', function (Y) {
             canvas: {
                 value: null
             }
-        }
+        },
+
+        VIEW_NAME: "Capture"
     });
 
 }, '0.0.1');

@@ -3,6 +3,7 @@ YUI.add('checks-view', function (Y) {
 
     Y.ChecksView = Y.Base.create('checksView', Y.TemplateView, [], {
         events: {
+            '.pure-menu-disabled a': {'click': '_disableClick'},
             '#capture-details-button': {'click': '_nextStep'},
             'input[type=text], input[type=password]': {'keyup': '_checkRestApi'}
         },
@@ -17,13 +18,11 @@ YUI.add('checks-view', function (Y) {
             });
         },
 
-        render: function () {
-            this.get('container').setHTML(
-                this.template({
-                    'configuration': this.get('configuration')
-                })
-            );
-            return this;
+        _renderTemplate: function () {
+            return this.template({
+                'breadcrumbs': this.get('breadcrumbs'),
+                'configuration': this.get('configuration')
+            });
         },
 
         _checkRestApi: function (e) {
@@ -74,6 +73,8 @@ YUI.add('checks-view', function (Y) {
             ezpublish: {
                 value: false
             }
-        }
+        },
+
+        VIEW_NAME: "System checks"
     });
 }, '0.0.1');

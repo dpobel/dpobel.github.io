@@ -31,13 +31,17 @@
                 fullpath: "js/hello-app.js",
                 requires: [
                     'app', 'app-transitions', 'transition', 'node-event-html5',
-                    'ezp-rest-client', 'message-model',
+                    'ezp-rest-client', 'message-model', 'hello-ez-partials',
                     'home-view', 'checks-view', 'capture-view', 'detail-view', 'result-view'
                 ]
             },
             'message-model': {
                 fullpath: "js/message-model.js",
                 requires: ['model']
+            },
+            'hello-ez-partials': {
+                fullpath: "js/hello-ez-partials.js",
+                requires: ['handlebars', 'node']
             },
 
             // views
@@ -93,6 +97,7 @@
 
     <script type="text/x-handlebars-template" id="homeview-tpl">
         <h1 class="view-title">Welcome to the <strong>Hello eZ!</strong> demo application</h1>
+        {{> breadcrumbs}}
         <article class="text">
             <p>This is a demo application of <a href="https://confluence.ez.no/display/EZP/REST+API">the eZ Publish REST API v2</a>. It is also build with <a href="http://yuilibrary.com/yui/docs/app/">the YUI App Framework</a> and <a href="http://purecss.io/">the Pure CSS framework</a>.</p>
             <h2>What it does</h2>
@@ -111,6 +116,7 @@
 
     <script type="text/x-handlebars-template" id="checksview-tpl">
         <h1 class="view-title">Configuration</h1>
+        {{> breadcrumbs}}
         <div class="pure-g-r">
             <section class="pure-u-1-2">
                 <div class="inner-content-right">
@@ -147,6 +153,7 @@
 
     <script type="text/x-handlebars-template" id="captureview-tpl">
     <h1 class="view-title">Please smile and click to take a picture</h1>
+    {{> breadcrumbs}}
     <div class="pure-g-r">
         <section class="webcam-view pure-u-1-2">
             <div class="preview">
@@ -158,7 +165,7 @@
             <p class="help">You can take several picture until you feel satisfied with the one on the right!</p>
         </section><!--
         --><section class="picture-view pure-u-1-2">
-            <p class="preview image-result"><img src="{{picture}}" alt="" /></p>
+            <p class="preview image-result"><img src="{{message.picture}}" alt="" /></p>
             <p class="help help-next">Happy, with the result?</p>
             <p class="button-bar button-bar-next">
                 <a href="#/details" id="next-step-button" class="pure-button pure-button-primary " data-icon="&#xe002;" disabled>Go to the next step</a>
@@ -169,16 +176,17 @@
 
     <script type="text/x-handlebars-template" id="detailsview-tpl">
     <h1 class="view-title">Your profile</h1>
+    {{> breadcrumbs}}
     <div class="pure-g-r">
         <section class="picture-view pure-u-1-2">
             <div class="inner-content-right">
-            {{#if lat}}
+            {{#if message.lat}}
                 <label>Location</label>
                 <div id="map-location" class="map"></div>
             {{else}}
-                {{#if picture}}
+                {{#if message.picture}}
                     <p>Your picture:</p>
-                    <p class="image-result"><img src="{{picture}}" alt="Your picture"></p>
+                    <p class="image-result"><img src="{{message.picture}}" alt="Your picture"></p>
                 {{else}}
                     <p>Don't have a webcam? Or maybe you are too shy, if you change your mind, it is still time <a href="#/checks">to enable it</a> and take a beautiful picture :-)</p>
                 {{/if}}
@@ -191,16 +199,16 @@
                 <fieldset class="pure-g-r">
                     <p class="pure-u-1-2">
                         <label for="name">Your name*:</label>
-                        <input type="text" id="name" name="name" value="{{name}}" required placeholder="Please fill your name" class="pure-u-3-4">
+                        <input type="text" id="name" name="name" value="{{message.name}}" required placeholder="Please fill your name" class="pure-u-3-4">
                     </p><!--
                     --><p class="pure-u-1-2">
                         <label for="twitter">Your Twitter account:</label>
-                        <input type="text" id="twitter" name="twitter" value="{{twitter}}" placeholder="@login" class="pure-u-3-4">
+                        <input type="text" id="twitter" name="twitter" value="{{message.twitter}}" placeholder="@login" class="pure-u-3-4">
                     </p>
                 </fieldset>
                 <fieldset>
                     <label for="mood">Any thought?</label>
-                    <textarea id="mood" name="mood" rows="3" placeholder="You can write here whatever you want (please no ads, no offensive sentence, ...)" class="pure-input-1">{{mood}}</textarea>
+                    <textarea id="mood" name="mood" rows="3" placeholder="You can write here whatever you want (please no ads, no offensive sentence, ...)" class="pure-input-1">{{message.mood}}</textarea>
                 </fieldset>
             </form>
         </section>
@@ -214,6 +222,7 @@
 
     <script type="text/x-handlebars-template" id="resultview-tpl">
     <h1 class="view-title">Results</h1>
+    {{> breadcrumbs}}
     <div class="pure-g-r">
         <section class="picture-view pure-u-1-4">
             <div class="inner-content-right">
@@ -247,6 +256,19 @@
             </div>
         </section>
     </div>
+    </script>
+
+    <script type="text/x-handlebars-template" data-partial-name="breadcrumbs" class="hello-ez-partial">
+        <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+            <span class="pure-menu-heading">Steps:</span>
+            <ul>
+            {{#each breadcrumbs}}
+                <li class="{{class}} {{#if active}}pure-menu-selected{{/if}}{{#unless enabled}} pure-menu-disabled{{/unless}}">
+                    <a href="{{uri}}"><span class="step">{{step}}.</span>&nbsp;{{name}}</a>
+                </li>
+            {{/each}}
+            </ul>
+        </nav>
     </script>
 </body>
 </html>
