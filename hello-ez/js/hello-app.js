@@ -53,11 +53,6 @@ YUI.add('hello-app', function (Y) {
                     api: this.get('api')
                 });
             });
-
-            this.on('*:checkRestApi', function (e) {
-                this.get('api').setAttrs(e.api);
-                this._checkRestApi(e.view);
-            });
         },
 
         handleHome: function () {

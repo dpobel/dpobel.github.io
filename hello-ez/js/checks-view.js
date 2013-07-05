@@ -4,8 +4,7 @@ YUI.add('checks-view', function (Y) {
     Y.ChecksView = Y.Base.create('checksView', Y.TemplateView, [], {
         events: {
             '.pure-menu-disabled a': {'click': '_disableClick'},
-            '#capture-details-button': {'click': '_nextStep'},
-            'input[type=text], input[type=password]': {'keyup': '_checkRestApi'}
+            '#capture-details-button': {'click': '_nextStep'}
         },
 
         initializer: function () {
@@ -22,21 +21,6 @@ YUI.add('checks-view', function (Y) {
             return this.template({
                 'breadcrumbs': this.get('breadcrumbs'),
                 'configuration': this.get('configuration')
-            });
-        },
-
-        _checkRestApi: function (e) {
-            var c = this.get('container');
-
-            this.set('ezpublish', undefined);
-            this.fire('checkRestApi', {
-                'view': this,
-                'api': {
-                    'login': c.one('#login').get('value'),
-                    'password': c.one('#password').get('value'),
-                    'restUrl': c.one('#resturl').get('value'),
-                    'prefix': c.one('#prefix').get('value')
-                }
             });
         },
 
