@@ -12,7 +12,6 @@ YUI.add('detail-view', function (Y) {
     Y.DetailsView = Y.Base.create('detailsView', Y.TemplateView, [], {
         events: {
             '.pure-menu-disabled a': {'click': '_disableClick'},
-            '#another-picture': {'click': '_anotherPicture'},
             '#name': {'keyup': '_handleResultButtonState'},
             '#result-step': {'click': '_handleResultButton'}
         },
@@ -95,19 +94,6 @@ YUI.add('detail-view', function (Y) {
                 });
                 map.entities.push(info);
             }
-        },
-
-        _anotherPicture: function (e) {
-            var c = this.get('container');
-
-            e.preventDefault();
-            this.fire('capture', {
-                'message': {
-                    'name': c.one('#name').get('value'),
-                    'twitter': c.one('#twitter').get('value'),
-                    'mood': c.one('#mood').get('value')
-                }
-            });
         }
     }, {
         VIEW_NAME: "Details"
