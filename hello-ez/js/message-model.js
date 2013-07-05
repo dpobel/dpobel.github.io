@@ -4,7 +4,7 @@ YUI.add('message-model', function (Y) {
     var TYPE_REMOTE_ID = "hello-ez-type-v1",
         TYPE_GROUP_IDENTIFIER = 'Hello eZ Demo Types',
         TYPE_GROUP_URI = 'content/typegroups', // TODO should be referenced in the root struct, report the issue
-        LANG_CODE = 'eng-GB', // TODO allow to change this in the conf.
+        LANG_CODE = 'eng-GB',
 
         typeGroupCreateStruct = {
             "ContentTypeGroupInput": {
@@ -157,7 +157,7 @@ YUI.add('message-model', function (Y) {
                 "mainLanguageCode": LANG_CODE,
                 "LocationCreate": {
                     "ParentLocation": {
-                        "_href": "/content/locations/1/2" // TODO allow to change this in the conf.
+                        "_href": ""
                     },
                     "priority": "0",
                     "hidden": "false",
@@ -165,7 +165,7 @@ YUI.add('message-model', function (Y) {
                     "sortOrder": "ASC"
                 },
                 "Section": {
-                    "_href": "/content/sections/1" // TODO allow to change this in the conf.
+                    "_href": ""
                 },
                 "alwaysAvailable": "true",
                 //"remoteId": "",
@@ -360,7 +360,7 @@ YUI.add('message-model', function (Y) {
                 that = this,
                 createStruct;
 
-            createStruct = this._getContentCreateStruct(contentType);
+            createStruct = this._getContentCreateStruct(contentType, options.settings);
             api.POST(
                 api.get('rootStruct').Root.content._href, {
                     'Content-Type': 'application/vnd.ez.api.ContentCreate+json',
@@ -387,19 +387,38 @@ YUI.add('message-model', function (Y) {
             );
         },
 
-        _getContentCreateStruct: function (contentType) {
+        _getTypeCreateStruct: function (settings) {
+            var struct = Y.clone(typeCreateStruct),
+                lang = settings.languageCode, i,
+                fields = struct.ContentTypeCreate.FieldDefinitions.FieldDefinition;
+
+            struct.ContentTypeCreate.names.value[0]._languageCode = lang;
+            struct.ContentTypeCreate.descriptions.value[0]._languageCode = lang;
+            struct.ContentTypeCreate.mainLanguageCode = lang;
+
+            for(i = 0; i != fields.length; i++) {
+                fields[i].names.value[0]._languageCode = lang;
+                fields[i].descriptions.value[0]._languageCode = lang;
+            }
+            return struct;
+        },
+
+        _getContentCreateStruct: function (contentType, settings) {
             var struct = Y.clone(contentCreateStruct),
                 that = this,
                 fields = typeCreateStruct.ContentTypeCreate.FieldDefinitions.FieldDefinition;
 
+            struct.ContentCreate.mainLanguageCode = settings.languageCode;
+            struct.ContentCreate.Section._href = settings.section;
             struct.ContentCreate.ContentType._href = contentType._href;
+            struct.ContentCreate.LocationCreate.ParentLocation._href = settings.location;
             fields.forEach(function (value) {
                 var fieldValue = that.get(value.identifier);
 
                 if ( fieldValue ) {
                     struct.ContentCreate.fields.field.push({
                         'fieldDefinitionIdentifier': value.identifier,
-                        'languageCode': LANG_CODE,
+                        'languageCode': settings.languageCode,
                         'fieldValue': fieldValue
                     });
                 }
@@ -444,7 +463,7 @@ YUI.add('message-model', function (Y) {
             api.POST(
                 contentTypeGroup.ContentTypes._href + '?publish=true',
                 {'Content-Type': 'application/vnd.ez.api.ContentTypeCreate+json'},
-                typeCreateStruct, {
+                this._getTypeCreateStruct(options.settings), {
                     start: function (id, args) {
                         log("Creating the content type");
                         log(args.formattedRequest, false, 'request');
@@ -505,7 +524,10 @@ YUI.add('message-model', function (Y) {
                         'fileSize': Y.Base64.decode(b64).length
                     };
                 }
+            },
 
+            settings: {
+                value: {}
             }
         }
     });

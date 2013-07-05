@@ -49,6 +49,7 @@ YUI.add('hello-app', function (Y) {
             this.on('*:save', function (e) {
                 this.get('message').save({
                     logFn: e.logFn,
+                    settings: this.get('contentSettings'),
                     api: this.get('api')
                 });
             });
@@ -226,6 +227,10 @@ YUI.add('hello-app', function (Y) {
                     login: 'admin',
                     password: 'ezpublish'
                 })
+            },
+
+            contentSettings: {
+                value: {}
             },
 
             stream: {
