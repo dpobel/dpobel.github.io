@@ -66,9 +66,12 @@ YUI.add('hello-app', function (Y) {
                 'breadcrumbs': this._breadcrumbs('checks'),
                 'stream': this.get('stream'),
                 'configuration': this.get('api').toJSON(),
+                'settings': this.get('contentSettings'),
                 'webcam': null,
                 'geoloc': null,
-                'ezpublish': null
+                'ezpublish': null,
+                'location': null,
+                'section': null
             }, {
                 callback: function (view) {
                     this._getWebcamAccess(view, function () {
@@ -119,15 +122,48 @@ YUI.add('hello-app', function (Y) {
         },
 
         _checkRestApi: function(checkView) {
-            var handlers = {
+            var that = this,
+                handlers = {
                     success: function () {
                         checkView.set('ezpublish', true);
+                        that._checkLocation(checkView);
                     },
                     failure: function () {
                         checkView.set('ezpublish', false);
+                        checkView.set('location', false);
+                        checkView.set('section', false);
                     }
                 };
             this.get('api').root(handlers);
+        },
+
+        _checkLocation: function (checkView) {
+            var that = this,
+                settings = this.get('contentSettings'),
+                handlers = {
+                    success: function () {
+                        checkView.set('location', true);
+                        that._checkSection(checkView);
+                    },
+                    failure: function () {
+                        checkView.set('location', false);
+                        that._checkSection(checkView);
+                    }
+                };
+            this.get('api').GET(settings.location, {}, handlers);
+        },
+
+        _checkSection: function (checkView) {
+            var settings = this.get('contentSettings'),
+                handlers = {
+                    success: function () {
+                        checkView.set('section', true);
+                    },
+                    failure: function () {
+                        checkView.set('section', false);
+                    }
+                };
+            this.get('api').GET(settings.section, {}, handlers);
         },
 
         _getWebcamAccess: function (checkView, callback) {

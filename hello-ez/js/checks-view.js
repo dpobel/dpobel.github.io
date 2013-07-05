@@ -8,19 +8,27 @@ YUI.add('checks-view', function (Y) {
         },
 
         initializer: function () {
-            this.on(['webcamChange', 'geolocChange'], function (e) {
-                this._setCheckState(e.attrName, e.newVal);
-            });
-            this.on('ezpublishChange', function (e) {
-                this._setCheckState(e.attrName, e.newVal);
+            this.on([
+                    'webcamChange', 'geolocChange',
+                    'ezpublishChange', 'locationChange',
+                    'sectionChange'
+                ], function (e) {
+                    this._setCheckState(e.attrName, e.newVal);
+                }
+            );
+            this.on('sectionChange', function (e) {
                 this.get('container').one('#capture-details-button').set('disabled', false);
             });
         },
 
         _renderTemplate: function () {
+            var settings = this.get('settings');
+
             return this.template({
                 'breadcrumbs': this.get('breadcrumbs'),
-                'configuration': this.get('configuration')
+                'configuration': this.get('configuration'),
+                'location': settings.location,
+                'section': settings.section
             });
         },
 
@@ -55,6 +63,14 @@ YUI.add('checks-view', function (Y) {
             },
 
             ezpublish: {
+                value: false
+            },
+
+            location: {
+                value: false
+            },
+
+            section: {
                 value: false
             }
         },
