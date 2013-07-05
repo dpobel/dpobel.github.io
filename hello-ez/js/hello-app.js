@@ -7,7 +7,6 @@ YUI.add('hello-app', function (Y) {
                 type: Y.HomeView
             },
             checks: {
-                preserve: true,
                 type: Y.ChecksView,
                 parent: 'home'
             },
@@ -65,7 +64,10 @@ YUI.add('hello-app', function (Y) {
             this.showView('checks', {
                 'breadcrumbs': this._breadcrumbs('checks'),
                 'stream': this.get('stream'),
-                'configuration': this.get('api').toJSON()
+                'configuration': this.get('api').toJSON(),
+                'webcam': null,
+                'geoloc': null,
+                'ezpublish': null
             }, {
                 callback: function (view) {
                     this._getWebcamAccess(view, function () {
@@ -73,7 +75,8 @@ YUI.add('hello-app', function (Y) {
                             this._checkRestApi(view);
                         });
                     });
-                }
+                },
+                'updated': true
             });
 
         },
