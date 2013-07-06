@@ -134,6 +134,7 @@ YUI.add('hello-app', function (Y) {
                         checkView.set('section', false);
                     }
                 };
+            checkView.set('ezpublish', undefined);
             this.get('api').root(handlers);
         },
 
@@ -150,6 +151,7 @@ YUI.add('hello-app', function (Y) {
                         that._checkSection(checkView);
                     }
                 };
+            checkView.set('location', undefined);
             this.get('api').GET(settings.location, {}, handlers);
         },
 
@@ -163,12 +165,14 @@ YUI.add('hello-app', function (Y) {
                         checkView.set('section', false);
                     }
                 };
+            checkView.set('section', undefined);
             this.get('api').GET(settings.section, {}, handlers);
         },
 
         _getWebcamAccess: function (checkView, callback) {
             var that = this;
 
+            checkView.set('webcam', undefined);
             if ( navigator.getMedia ) {
                 navigator.getMedia({
                         video: true,
@@ -197,6 +201,7 @@ YUI.add('hello-app', function (Y) {
         _geolocate: function (checkView, callback) {
             var that = this;
 
+            checkView.set('geoloc', undefined);
             if ( "geolocation" in navigator ) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     that.get('message').setAttrs({

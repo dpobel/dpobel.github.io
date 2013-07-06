@@ -116,11 +116,11 @@
         {{> breadcrumbs}}
         <section>
             <div class="inner-content-right">
-                <p>Please allow your browser to access the following resources, if you don't do that (or those resources are not available), the demo will still works but it will be less fun :-)</p>
+                <p>Please allow your browser to access to your webcam (if any) and your position, if you don't do that (or those resources are not available), the demo will still work but it will be less fun :-)</p>
                 <ul class="system-check">
                     <li id="webcam-check">Your webcam</li>
                     <li id="geoloc-check">Your location</li>
-                    <li id="ezpublish-check">Access to eZ Publish</li>
+                    <li id="ezpublish-check">Access to the eZ Publish REST endpoint {{configuration.restUrl}}{{configuration.prefix}}</li>
                     <li id="location-check">Parent location in eZ Publish {{location}} </li>
                     <li id="section-check">Section in eZ Publish {{section}}</li>
                 </ul>

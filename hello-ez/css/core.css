@@ -185,10 +185,29 @@ canvas {
 .system-check li {
     margin-top:2px;
     background: #f3f3f3;
+    color: #999;
 }
 
 .system-check li:before {
-    content: "\e00d";
+    content: "?";
+    width: 2em;
+    text-align:center;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.system-check .is-checking {
+    color: #666;
+}
+
+.system-check .is-granted,
+.system-check .is-denied {
+    color: #444;
+}
+
+.system-check .is-checking:before,
+.system-check .is-granted:before,
+.system-check .is-denied:before {
     font-family: 'icomoon';
     speak: none;
     font-weight: normal;
@@ -196,16 +215,16 @@ canvas {
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    width: 2em;
-    text-align:center;
+}
 
+.system-check .is-checking:before {
+    content: "\e00d";
     -moz-animation: spin 2s infinite linear;
     -o-animation: spin 2s infinite linear;
     -webkit-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
-    display: inline-block;
-
 }
+
 .system-check .is-granted:before {
     content: "\e00b";
     color: #1CB841;

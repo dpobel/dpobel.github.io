@@ -45,11 +45,13 @@ YUI.add('checks-view', function (Y) {
         _setCheckState: function (id, ok) {
             var wc = this.get('container').one('#' + id + '-check');
             if ( ok === true ) {
-                wc.removeClass('is-denied').addClass('is-granted');
+                wc.removeClass('is-denied').addClass('is-granted').removeClass('is-checking');
             } else if ( ok === false ) {
-                wc.removeClass('is-granted').addClass('is-denied');
+                wc.removeClass('is-granted').addClass('is-denied').removeClass('is-checking');
+            } else if ( ok === undefined ) {
+                wc.removeClass('is-granted').removeClass('is-denied').addClass('is-checking');
             } else {
-                wc.removeClass('is-granted').removeClass('is-denied');
+                wc.removeClass('is-granted').removeClass('is-denied').removeClass('is-checking');
             }
         }
     }, {
