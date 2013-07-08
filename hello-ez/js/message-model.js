@@ -208,6 +208,106 @@ YUI.add('message-model', function (Y) {
             }
         },
 
+        url: function (options, callback) {
+            var api = options.api,
+                log = options.logFn,
+                that = this;
+
+            if ( !callback ) {
+                callback = function (err, resp) { };
+            }
+
+            log("Getting the URL alias");
+            api.GET(this.get('id'), {
+                'Accept': 'application/vnd.ez.api.ContentInfo+json'
+            }, {
+                start: function (id, args) {
+                    log("Reading the content info");
+                    log(args.formattedRequest, false, 'request');
+                },
+                success: function (id, xhr, args) {
+                    var struct = Y.JSON.parse(xhr.responseText);
+
+                    api.GET(struct.Content.MainLocation._href, {}, {
+                        start: function (id, args) {
+                            log("Reading the main location");
+                            log(args.formattedRequest, false, 'request');
+                        },
+                        success: function (id, xhr, args) {
+                            // TODO should be referenced xhr.responseText => report issue
+                            api.GET(struct.Content.MainLocation._href + '/urlaliases?custom=false',
+                                {}, {
+                                    start: function (id, args) {
+                                        log("Reading the URL aliases of the main location");
+                                        log(args.formattedRequest, false, 'request');
+                                    },
+                                    success: function (id, xhr, args) {
+                                        var struct = Y.JSON.parse(xhr.responseText);
+
+                                        api.GET(struct.UrlAliasRefList.UrlAlias[0]._href,
+                                            {}, {
+                                                start: function (id, args) {
+                                                    log("Reading the main URL alias");
+                                                    log(args.formattedRequest, false, 'request');
+                                                },
+                                                success: function (id, xhr, args) {
+                                                    var struct = Y.JSON.parse(xhr.responseText);
+
+                                                    that.set('url', struct.UrlAlias.path);
+                                                    callback();
+                                                },
+                                                failure: function (id, xhr, args) {
+                                                    log(
+                                                        "Unable to read the main url alias (" + xhr.status + " " + xhr.statusText + ")",
+                                                        false, 'error'
+                                                    );
+                                                    callback("Fatal error (status " + xhr.status + ")");
+                                                },
+                                                complete: function (id, xhr, args) {
+                                                    logResponse(log, xhr);
+                                                }
+                                            }
+                                        );
+
+                                    },
+                                    failure: function (id, xhr, args) {
+                                        log(
+                                            "Unable to read the url aliases (" + xhr.status + " " + xhr.statusText + ")",
+                                            false, 'error'
+                                        );
+                                        callback("Fatal error (status " + xhr.status + ")");
+                                    },
+                                    complete: function (id, xhr, args) {
+                                        logResponse(log, xhr);
+                                    }
+                                }
+                            );
+                        },
+                        failure: function (id, xhr, args) {
+                            log(
+                                "Unable to read the location (" + xhr.status + " " + xhr.statusText + ")",
+                                false, 'error'
+                            );
+                            callback("Fatal error (status " + xhr.status + ")");
+                        },
+                        complete: function (id, xhr, args) {
+                            logResponse(log, xhr);
+                        }
+                    });
+                },
+                failure: function (id, xhr, args) {
+                    log(
+                        "Unable to read the content " + this.get('id') + " (" + xhr.status + " " + xhr.statusText + ")",
+                        false, 'error'
+                    );
+                    callback("Fatal error (status " + xhr.status + ")");
+                },
+                complete: function (id, xhr, args) {
+                    logResponse(log, xhr);
+                }
+            });
+        },
+
         _createMessage: function (options, callback) {
             var api = options.api,
                 log = options.logFn,
@@ -371,6 +471,9 @@ YUI.add('message-model', function (Y) {
                         log(args.formattedRequest, false, 'request');
                     },
                     success: function (id, xhr, args) {
+                        var struct = Y.JSON.parse(xhr.responseText);
+
+                        that.set('id', struct.Content._href);
                         that._publishDraft(Y.JSON.parse(xhr.responseText), options, callback);
                     },
                     failure: function (id, xhr, args) {
@@ -524,6 +627,10 @@ YUI.add('message-model', function (Y) {
                         'fileSize': Y.Base64.decode(b64).length
                     };
                 }
+            },
+
+            url: {
+                value: null
             },
 
             settings: {

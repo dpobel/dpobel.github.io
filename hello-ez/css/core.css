@@ -292,6 +292,19 @@ canvas {
     position: relative;
 }
 
+.result-bar {
+    font-size: 140%;
+    text-align: center;
+}
+
+.button-success {
+    background: #1CB841;
+}
+
+.button-success {
+    color: #fff;
+}
+
 .rest-log .log-title {
     background: #c9c9c9;
     border: 1px solid #c9c9c9;

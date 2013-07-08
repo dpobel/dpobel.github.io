@@ -7,6 +7,19 @@ YUI.add('result-view', function (Y) {
             '#save-rest': {'click': '_saveRest'}
         },
 
+        initializer: function () {
+            var api = this.get('api'),
+                view = this;
+
+            this.get('message').on('urlChange', function (e) {
+                var url = api.get('restUrl') + e.newVal;
+
+                view.get('container').all('.view-rest')
+                    .setAttribute('href', url)
+                    .removeAttribute('disabled');
+            });
+        },
+
         _saveRest: function (e) {
             if ( !e.target.get('disabled') ) {
                 this.fire('save', {

@@ -48,10 +48,20 @@ YUI.add('hello-app', function (Y) {
             });
 
             this.on('*:save', function (e) {
-                this.get('message').save({
+                var msg = this.get('message'),
+                    api = this.get('api');
+
+                msg.save({
                     logFn: e.logFn,
                     settings: this.get('contentSettings'),
-                    api: this.get('api')
+                    api: api
+                }, function (err, response) {
+                    if ( !err ) {
+                        msg.url({
+                            logFn: e.logFn,
+                            api: api
+                        });
+                    }
                 });
             });
         },
