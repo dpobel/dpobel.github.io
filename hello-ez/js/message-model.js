@@ -233,7 +233,7 @@ YUI.add('message-model', function (Y) {
                             log(
                                 "Most likely, the content type group exists and" +
                                     " your browser has a bug in the handling of" +
-                                    " 30X response of a CORS request...",
+                                    " 30X response after a CORS request...",
                                 true
                             );
                             that._checkContentTypeGroupFromList(options, callback);
