@@ -1,13 +1,8 @@
 YUI.add('home-view', function (Y) {
     "use strict";
 
-    Y.HomeView = Y.Base.create('homeView', Y.TemplateView, [], {
+    Y.HomeView = Y.Base.create('homeView', Y.View, [], {
 
-        _renderTemplate: function () {
-            return this.template({
-                'breadcrumbs': this.get('breadcrumbs')
-            });
-        }
     }, {
         VIEW_NAME: "Introduction"
     });

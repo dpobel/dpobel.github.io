@@ -4,7 +4,8 @@ YUI.add('hello-app', function (Y) {
     Y.HelloApp = Y.Base.create('helloApp', Y.App, [], {
         views: {
             home: {
-                type: Y.HomeView
+                type: Y.HomeView,
+                preserve: true
             },
             checks: {
                 type: Y.ChecksView,
@@ -56,8 +57,8 @@ YUI.add('hello-app', function (Y) {
         },
 
         handleHome: function () {
-            this.showView('home', {
-                'breadcrumbs': this._breadcrumbs('home')
+            this.showContent(Y.one('.view-home'), {
+                view: 'home'
             });
         },
 

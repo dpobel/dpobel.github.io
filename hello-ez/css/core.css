@@ -23,6 +23,14 @@ h2 {
     font-style: normal;
 }
 
+.js-showed {
+    display: none;
+}
+
+.yui3-js-enabled .js-showed {
+    display: inline-block;
+}
+
 .text a, .text a:visited {
     color: #0000dd;
     text-decoration: none;
@@ -96,12 +104,39 @@ canvas {
 }
 
 .application {
+    display: none;
     background: #fff;
     margin: 1em;
     border: 1px solid #999;
     border-radius: 3px;
     padding: 0 1em 1em 1em;
     max-width: 1280px;
+}
+
+.yui3-js-enabled .application {
+    display: block;
+}
+
+.view-home {
+    background: #fff;
+    margin: 1em;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 0 1em 1em 1em;
+    max-width: 1280px;
+}
+
+.yui3-js-enabled .view-home {
+    display: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    max-width: none;
+}
+
+.yui3-js-enabled .application .view-home {
+    display: block;
 }
 
 .view-title {

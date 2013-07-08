@@ -11,6 +11,17 @@
     <script src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
 </head>
 <body>
+    <div class="view-home">
+        <h1 class="view-title">Welcome to the <strong>Hello eZ!</strong> demo application</h1>
+        <article class="text">
+            <p>This is a demo application of <a href="https://confluence.ez.no/display/EZP/REST+API">the eZ Publish REST API v2</a>. It is also build with <a href="http://yuilibrary.com/yui/docs/app/">the YUI App Framework</a> and <a href="http://purecss.io/">the Pure CSS framework</a>.</p>
+            <noscript><strong>This application requires a JavaScript to be enabled in your browser</strong></noscript>
+            <h2>What it does</h2>
+            <p>By going through the following steps, you will create a simplified profile containing a picture taken with your webcam, the location send by your browser and others manually filled fields on an eZ Publish website (<a href="http://www.planet-ezpublish.fr">Planet eZ Publish.fr</a> by default). This profile will be only visible on <a href="http://demo.planet-ezpublish.fr/">the demo page of Planet eZ Publish.fr</a>, if you want me to remove you profile, just <a href="mailto:damien+helloez@pobel.fr">drop an email</a>.
+        </article>
+        <p class="button-bar button-bar-next"><a href="#/checks" class="js-showed pure-button pure-button-primary" data-icon="&#xe002;">Start</a></p>
+    </div>
+
     <div id="hello-app" class="application"></div>
     <script>
     YUI({
@@ -30,7 +41,7 @@
             'hello-app': {
                 fullpath: "js/hello-app.js",
                 requires: [
-                    'app', 'app-transitions', 'transition', 'node-event-html5',
+                    'app', 'app-transitions', 'app-content', 'transition', 'node-event-html5',
                     'ezp-rest-client', 'message-model', 'hello-ez-partials',
                     'home-view', 'checks-view', 'capture-view', 'detail-view', 'result-view'
                 ]
@@ -97,18 +108,6 @@
         });
         app.render().dispatch();
     });
-    </script>
-
-
-    <script type="text/x-handlebars-template" id="homeview-tpl">
-        <h1 class="view-title">Welcome to the <strong>Hello eZ!</strong> demo application</h1>
-        {{> breadcrumbs}}
-        <article class="text">
-            <p>This is a demo application of <a href="https://confluence.ez.no/display/EZP/REST+API">the eZ Publish REST API v2</a>. It is also build with <a href="http://yuilibrary.com/yui/docs/app/">the YUI App Framework</a> and <a href="http://purecss.io/">the Pure CSS framework</a>.</p>
-            <h2>What it does</h2>
-            <p>By going through the following steps, you will create a simplified profile containing a picture taken with your webcam, the location send by your browser and others manually filled fields on an eZ Publish website (<a href="http://www.planet-ezpublish.fr">Planet eZ Publish.fr</a> by default). This profile will be only visible on <a href="http://demo.planet-ezpublish.fr/">the demo page of Planet eZ Publish.fr</a>, if you want me to remove you profile, just <a href="mailto:damien+helloez@pobel.fr">drop an email</a>.
-        </article>
-        <p class="button-bar button-bar-next"><a href="#/checks" class="pure-button pure-button-primary" data-icon="&#xe002;">Start</a></p>
     </script>
 
     <script type="text/x-handlebars-template" id="checksview-tpl">
