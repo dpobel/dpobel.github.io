@@ -242,7 +242,6 @@ YUI.add('hello-app', function (Y) {
                     }
                 }
             }
-            console.log(path);
             return path;
 
         }
