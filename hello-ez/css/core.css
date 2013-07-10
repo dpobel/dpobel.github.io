@@ -109,7 +109,7 @@ canvas {
     margin: 1em;
     border: 1px solid #999;
     border-radius: 3px;
-    padding: 0 1em 1em 1em;
+    padding: 0 1em 0 1em;
     max-width: 1280px;
 }
 
@@ -395,4 +395,30 @@ canvas {
 
 .pure-menu .pure-menu-disabled .step {
     background: #aaa;
+}
+
+.footer-links {
+    text-align: center;
+}
+
+.pure-menu.footer-links>ul {
+    height: auto;
+}
+
+.footer-links li {
+    margin-right: 1em;
+    font-size: 85%;
+}
+
+.footer-links li a {
+    padding: 0;
+    border: 0;
+}
+
+.footer-links li a:before {
+    color: #666;
+}
+
+.footer-links li a:hover {
+    background: transparent;
 }

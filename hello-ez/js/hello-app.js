@@ -68,7 +68,10 @@ YUI.add('hello-app', function (Y) {
 
         handleHome: function () {
             this.showContent(Y.one('.view-home'), {
-                view: 'home'
+                view: 'home',
+                callback: function (view) {
+                    view.addFooter();
+                }
             });
         },
 
