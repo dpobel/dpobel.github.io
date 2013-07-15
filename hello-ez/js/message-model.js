@@ -1,7 +1,8 @@
 YUI.add('message-model', function (Y) {
     "use strict";
 
-    var TYPE_REMOTE_ID = "hello-ez-type-v1",
+    var L = Y.Lang,
+        TYPE_REMOTE_ID = "hello-ez-type-v1",
         TYPE_GROUP_IDENTIFIER = 'Hello eZ Demo Types',
         TYPE_GROUP_URI = 'content/typegroups', // TODO should be referenced in the root struct, report the issue
         LANG_CODE = 'eng-GB',
@@ -184,6 +185,27 @@ YUI.add('message-model', function (Y) {
         }
     }
 
+    function getHandlers(logFn, startMsg, successFn, failure, callback) {
+        return {
+            start: function (id, args) {
+                logFn(startMsg);
+                logFn(args.formattedRequest, false, 'request');
+            },
+            success: successFn,
+            failure: function (id, xhr, args) {
+                if ( L.isString(failure) ) {
+                    logFn(failure + " (" + xhr.status + " " + xhr.statusText + ")", false, 'error');
+                    callback(failure + " (status " + xhr.status + ")");
+                } else if ( L.isFunction(failure) ) {
+                    failure(id, xhr, args);
+                }
+            },
+            complete: function (id, xhr, args) {
+                logResponse(logFn, xhr);
+            }
+        };
+    }
+
     Y.Message = Y.Base.create('message', Y.Model, [], {
 
         sync: function (action, options, callback) {
@@ -193,15 +215,13 @@ YUI.add('message-model', function (Y) {
 
             if ( action === 'create' ) {
                 if ( !this.get('rootStruct') ) {
-                    api.root({
-                        success: function (id, xhr, args) {
-                            that._createMessage(options, callback);
-                        },
-                        failure: function (id, xhr, args) {
-                            log("Fatal error", false, 'error');
-                            callback("Fatal error (status " + xhr.status + ")");
-                        }
-                    });
+                    api.root(
+                        getHandlers(
+                            log, "Getting root structure", function (id, xhr, args) {
+                                that._createMessage(options, callback);
+                            }, "Fatal error", callback
+                        )
+                    );
                 } else {
                     this._createMessage(options, callback);
                 }
@@ -219,93 +239,47 @@ YUI.add('message-model', function (Y) {
 
             log("Getting the URL alias");
             api.GET(this.get('id'), {
-                'Accept': 'application/vnd.ez.api.ContentInfo+json'
-            }, {
-                start: function (id, args) {
-                    log("Reading the content info");
-                    log(args.formattedRequest, false, 'request');
-                },
-                success: function (id, xhr, args) {
-                    var struct = Y.JSON.parse(xhr.responseText);
+                    'Accept': 'application/vnd.ez.api.ContentInfo+json'
+                }, getHandlers(
+                    log, "Reading the content info",
+                    function (id, xhr, args) {
+                        var struct = Y.JSON.parse(xhr.responseText);
 
-                    api.GET(struct.Content.MainLocation._href, {}, {
-                        start: function (id, args) {
-                            log("Reading the main location");
-                            log(args.formattedRequest, false, 'request');
-                        },
-                        success: function (id, xhr, args) {
-                            // TODO should be referenced xhr.responseText => report issue
-                            api.GET(struct.Content.MainLocation._href + '/urlaliases?custom=false',
-                                {}, {
-                                    start: function (id, args) {
-                                        log("Reading the URL aliases of the main location");
-                                        log(args.formattedRequest, false, 'request');
-                                    },
-                                    success: function (id, xhr, args) {
-                                        var struct = Y.JSON.parse(xhr.responseText);
+                        api.GET(struct.Content.MainLocation._href, {},
+                            getHandlers(
+                                log, "Reading the main location",
+                                function (id, xhr, args) {
+                                // TODO should be referenced xhr.responseText => report issue
+                                    api.GET(struct.Content.MainLocation._href + '/urlaliases?custom=false',
+                                        {}, getHandlers(
+                                            log, "Reading the URL aliases of the main location",
+                                            function (id, xhr, args) {
+                                                var struct = Y.JSON.parse(xhr.responseText);
 
-                                        api.GET(struct.UrlAliasRefList.UrlAlias[0]._href,
-                                            {}, {
-                                                start: function (id, args) {
-                                                    log("Reading the main URL alias");
-                                                    log(args.formattedRequest, false, 'request');
-                                                },
-                                                success: function (id, xhr, args) {
-                                                    var struct = Y.JSON.parse(xhr.responseText);
+                                                api.GET(struct.UrlAliasRefList.UrlAlias[0]._href,
+                                                    {}, getHandlers(
+                                                        log, "Reading the main URL alias",
+                                                        function (id, xhr, args) {
+                                                            var struct = Y.JSON.parse(xhr.responseText);
 
-                                                    that.set('url', struct.UrlAlias.path);
-                                                    callback();
-                                                },
-                                                failure: function (id, xhr, args) {
-                                                    log(
-                                                        "Unable to read the main url alias (" + xhr.status + " " + xhr.statusText + ")",
-                                                        false, 'error'
-                                                    );
-                                                    callback("Fatal error (status " + xhr.status + ")");
-                                                },
-                                                complete: function (id, xhr, args) {
-                                                    logResponse(log, xhr);
-                                                }
-                                            }
-                                        );
-
-                                    },
-                                    failure: function (id, xhr, args) {
-                                        log(
-                                            "Unable to read the url aliases (" + xhr.status + " " + xhr.statusText + ")",
-                                            false, 'error'
-                                        );
-                                        callback("Fatal error (status " + xhr.status + ")");
-                                    },
-                                    complete: function (id, xhr, args) {
-                                        logResponse(log, xhr);
-                                    }
-                                }
-                            );
-                        },
-                        failure: function (id, xhr, args) {
-                            log(
-                                "Unable to read the location (" + xhr.status + " " + xhr.statusText + ")",
-                                false, 'error'
-                            );
-                            callback("Fatal error (status " + xhr.status + ")");
-                        },
-                        complete: function (id, xhr, args) {
-                            logResponse(log, xhr);
-                        }
-                    });
-                },
-                failure: function (id, xhr, args) {
-                    log(
-                        "Unable to read the content " + this.get('id') + " (" + xhr.status + " " + xhr.statusText + ")",
-                        false, 'error'
-                    );
-                    callback("Fatal error (status " + xhr.status + ")");
-                },
-                complete: function (id, xhr, args) {
-                    logResponse(log, xhr);
-                }
-            });
+                                                            that.set('url', struct.UrlAlias.path);
+                                                            callback();
+                                                        },
+                                                        "Unable to read the main url alias", callback
+                                                    )
+                                                );
+                                            },
+                                            "Unable to read the url aliases", callback
+                                        )
+                                    );
+                                },
+                                "Unable to read the location", callback
+                            )
+                        );
+                    },
+                    "Unable to read the content " + this.get('id'), callback
+                )
+            );
         },
 
         _createMessage: function (options, callback) {
@@ -315,17 +289,15 @@ YUI.add('message-model', function (Y) {
 
             api.GET(
                 api.get('prefix') + TYPE_GROUP_URI + '?identifier=' + TYPE_GROUP_IDENTIFIER,
-                {}, {
-                    start: function (id, args) {
-                        log("Checking whether the content type groups exists");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                {},
+                getHandlers(
+                    log, "Checking whether the content type groups exists",
+                    function (id, xhr, args) {
                         var struct = Y.JSON.parse(xhr.responseText);
 
                         that._checkType(struct, options, callback);
                     },
-                    failure: function (id, xhr, args) {
+                    function (id, xhr, args) {
                         if ( xhr.status === 404 ) {
                             that._createContentTypeGroup(options, callback);
                         } else if ( xhr.status === 0 ) {
@@ -341,11 +313,8 @@ YUI.add('message-model', function (Y) {
                             log("Fatal error", false, 'error');
                             callback("Fatal error (status " + xhr.status + ")");
                         }
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-                }
+                    }, callback
+                )
             );
         },
 
@@ -356,12 +325,10 @@ YUI.add('message-model', function (Y) {
 
             api.GET(
                 api.get('prefix') + TYPE_GROUP_URI,
-                {}, {
-                    start: function (id, args) {
-                        log("Getting the content type groups from the full list of content type groups");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                {},
+                getHandlers(
+                    log, "Getting the content type groups from the full list of content type groups",
+                    function (id, xhr, args) {
                         var struct = Y.JSON.parse(xhr.responseText);
 
                         struct.ContentTypeGroupList.ContentTypeGroup.forEach(function(contentTypeGroup) {
@@ -370,20 +337,9 @@ YUI.add('message-model', function (Y) {
                             }
                         });
                     },
-                    failure: function (id, xhr, args) {
-                        log(
-                            "Unable to list the content type groups (" + xhr.status + " " + xhr.statusText + ")",
-                            false, 'error'
-                        );
-                        callback("Unable to create the content type group (status " + xhr.status + ")");
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-                }
+                    "Unable to list the content type groups", callback
+                )
             );
-
-
         },
 
         _createContentTypeGroup: function (options, callback) {
@@ -394,27 +350,16 @@ YUI.add('message-model', function (Y) {
             api.POST(
                 api.get('prefix') + TYPE_GROUP_URI, {
                     'Content-Type': 'application/vnd.ez.api.ContentTypeGroupInput+json'
-                }, typeGroupCreateStruct, {
-                    start: function (id, args) {
-                        log("Creating the content type groups");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                }, typeGroupCreateStruct,
+                getHandlers(
+                    log, "Creating the content type groups",
+                    function (id, xhr, args) {
                         var struct = Y.JSON.parse(xhr.responseText);
 
                         that._checkType(struct.ContentTypeGroup, options, callback);
                     },
-                    failure: function (id, xhr, args) {
-                        log(
-                            "Unable to create the content type group (" + xhr.status + " " + xhr.statusText + ")",
-                            false, 'error'
-                        );
-                        callback("Unable to create the content type group (status " + xhr.status + ")");
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-                }
+                    "Unable to create the content type group", callback
+                )
             );
         },
 
@@ -425,12 +370,10 @@ YUI.add('message-model', function (Y) {
 
             api.GET(
                 api.get('rootStruct').Root.contentTypes._href + '?remoteId=' + TYPE_REMOTE_ID,
-                {}, {
-                    start: function (id, args) {
-                        log("Checking whether the content type exists");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                {},
+                getHandlers(
+                    log, "Checking whether the content type exists",
+                    function (id, xhr, args) {
                         var struct = Y.JSON.parse(xhr.responseText);
 
                         that._createDraft(
@@ -439,18 +382,15 @@ YUI.add('message-model', function (Y) {
                             callback
                         );
                     },
-                    failure: function (id, xhr, args) {
+                    function (id, xhr, args) {
                         if ( xhr.status === 404 ) {
                             that._createContentType(contentTypeGroup, options, callback);
                         } else {
                             log("Fatal error", false, 'error');
                             callback("Fatal error (status " + xhr.status + ")");
                         }
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-                }
+                    }, callback
+                )
             );
         },
 
@@ -465,28 +405,17 @@ YUI.add('message-model', function (Y) {
                 api.get('rootStruct').Root.content._href, {
                     'Content-Type': 'application/vnd.ez.api.ContentCreate+json',
                     'Accept': 'application/vnd.ez.api.Content+json'
-                }, createStruct, {
-                    start: function (id, args) {
-                        log("Creating the draft");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                }, createStruct,
+                getHandlers(
+                    log, "Creating the draft",
+                    function (id, xhr, args) {
                         var struct = Y.JSON.parse(xhr.responseText);
 
                         that.set('id', struct.Content._href);
                         that._publishDraft(Y.JSON.parse(xhr.responseText), options, callback);
                     },
-                    failure: function (id, xhr, args) {
-                        log(
-                            "Unable to create the draft (" + xhr.status + " " + xhr.statusText + ")",
-                            false, 'error'
-                        );
-                        callback("Unable to create the draft (status " + xhr.status + ")");
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-                }
+                    "Unable to create the draft", callback
+                )
             );
         },
 
@@ -535,26 +464,14 @@ YUI.add('message-model', function (Y) {
 
             api.PUBLISH(
                 draft.Content.CurrentVersion.Version._href,
-                {}, null, {
-                    start: function (id, args) {
-                        log("Publishing the draft");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                {}, null,
+                getHandlers(
+                    log, "Publishing the draft",
+                    function (id, xhr, args) {
                         callback();
                     },
-                    failure: function (id, xhr, args) {
-                        log(
-                            "Unable to publish the draft (" + xhr.status + " " + xhr.statusText + ")",
-                            false, 'error'
-                        );
-                        callback("Unable to publish the draft (status " + xhr.status + ")");
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-
-                }
+                    "Unable to publish the draft", callback
+                )
             );
         },
 
@@ -566,27 +483,16 @@ YUI.add('message-model', function (Y) {
             api.POST(
                 contentTypeGroup.ContentTypes._href + '?publish=true',
                 {'Content-Type': 'application/vnd.ez.api.ContentTypeCreate+json'},
-                this._getTypeCreateStruct(options.settings), {
-                    start: function (id, args) {
-                        log("Creating the content type");
-                        log(args.formattedRequest, false, 'request');
-                    },
-                    success: function (id, xhr, args) {
+                this._getTypeCreateStruct(options.settings),
+                getHandlers(
+                    log, "Creating the content type",
+                    function (id, xhr, args) {
                         var struct = Y.JSON.parse(xhr.responseText);
 
                         that._createDraft(struct.ContentType, options, callback);
                     },
-                    failure: function (id, xhr, args) {
-                        log(
-                            "Unable to create the type (" + xhr.status + " " + xhr.statusText + ")",
-                            false, 'error'
-                        );
-                        callback("Unable to create the type (status " + xhr.status + ")");
-                    },
-                    complete: function (id, xhr, args) {
-                        logResponse(log, xhr);
-                    }
-                }
+                    "Unable to create the type", callback
+                )
             );
         }
 
