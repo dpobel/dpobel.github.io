@@ -180,6 +180,13 @@ canvas {
     z-index:1;
 }
 
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 11;
+}
+
 .camera-overlay {
     font-family: 'icomoon';
     font-size: 200px;
@@ -198,12 +205,8 @@ canvas {
     display: none;
 }
 
-.picture-view .image-result {
-    text-align: center;
-}
-
-.picture-view .image-result-captured {
-    text-align: right;
+.picture-view img {
+    position:relative;
 }
 
 .button-bar-next {

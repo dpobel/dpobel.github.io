@@ -57,13 +57,25 @@ YUI.add('capture-view', function (Y) {
         },
 
         _setCapture: function (b64Img) {
-            this.get('container').one('.image-result img')
-                .setAttribute('src', b64Img)
-                .addClass('is-capture');
-            this.get('container').one('.image-result').addClass('image-result-captured');
-            this.get('container')
-                .one('#next-step-button')
-                .removeAttribute('disabled');
+            var c = this.get('container'),
+                video = this.get('video'),
+                imgPreview = c.one('.picture-view'),
+                elAnim = Y.Node.create('<img alt="" class="image-overlay">');
+
+            elAnim.setAttribute('src', b64Img)
+                .setStyle('width', video.getComputedStyle('width'))
+                .setXY(video.getXY());
+            Y.one('body').append(elAnim);
+            elAnim.transition({
+                left: imgPreview.getX() + 'px',
+                top: imgPreview.getY() + 'px'
+            }, function () {
+                c.one('.image-result img')
+                    .setAttribute('src', b64Img);
+                c.one('#next-step-button')
+                    .removeAttribute('disabled');
+                elAnim.remove(true);
+            });
         },
 
         handleWebcam: function () {
