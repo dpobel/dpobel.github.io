@@ -24,6 +24,10 @@ YUI.add('detail-view', function (Y) {
         render: function () {
             this.get('container').setHTML(this._renderTemplate());
             this._showMap();
+            // make sure we save again the content if the user comes from
+            // the result view.
+            // TODO: handle the update of the existing model
+            this.get('message').set('id', null);
             return this;
         },
 
