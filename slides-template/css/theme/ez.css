@@ -155,7 +155,7 @@ body {
 {
     position: absolute;
     content: " ";
-    background: #fff url(../../../assets/ez_small.png) no-repeat center center;
+    background: #fff url(../../assets/ez_small.png) no-repeat center center;
     width: 140px;
     height: 55px;
     left: 88%;
