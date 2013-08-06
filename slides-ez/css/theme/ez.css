@@ -18,6 +18,16 @@ body {
     text-shadow: none;
 }
 
+.reveal code
+{
+    font-size: 80%;
+}
+
+.reveal pre code
+{
+    font-size: 100%;
+}
+
 .reveal h1,
 .reveal h2,
 .reveal h3,
