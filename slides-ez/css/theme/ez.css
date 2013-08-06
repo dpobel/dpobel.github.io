@@ -8,7 +8,7 @@ body {
     font-size: 36px;
     font-weight: 200;
     letter-spacing: -0.02em;
-    color: #000000;
+    color: #222;
 }
 
 ::selection
@@ -25,30 +25,18 @@ body {
 .reveal h5,
 .reveal h6 {
     margin: 0 0 20px 0;
-    color: #0000;
+    color: #222;
     font-family: sans-serif;
     line-height: 0.9em;
     letter-spacing: 0.02em;
     font-weight: bold;
 }
 
-.reveal a:not(.image) {
-  color: #333;
-  text-decoration: none;
-  -webkit-transition: color .15s ease;
-  -moz-transition: color .15s ease;
-  -ms-transition: color .15s ease;
-  -o-transition: color .15s ease;
-  transition: color .15s ease; }
-
-.reveal a:not(.image):hover {
-  color: #000;
-  text-shadow: none;
-  border: none; }
-
-.reveal .roll span:after {
-  color: #fff;
-  background: #0d99a5; }
+.reveal a:not(.image)
+{
+    color: #005;
+    text-decoration: none;
+}
 
 .reveal section img {
   margin: 15px 0px;
@@ -174,10 +162,13 @@ body {
     border-bottom: 8px solid #2a84b7;
     font-size: 8px;
     text-align: left;
-    color: #2a84b7;
     margin-bottom: 1em;
 }
 
+.reveal header h1
+{
+    color: #2a84b7;
+}
 
 .reveal section footer
 {
@@ -208,4 +199,58 @@ body {
 .reveal footer p:last-of-type
 {
     text-align: right;
+}
+
+.reveal h2
+{
+    margin: 0.4em;
+    font-size: 140%;
+}
+
+.reveal ul
+{
+    padding-left: 1em;
+    list-style-type: square;
+}
+
+.reveal ol
+{
+    padding-left: 1em;
+}
+
+.reveal li
+{
+    line-height: 1.5em;
+}
+
+.reveal ul .conclusion
+{
+    list-style-type: none;
+}
+
+.reveal ul ul
+{
+    list-style-type: disc;
+}
+
+.reveal .social
+{
+    margin-top: 2em;
+    display: block;
+    text-align:center;
+}
+
+
+.reveal .social li,
+.reveal .social a
+{
+    font-size: 140%;
+    display: inline-block;
+    width: 3em;
+}
+
+
+.reveal .social span
+{
+    display: none;
 }

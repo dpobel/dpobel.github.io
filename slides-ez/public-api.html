@@ -16,6 +16,7 @@
 
 		<link rel="stylesheet" href="css/reveal.min.css">
 		<link rel="stylesheet" href="css/theme/ez.css" id="theme">
+		<link rel="stylesheet" href="lib/css/icomoon.css">
 
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -47,29 +48,79 @@
                     <ul>
                         <li>eZ Community member since 2005</li>
                         <li>eZ employee since 2011</li>
-                        <li><em>Lead engineer User Interface</em></li>
-                        <li>Webmaster of <a href="http://www.planet-ezpublish.fr/">http://www.planet-ezpublish.fr/</a></li>
+                        <li><em>Lead engineer User Interface</em> at eZ</li>
+                        <li>Webmaster of <a href="http://www.planet-ezpublish.fr/">http://www.planet-ezpublish.fr/</a>, powered by eZ Publish 5!</li>
                     </ul>
 
                     <ul class="social">
-                        <li class="twitter"><a href="https://twitter.com/dpobel">@dpobel</a></li>
-                        <li class="gplus"><a href="https://plus.google.com/u/0/102664237253121682993/posts?rel=author">+Damien Pobel</a></li>
-                        <li class="github"><a href="http://github.com/dpobel">Github</a></li>
-                        <li class="linkedin"><a href="http://fr.linkedin.com/in/dpobel">Linkedin</a></li>
-                        <li class="blog"><a href="http://damien.pobel.fr">Blog</a></li>
+                        <li class="twitter"><a href="https://twitter.com/dpobel" data-icon="&#xe001"><span>@dpobel</span></a></li>
+                        <li class="gplus"><a href="https://plus.google.com/u/0/102664237253121682993/posts?rel=author" data-icon="&#xe000"><span>+Damien Pobel</span></a></li>
+                        <li class="github"><a href="http://github.com/dpobel" data-icon="&#xe003"><span>Github</span></a></li>
+                        <li class="linkedin"><a href="http://fr.linkedin.com/in/dpobel" data-icon="&#xe004"><span>Linkedin</span></a></li>
+                        <li class="blog"><a href="http://damien.pobel.fr" data-icon="&#xe005"><span>Blog</span></a></li>
                     </ul>
-
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
 				</section>
 
 				<section>
-                    <h2>Slide 3</h2>
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
+                    <h2>eZ Publish 3.x/4.x</h2>
+                    <ul>
+                        <li><code>eZContentObjectTreeNode</code>, <code>eZContentObject</code>, <code>eZContentClass</code>, ...</li>
+                        <li>Lots of static methods</li>
+                        <li>Almost no visibility (<code>private</code>, <code>protected</code>, ...)</li>
+                        <li>Objects are tighly coupled</li>
+                        <li>Lazy loaded object attributes</li>
+                        <li class="conclusion" data-icon="&#xe006">Barely testable</li>
+                        <li class="conclusion" data-icon="&#xe006">Difficult to maintain</li>
+                        <li class="conclusion" data-icon="&#xe006">Huge effort to introduce new storage system</li>
+                    </ul>
 				</section>
+
+				<section>
+                    <h2>Architecture of eZ Publish 5.x</h2>
+                    <aside class="notes">Add the schema</aside>
+				</section>
+
+				<section>
+                    <h2>Repository / Services</h2>
+				</section>
+
+				<section>
+                    <h2>Current user and policies</h2>
+                    <aside class="notes">Explain how to set the current user and how policy check is done</aside>
+				</section>
+
+				<section>
+                    <h2>Domain objects</h2>
+				</section>
+
+				<section>
+                    <h2>Usage of services</h2>
+                    <aside class="notes">scalar, value object, struct</aside>
+				</section>
+
+				<section>
+                    <h2>Tips</h2>
+
+                    <aside class="notes">
+                        content centric, Content vs. ContentInfo, no more lazy loaded object attribute, legacy callback
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Hands on! (1)</h2>
+				</section>
+
+				<section>
+                    <h2>Hands on! (2)</h2>
+				</section>
+
+				<section>
+                    <h2>Hands on! (bonus)</h2>
+                    <aside class="notes">
+                        HTML instead of strig_tags(ezxml) in item's description, configurable action: type identifier, number of elements, ...
+                    </aside>
+				</section>
+
 			</div>
             <header>
             <h1>eZ Publish Public API</h1>
@@ -89,6 +140,7 @@
 				progress: true,
 				history: true,
 				center: false,
+                rollingLinks: false,
 
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
 				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
