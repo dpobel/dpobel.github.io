@@ -81,16 +81,55 @@
 				</section>
 
 				<section>
-                    <h2>Repository / Services</h2>
+                    <h2>Domain objects</h2>
+                    <aside class="notes">
+                        vocabulary change
+                    </aside>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Repository / Services
+
+                        * Repository === main entry point to do anything related to what is stored by eZ
+                        * PHP interface `eZ\Publish\API\Repository\Repository`
+                        * Repository gives access to the services
+                        * Services allows to *do something*:<br>
+                          Ex: load a section:
+
+                        ```php
+                        /** @var $repository eZ\Publish\API\Repository\Repository */
+                        /** @var $sectionService eZ\Publish\API\Repository\SectionService */
+                        $sectionService = $repository->getSectionService();
+
+                        /** @var $section eZ\Publish\API\Repository\Values\Content\Section */
+                        $section = $sectionService->loadSection( 1 );
+                        ```
+                    </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>Interfaces in eZ\Publish\API</li>
+                        </ul>
+                    </aside>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Services
+
+                        * `ContentService` to handle contents (`eZ\Publish\API\Repository\ContentService`)
+                        * `LocationService` to handle locations (`eZ\Publish\API\Repository\LocationService`)
+                        * `ContentTypeService` to handle sections (`eZ\Publish\API\Repository\ContentTypeService`)
+                        * `URLAliasService` to handle url aliases (`eZ\Publish\API\Repository\URLAliasService`)
+                        * ...
+                        * `SearchService` to search contents (`eZ\Publish\API\Repository\SearchService`)
+
+                    </script>
 				</section>
 
 				<section>
                     <h2>Current user and policies</h2>
                     <aside class="notes">Explain how to set the current user and how policy check is done</aside>
-				</section>
-
-				<section>
-                    <h2>Domain objects</h2>
 				</section>
 
 				<section>
@@ -102,7 +141,7 @@
                     <h2>Tips</h2>
 
                     <aside class="notes">
-                        content centric, Content vs. ContentInfo, no more lazy loaded object attribute, legacy callback
+                        getting the repository, content centric, Content vs. ContentInfo, no more lazy loaded object attribute, legacy callback
                     </aside>
 				</section>
 
@@ -117,7 +156,7 @@
 				<section>
                     <h2>Hands on! (bonus)</h2>
                     <aside class="notes">
-                        HTML instead of strig_tags(ezxml) in item's description, configurable action: type identifier, number of elements, ...
+                        HTML instead of strig_tags(ezxml) in item's description, configurable action: type identifier, number of elements, root location, adapt unit tests
                     </aside>
 				</section>
 
