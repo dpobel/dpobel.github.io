@@ -139,6 +139,14 @@ body {
     text-align:center;
 }
 
+
+.reveal section:first-of-type p
+{
+    text-align:center;
+    margin-top:3em;
+    font-size:120%;
+}
+
 .reveal section.present:before
 {
     position: absolute;
