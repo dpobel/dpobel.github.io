@@ -129,8 +129,15 @@
                     </script>
 				</section>
 
-				<section>
-                    <h2>Current user and policies</h2>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Current user and policies
+
+                        * In the Symfony2 context, the current user is set to the currently logged in user
+                        * CLI: anonymous by default
+                        * `Repository::setCurrentUser`
+                        * User are loaded with ... the `UserService`
+                    </script>
                     <aside class="notes">Explain how to set the current user and how policy check is done</aside>
 				</section>
 
