@@ -162,7 +162,9 @@
                         * In the Symfony2 context, the current user is set to the currently logged in user
                         * CLI: anonymous by default
                         * `Repository::setCurrentUser`
-                        * User are loaded with ... the `UserService`
+                        * User are loaded with the ... `UserService`
+                        * Unless specified, all methods take user's policies into account
+                        * Loading an inaccessible object throws an exception
                     </script>
                     <aside class="notes">Explain how to set the current user and how policy check is done</aside>
 				</section>
