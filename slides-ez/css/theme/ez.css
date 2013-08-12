@@ -272,3 +272,26 @@ body {
 {
     display: none;
 }
+
+.reveal table
+{
+    width:90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.reveal td
+{
+    padding: 0.2em 0.4em;
+    width:50%;
+}
+
+.reveal tr:nth-child(even)
+{
+    background: #fcfcfc;
+}
+
+.reveal tr:nth-child(odd)
+{
+    background: #eee;
+}
