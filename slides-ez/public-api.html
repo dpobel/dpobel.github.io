@@ -169,10 +169,43 @@
                     <aside class="notes">Explain how to set the current user and how policy check is done</aside>
 				</section>
 
-				<section>
-                    <h2>Usage of services</h2>
-                    <aside class="notes">scalar, value object, struct</aside>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Usage of service (1)
+
+                        ```php
+                        $sectionService = $repository->getSectionService();
+                        /** @var $section eZ\Publish\API\Repository\Values\Content\Section */
+                        $section = $sectionService->loadSection( 1 );
+                        ```
+
+                        * `$section` is value object
+                        * *dumb* object
+                            * only holds data
+                            * may have some convenient methods
+                            * Read only by design
+                    </script>
+                    <aside class="notes">value object, struct</aside>
 				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Usage of service (2)
+
+                        ```php
+                        $contentService = $repository->getContentService();
+                        $updateMetadataStruct = $contentService->newContentMetadataUpdateStruct();
+                        $updateMetadataStruct->ownerId = 14;
+                        $contentService->updateContentMetadata( $contentInfo, $updateMetadataStruct );
+                        ```
+
+                        * A structure describes a *complex* operation
+                        * Created by the service
+                        * `ContentMetadataUpdateStruct`, `ContentUpdateStruct`, `ContentCreateStruct`, ...
+                    </script>
+                    <aside class="notes">value object, struct</aside>
+				</section>
+
 
 				<section>
                     <h2>Tips</h2>
