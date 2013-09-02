@@ -138,7 +138,7 @@
                         * Repository === main entry point to do anything related to what is stored by eZ
                         * PHP interface `eZ\Publish\API\Repository\Repository`
                         * Repository gives access to the services
-                        * Services allows to *do something*:<br>
+                        * Services allow to *do something*:<br>
                           Ex: load a section:
 
                         ```php
@@ -295,7 +295,7 @@
 
 				<section data-markdown>
                     <script type="text/template">
-                        ## *fetch content list*
+                        ## *fetch content list* legacy vs. eZ 5
 
                         ```php
                         $items = eZContentObject::subTreeByNodeID(
@@ -325,7 +325,7 @@
 
 				<section data-markdown>
                     <script type="text/template">
-                        ## *fetch content tree*
+                        ## *fetch content tree* legacy vs. eZ 5
 
                         ```php
                         $items = eZContentObject::subTreeByNodeID(
@@ -358,8 +358,8 @@
                     <script type="text/template">
                         ## Legacy callback
 
-                        * PAPI is still a work in progress
-                        * when something is not implemented, *legacy callback*:
+                        * Some parts of the PAPI are still a work in progress
+                        * when something is not implemented => *legacy callback*:
                             1. get the legacy kernel
                             2. run a closure with legacy code inside
                         * allows to use legacy code inside the new stack
@@ -396,7 +396,7 @@
 
                         * Test Driven Development :-)
                         * `phpunit -c ezpublish/ src/EzSystems/SummerCamp2013PublicApiBundle` fails
-                        * `EzSystems\SummerCamp2013PublicApiBundle\Controller` half implemented
+                        * `EzSystems\SummerCamp2013PublicApiBundle\Controller\ExportController` half implemented
                         * Purposes:
                             * successful tests
                             * `/summercamp/rssblogposts` RSS feed of the blog posts (10 last)
