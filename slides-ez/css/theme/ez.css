@@ -28,6 +28,11 @@ body {
     font-size: 100%;
 }
 
+.reveal abbr
+{
+    border-bottom: 1px dotted #222;
+}
+
 .reveal h1,
 .reveal h2,
 .reveal h3,
@@ -225,6 +230,12 @@ body {
     font-size: 140%;
 }
 
+.reveal h3
+{
+    margin: 0.6em;
+    font-size: 120%;
+}
+
 .reveal ul
 {
     padding-left: 1em;
@@ -233,6 +244,7 @@ body {
 
 .reveal ol
 {
+    list-style-position: outside;
     padding-left: 1em;
 }
 
@@ -294,4 +306,23 @@ body {
 .reveal tr:nth-child(odd)
 {
     background: #eee;
+}
+
+.reveal .end
+{
+    font-size:800%;
+    text-align:center;
+    font-weight: bold;
+}
+
+.reveal .architecture
+{
+    text-align:center;
+    height: 100%;
+}
+
+
+.reveal .architecture img
+{
+    height: 80%;
 }

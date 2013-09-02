@@ -77,10 +77,20 @@
                     </ul>
 				</section>
 
-				<section>
-                    <h2>Architecture of eZ Publish 5.x</h2>
-                    <aside class="notes">Add the schema</aside>
-				</section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Public API
+
+                        * <abbr title="Public API">PAPI</abbr>
+                        * modern PHP API
+                            * namespaces
+                            * interfaces
+                            * exceptions
+                            * testable and unit tested
+                            * layered
+                        * API to handle eZ Publish domain objects
+                    </script>
+                </section>
 
 				<section>
                     <h2>Domain objects</h2>
@@ -115,6 +125,12 @@
                     </aside>
 				</section>
 
+
+				<section>
+                    <p class="architecture"><img src="assets/architecture.png" alt="eZ Publish 5 architecture"></p>
+				</section>
+
+
 				<section data-markdown>
                     <script type="text/template">
                         ## Repository / Services
@@ -147,7 +163,7 @@
 
                         * `ContentService` to handle contents (`eZ\Publish\API\Repository\ContentService`)
                         * `LocationService` to handle locations (`eZ\Publish\API\Repository\LocationService`)
-                        * `ContentTypeService` to handle sections (`eZ\Publish\API\Repository\ContentTypeService`)
+                        * `ContentTypeService` to handle content types (`eZ\Publish\API\Repository\ContentTypeService`)
                         * `URLAliasService` to handle url aliases (`eZ\Publish\API\Repository\URLAliasService`)
                         * ...
                         * `SearchService` to search contents (`eZ\Publish\API\Repository\SearchService`)
@@ -162,8 +178,8 @@
                         * In the Symfony2 context, the current user is set to the currently logged in user
                         * CLI: anonymous by default
                         * `Repository::setCurrentUser`
-                        * User are loaded with the ... `UserService`
-                        * Unless specified, all methods take user's policies into account
+                        * Users are loaded with the ... `UserService`
+                        * Unless specified, service's methods take user's policies into account
                         * Loading an inaccessible object throws an exception
                     </script>
                     <aside class="notes">Explain how to set the current user and how policy check is done</aside>
@@ -179,11 +195,11 @@
                         $section = $sectionService->loadSection( 1 );
                         ```
 
-                        * `$section` is value object
+                        * `$section` is a value object
                         * *dumb* object
                             * only holds data
                             * may have some convenient methods
-                            * Read only by design
+                            * read only by design
                     </script>
                     <aside class="notes">value object, struct</aside>
 				</section>
@@ -193,6 +209,7 @@
                         ## Usage of service (2)
 
                         ```php
+                        // changing the owner of a content
                         $contentService = $repository->getContentService();
                         $updateMetadataStruct = $contentService->newContentMetadataUpdateStruct();
                         $updateMetadataStruct->ownerId = 14;
@@ -206,30 +223,220 @@
                     <aside class="notes">value object, struct</aside>
 				</section>
 
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Gettting the repository
 
-				<section>
-                    <h2>Tips</h2>
+                        ```php
+                        /** @var $repository \eZ\Publish\API\Repository\Repository */
+                        $repository = $container->get( 'ezpublish.api.repository' );
+                        ```
 
+                        * `$container` is the Symfony's service container
+                        * so the Repository is a service from a Symfony point of view
+                        * in a controller extending `eZ\Bundle\EzPublishCoreBundle\Controller`:
+
+                        ```php
+                        $repository = $this->getRepository();
+                        ```
+
+                        * in a command class extending `Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand`:
+
+                        ```php
+                        $repository = $this->getContainer()->get( 'ezpublish.api.repository' );
+                        ```
+                    </script>
                     <aside class="notes">
-                        getting the repository, content centric, Content vs. ContentInfo, no more lazy loaded object attribute, legacy callback
+                        getting the repository
+                    </aside>
+                </section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Content in the Public API
+
+                        * the Public API is content centric
+                        * legacy is more or less node (location!) centric
+                        * `Content` vs. `ContentInfo`
+                        * **No more lazy loaded attribute**
+                    </script>
+                    <aside class="notes">
+                        content centric, Content vs. ContentInfo, no more lazy loaded object attribute
                     </aside>
 				</section>
 
-				<section>
-                    <h2>Hands on! (1)</h2>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Search contents
+
+                        * `SearchService` to find *contents*
+                        * Query object to express requirements
+                            * Criterion
+                            * Sort clause
+
+                        ```php
+                        use eZ\Publish\API\Repository\Values\Content\Query;
+                        use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+
+                        $searchService = $repository->getSearchService();
+                        $query = new Query();
+                        $query->criterion = new Criterion\Visibility( Criterion\Visibility::VISIBLE );
+                        $query->limit = 10;
+                        $query->offset = 0;
+                        $query->sortClauses = array( new SortClause\LocationPriority() );
+                        /** @var $contents eZ\Publish\API\Repository\Values\Content\Search\SearchResult */
+                        $contents = $searchService->findContent( $query );
+
+                        ```
+                    </script>
+                    <aside class="notes">
+                    </aside>
 				</section>
 
-				<section>
-                    <h2>Hands on! (2)</h2>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## *fetch content list*
+
+                        ```php
+                        $items = eZContentObject::subTreeByNodeID(
+                            array(
+                                'Depth' => 1,
+                                'ClassFilterType' => 'include',
+                                'ClassFilterArray' => array( 'folder' ),
+                                'SortBy' => array( array( 'priority', false ) )
+                            ), 2
+                        );
+                        ```
+
+                        ```php
+                        $searchService = $repository->getSearchService();
+                        $query = new Query();
+                        $query->criterion = new Criterion\LogicalAnd(
+                            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                            new Criterion\ParentLocationId( 2 ),
+                            new Criterion\ContentTypeIdentifier( array( 'folder' ) )
+                        );
+                        $query->sortClauses = array( new SortClause\LocationPriority() );
+                        /** @var $contents eZ\Publish\API\Repository\Values\Content\Search\SearchResult */
+                        $contents = $searchService->findContent( $query );
+                        ```
+                    </script>
 				</section>
 
-				<section>
-                    <h2>Hands on! (bonus)</h2>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## *fetch content tree*
+
+                        ```php
+                        $items = eZContentObject::subTreeByNodeID(
+                            array(
+                                'ClassFilterType' => 'include',
+                                'ClassFilterArray' => array( 'folder' ),
+                                'SortBy' => array( array( 'priority', false ) )
+                            ), 2
+                        );
+                        ```
+
+                        ```php
+                        $searchService = $repository->getSearchService();
+                        $query = new Query();
+                        $query->criterion = new Criterion\LogicalAnd(
+                            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                            new Criterion\Subtree( '/1/2' ),
+                            new Criterion\ContentTypeIdentifier( array( 'folder' ) )
+                        );
+                        $query->sortClauses = array( new SortClause\LocationPriority() );
+                        /** @var $contents eZ\Publish\API\Repository\Values\Content\Search\SearchResult */
+                        $contents = $searchService->findContent( $query );
+                        ```
+
+                    </script>
+				</section>
+
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Legacy callback
+
+                        * PAPI is still a work in progress
+                        * when something is not implemented, *legacy callback*:
+                            1. get the legacy kernel
+                            2. run a closure with legacy code inside
+                        * allows to use legacy code inside the new stack
+                        * Example: Trigger legacy workflow from an eZ Publish 5 script<br>See: http://j.mp/legacy-callback-ezpublish
+                    </script>
+                    <aside class="notes">
+                        legacy callback
+                    </aside>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Hands on!
+
+                        * `EzSystems/EzSummerCampPublicApiBundle`
+                        * generated with the `generate:bundle` command
+
+                        ```bash
+                        $ php ezpublish/console generate:bundle
+                        ```
+
+                        ### Exercices
+
+                        1. RSS feed of blog posts
+                        2. *Import* script
+                        3. Bonus ;-)
+
+                    </script>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## RSS feed
+
+                        * Test Driven Development :-)
+                        * `phpunit -c ezpublish/ src/EzSystems/SummerCamp2013PublicApiBundle` fails
+                        * `EzSystems\SummerCamp2013PublicApiBundle\Controller` half implemented
+                        * Purposes:
+                            * successful tests
+                            * `/summercamp/rssblogposts` RSS feed of the blog posts (10 last)
+                            * details in `EzSystems\SummerCamp2013PublicApiBundle\Controller\ExportController`
+                    </script>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## *Import* script
+
+                        * Actually a script that creates one blog post
+                        * `$ php ezpublish/console summercamp:create_blog_posts`
+                        * `EzSystems\SummerCamp2013PublicApiBundle\Command\CreateBlogPostCommand`
+                    </script>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Bonus
+
+                        * In RSS feed item description, put the HTML instead of `strip_tags( ezxml )`
+                        * Change route `summercamp/rssblogposts` to accept parameters
+                            * content type identifier of content to retrieve
+                            * root location
+                            * number of elements
+                            * ...
+                            * and fix unit tests!
+                    </script>
                     <aside class="notes">
                         HTML instead of strig_tags(ezxml) in item's description, configurable action: type identifier, number of elements, root location, adapt unit tests
                     </aside>
 				</section>
 
+
+				<section>
+                    <h2>The end</h2>
+
+                    <p class="end">?</p>
+                </section>
 			</div>
             <header>
             <h1>eZ Publish Public API</h1>
