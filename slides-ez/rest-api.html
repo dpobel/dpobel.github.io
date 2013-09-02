@@ -51,7 +51,6 @@
                         <li>eZ Community member since 2005</li>
                         <li>Part of the eZ Engineering team since 2011</li>
                         <li><em>Lead engineer User Interface</em> at eZ</li>
-                        <li>Webmaster of <a href="http://www.planet-ezpublish.fr/">http://www.planet-ezpublish.fr/</a>, powered by eZ Publish 5!</li>
                     </ul>
 
                     <ul class="social">
@@ -64,49 +63,178 @@
 				</section>
 
 
-				<section>
-                    <h2>REST API ?</h2>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## REST API ?
+
+                        * REpresentational State Transfer
+                        * In short terms API over HTTP
+                        * Manipulate resources (~URI) with HTTP verbs
+                        * Get the result through the HTTP response
+                    </script>
                 </section>
 
-				<section>
-                    <h2>eZ Publish 3.x/4.x</h2>
-                    <aside class="notes">api v1 read only</aside>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## REST API in eZ Publish 4.x
+
+                        * eZ Publish 4.x has a REST API
+                        * Read only
+                        * Very limited scope / incomplete
+                    </script>
 				</section>
 
-				<section>
-                    <h2>Architecture of eZ Publish 5.x</h2>
-                    <aside class="notes">Add the schema</aside>
-				</section>
 
-				<section>
-                    <h2>eZ Publish 5.x</h2>
+				<section data-markdown>
+                    <script type="text/template">
+                        ## REST API in eZ Publish 5
+
+                        * read / write
+                        * allows to handle almost everything in the repository (Content, Location, Types, ...)
+                        * support Basic Auth and Session auth
+                        * XML or JSON support in input and output
+                        * Hypermedia as the Engine of Application State (HATEOAS)
+                        * Specifications: http://j.mp/ezpublish-rest-spec
+                    </script>
                     <aside class="notes">api v2, completely different, almost "feature" complete</aside>
 				</section>
 
-                <section>
-                    <h2>Configuration</h2>
-                    <aside class="notes">auth, prefix</aside>
+
+				<section>
+                    <p class="architecture"><img src="assets/architecture.png" alt="eZ Publish 5 architecture"></p>
+				</section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## Configuration
+
+                        * ezpublish/config/security.yml
+                        * HTTP Auth by default
+
+                        ```yaml
+                        ezpublish_rest:
+                            pattern: ^/api/ezp/v2
+                            stateless: true
+                            ezpublish_http_basic:
+                                realm: eZ Publish REST API
+
+                        ```
+                        * To switch to session auth, just comment out this block
+                    </script>
                 </section>
 
-                <section>
-                    <h2>Tips</h2>
-                    <aside class="notes">HATEOAS, browse to get the URI and content type, xml/json</aside>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## HATEOAS
+
+                        * Never built URIs client side
+                        * Follow links provided by a previous response
+                        * Need to request to root first
+                    </script>
+                    <aside class="notes">very close to what you do when browsing</aside>
                 </section>
 
-				<section>
-                    <h2>Hands on! CLI with cURL</h2>
-                    <aside class="notes">root + content info + content + delete</aside>
-				</section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## XML or JSON
 
-				<section>
-                    <h2>Hands on! JavaScript</h2>
-                    <aside class="notes">build a tree menu + delete for each item</aside>
-				</section>
+                        * Both supported
+                        * Represent the exact same thing
+                        * XML is the base format
+                        * Conversion to JSON with syntax rules
+                        * Example with the root structure
+                    </script>
+                </section>
 
+                <section data-markdown>
+                <script type="text/template">
+                        ## XML Root struct
+
+                        ```xml
+                        <?xml version="1.0" encoding="UTF-8"?>
+                        <Root media-type="application/vnd.ez.api.Root+xml">
+                          <content media-type="" href="/api/ezp/v2/content/objects"/>
+                          <contentTypes media-type="application/vnd.ez.api.ContentTypeInfoList+xml" href="/api/ezp/v2/content/types"/>
+                          <users media-type="application/vnd.ez.api.UserRefList+xml" href="/api/ezp/v2/user/users"/>
+                          <roles media-type="application/vnd.ez.api.RoleList+xml" href="/api/ezp/v2/user/roles"/>
+                          <rootLocation media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations//1/2"/>
+                          <rootUserGroup media-type="application/vnd.ez.api.UserGroup+xml" href="/api/ezp/v2/user/groups//1/5"/>
+                          <rootMediaFolder media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations//1/43"/>
+                          <trash media-type="application/vnd.ez.api.Trash+xml" href="/api/ezp/v2/content/trash"/>
+                          <sections media-type="application/vnd.ez.api.SectionList+xml" href="/api/ezp/v2/content/sections"/>
+                          <views media-type="application/vnd.ez.api.RefList+xml" href="/api/ezp/v2/content/views"/>
+                        </Root>
+                        ```
+                    </script>
+                </section>
+
+                <section data-markdown>
+                <script type="text/template">
+                        ## JSON Root struct
+
+                        ```json
+                        {
+                          "Root": {
+                            "_media-type": "application/vnd.ez.api.Root+json",
+                            "roles": {"_href": "/api/ezp/v2/user/roles", "_media-type": "application/vnd.ez.api.RoleList+json"},
+                            "content": {"_href": "/api/ezp/v2/content/objects", "_media-type": ""},
+                            "users": {"_href": "/api/ezp/v2/user/users", "_media-type": "application/vnd.ez.api.UserRefList+json"},
+                            "rootLocation": {"_href": "/api/ezp/v2/content/locations//1/2", "_media-type": "application/vnd.ez.api.Location+json"},
+                            "contentTypes": {"_href": "/api/ezp/v2/content/types", "_media-type": "application/vnd.ez.api.ContentTypeInfoList+json"},
+                            "views": {"_href": "/api/ezp/v2/content/views","_media-type": "application/vnd.ez.api.RefList+json"},
+                            "trash": {"_href": "/api/ezp/v2/content/trash", "_media-type": "application/vnd.ez.api.Trash+json"},
+                            "rootUserGroup": {"_href": "/api/ezp/v2/user/groups//1/5", "_media-type": "application/vnd.ez.api.UserGroup+json"},
+                            "rootMediaFolder": {"_href": "/api/ezp/v2/content/locations//1/43", "_media-type": "application/vnd.ez.api.Location+json"},
+                            "sections": {"_href": "/api/ezp/v2/content/sections", "_media-type": "application/vnd.ez.api.SectionList+json"}
+                          }
+                        }
+                        ```
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## XML or JSON
+
+                        * The type of input (if any) is specified in the `Content-Type` header
+                            * `application/vnd.ez.api.ContentCreate+json`
+                            * `application/vnd.ez.api.ContentCreate+xml`
+                        * The type of output is specified in the `Accept` header
+                            * `application/vnd.ez.api.Content+xml`
+                            * `application/vnd.ez.api.Content+json`
+                            * `application/json` works too!
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Hands on!
+
+                        * Command line with cURL
+                            1. Get the root structure in XML and JSON
+                            2. Browse the locations
+                            2. Read a content and the content info
+                            3. Delete a content
+                            4. Create an image content
+                            5. Publish the image content
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Hands on!
+
+                        * `EzSystems/EzSummerCampRestApiBundle`: build a very rough admin interface
+                            1. build a tree menu
+                            2. delete a content
+                            3. Bonus: copy/move...
+                    </script>
+                </section>
 				<section>
-                    <h2>Hands on! (bonus)</h2>
-                    <aside class="notes">copy + move</aside>
-				</section>
+                    <h2>The end</h2>
+
+                    <p class="end">?</p>
+                </section>
+
 
 			</div>
             <header>
