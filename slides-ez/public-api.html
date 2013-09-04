@@ -61,6 +61,11 @@
                         <li class="linkedin"><a href="http://fr.linkedin.com/in/dpobel" data-icon="&#xe004"><span>Linkedin</span></a></li>
                         <li class="blog"><a href="http://damien.pobel.fr" data-icon="&#xe005"><span>Blog</span></a></li>
                     </ul>
+                    <aside class="notes">
+                        <ul>
+                            <li>Planet eZ Publish.fr probably the first eZ Publish 5 website</li>
+                        </ul>
+                    </aside>
 				</section>
 
 				<section>
@@ -71,9 +76,9 @@
                         <li>Almost no visibility (<code>private</code>, <code>protected</code>, ...)</li>
                         <li>Objects are tighly coupled</li>
                         <li>Lazy loaded object attributes</li>
-                        <li class="conclusion" data-icon="&#xe006">Barely testable</li>
-                        <li class="conclusion" data-icon="&#xe006">Difficult to maintain</li>
-                        <li class="conclusion" data-icon="&#xe006">Huge effort to introduce new storage system</li>
+                        <li class="conclusion" data-icon="&#xe006 ">Barely testable</li>
+                        <li class="conclusion" data-icon="&#xe006 ">Difficult to maintain</li>
+                        <li class="conclusion" data-icon="&#xe006 ">Huge effort to introduce new storage system</li>
                     </ul>
 				</section>
 
@@ -90,6 +95,12 @@
                             * layered
                         * API to handle eZ Publish domain objects
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>Abbreviation PAPI</li>
+                            <li>Almost 9000 thousand tests (unit + functional)</li>
+                        </ul>
+                    </aside>
                 </section>
 
 				<section>
@@ -121,13 +132,22 @@
                         </tr>
                     </table>
                     <aside class="notes">
-                        vocabulary change
+                        <ul>
+                            <li>Concepts remain, only vocabulary changes</li>
+                        </ul>
                     </aside>
 				</section>
 
 
 				<section>
                     <p class="architecture"><img src="assets/architecture.png" alt="eZ Publish 5 architecture"></p>
+                    <aside class="notes">
+                        <ul>
+                            <li>Public API built on top of a persistence layer</li>
+                            <li>Allow to change the persistence layer smoothly</li>
+                            <li>Storage engine: NoSQL, new based on SQL, Oracle, ...</li>
+                        </ul>
+                    </aside>
 				</section>
 
 
@@ -153,6 +173,8 @@
                     <aside class="notes">
                         <ul>
                             <li>Interfaces in eZ\Publish\API</li>
+                            <li>Repositoru::getXXXXService() + transaction + current user management</li>
+                            <li>Annotation for IDE</li>
                         </ul>
                     </aside>
 				</section>
@@ -167,7 +189,6 @@
                         * `URLAliasService` to handle url aliases (`eZ\Publish\API\Repository\URLAliasService`)
                         * ...
                         * `SearchService` to search contents (`eZ\Publish\API\Repository\SearchService`)
-
                     </script>
 				</section>
 
@@ -182,7 +203,6 @@
                         * Unless specified, service's methods take user's policies into account
                         * Loading an inaccessible object throws an exception
                     </script>
-                    <aside class="notes">Explain how to set the current user and how policy check is done</aside>
 				</section>
 
 				<section data-markdown>
@@ -201,7 +221,6 @@
                             * may have some convenient methods
                             * read only by design
                     </script>
-                    <aside class="notes">value object, struct</aside>
 				</section>
 
 				<section data-markdown>
@@ -220,7 +239,6 @@
                         * Created by the service
                         * `ContentMetadataUpdateStruct`, `ContentUpdateStruct`, `ContentCreateStruct`, ...
                     </script>
-                    <aside class="notes">value object, struct</aside>
 				</section>
 
 				<section data-markdown>
@@ -246,9 +264,6 @@
                         $repository = $this->getContainer()->get( 'ezpublish.api.repository' );
                         ```
                     </script>
-                    <aside class="notes">
-                        getting the repository
-                    </aside>
                 </section>
 
 				<section data-markdown>
@@ -260,9 +275,6 @@
                         * `Content` vs. `ContentInfo`
                         * **No more lazy loaded attribute**
                     </script>
-                    <aside class="notes">
-                        content centric, Content vs. ContentInfo, no more lazy loaded object attribute
-                    </aside>
 				</section>
 
 				<section data-markdown>
@@ -289,8 +301,6 @@
 
                         ```
                     </script>
-                    <aside class="notes">
-                    </aside>
 				</section>
 
 				<section data-markdown>
@@ -365,9 +375,6 @@
                         * allows to use legacy code inside the new stack
                         * Example: Trigger legacy workflow from an eZ Publish 5 script<br>See: http://j.mp/legacy-callback-ezpublish
                     </script>
-                    <aside class="notes">
-                        legacy callback
-                    </aside>
 				</section>
 
 				<section data-markdown>
