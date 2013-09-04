@@ -322,9 +322,11 @@
                         $searchService = $repository->getSearchService();
                         $query = new Query();
                         $query->criterion = new Criterion\LogicalAnd(
-                            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                            new Criterion\ParentLocationId( 2 ),
-                            new Criterion\ContentTypeIdentifier( array( 'folder' ) )
+                            array(
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                                new Criterion\ParentLocationId( 2 ),
+                                new Criterion\ContentTypeIdentifier( array( 'folder' ) )
+                            )
                         );
                         $query->sortClauses = array( new SortClause\LocationPriority() );
                         /** @var $contents eZ\Publish\API\Repository\Values\Content\Search\SearchResult */
