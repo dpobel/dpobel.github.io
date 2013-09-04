@@ -60,6 +60,11 @@
                         <li class="linkedin"><a href="http://fr.linkedin.com/in/dpobel" data-icon="&#xe004"><span>Linkedin</span></a></li>
                         <li class="blog"><a href="http://damien.pobel.fr" data-icon="&#xe005"><span>Blog</span></a></li>
                     </ul>
+                    <aside class="notes">
+                        <ul>
+                            <li>Working on the new editorial interface which heavily uses the REST API</li>
+                        </ul>
+                    </aside>
 				</section>
 
 
@@ -73,6 +78,12 @@
                         * Get the result through the HTTP response
                         * so knowing HTTP is important ([RFC 2616](http://www.ietf.org/rfc/rfc2616.txt))
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>REST API not limited to HTTP but most common</li>
+                            <li>As a web developper, you must the RFC 2616 at least once!</li>
+                        </ul>
+                    </aside>
                 </section>
 
 				<section data-markdown>
@@ -80,10 +91,15 @@
                         ## HTTP 1.1 Request
 
                         * HTTP verb / method : `GET`, `POST`, `PUT`, `DELETE`, ~~`TRACE`~~, ~~`OPTIONS`~~, ~~`HEAD`~~, ...
-                        * or a custom verb: `PATCH`, `COPY`, ...
+                        * ... or a custom verb: `PATCH`, `COPY`, ...
                         * Set of headers
                         * a body in `POST`, `PUT` or custom verb requests
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>OPTIONS will be implemented soon: help auto discover, CORS</li>
+                        </ul>
+                    </aside>
                 </section>
 
 				<section data-markdown>
@@ -106,6 +122,7 @@
                         ## REST API in eZ Publish 4.x
 
                         * eZ Publish 4.x has a REST API
+                        * Prefix `/ezp/api/v1/`
                         * Read only
                         * Very limited scope / incomplete
                     </script>
@@ -116,19 +133,34 @@
                     <script type="text/template">
                         ## REST API in eZ Publish 5
 
-                        * read / write
-                        * allows to handle almost everything in the repository (Content, Location, Types, ...)
-                        * support Basic Auth and Session Auth
+                        * Read / write
+                        * Prefix `/ezp/api/v2/`
+                        * Allows to handle almost everything in the repository (Content, Location, Types, ...)
+                        * Support Basic Auth and Session Auth
                         * XML or JSON support in input and output
                         * Hypermedia as the Engine of Application State (HATEOAS)
                         * Specifications: http://j.mp/ezpublish-rest-spec
                     </script>
-                    <aside class="notes">api v2, completely different, almost "feature" complete</aside>
+                    <aside class="notes">
+                        <ul>
+                            <li>This is a huge new thing in eZ Publish 5</li>
+                            <li>OAuth will probably be implemented sooner or later</li>
+                            <li>XML in input, JSON in output or the opposite is possible</li>
+                            <li>HATEOS to be detailed later</li>
+                            <li>Spec: huge doc, almost everything in it is implemented</li>
+                        </ul>
+                    </aside>
 				</section>
 
 
 				<section>
                     <p class="architecture"><img src="assets/architecture.png" alt="eZ Publish 5 architecture"></p>
+                    <aside class="notes">
+                        <ul>
+                            <li>REST API on top of Public API</li>
+                            <li>Shares behaviour of the public API (concepts, exceptions, ...)</li>
+                        </ul>
+                    </aside>
 				</section>
 
 				<section data-markdown>
@@ -148,6 +180,12 @@
                         ```
                         * To switch to session auth, just comment out this block
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>Session Auth is a bit against REST principle</li>
+                            <li>But needed to use the REST API as an AJAX provider for instance</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
@@ -155,6 +193,7 @@
                         ## Session Auth
 
                         * Authentication done with a POST on `/user/sessions`
+                        * `201 Created` in case of success
                         * Returns the CSRF Token
                         * `X-CSRF-Token` header required for *non safe* methods
                             * POST
@@ -219,11 +258,17 @@
                     <script type="text/template">
                         ## HATEOAS
 
-                        * Never built URIs client side
+                        * Never build URIs client side
                         * Follow links provided by a previous response
                         * Need to request to root first
+                        * Good for backward compatibility (no hardcoded URIs)
                     </script>
-                    <aside class="notes">very close to what you do when browsing</aside>
+                    <aside class="notes">
+                        <ul>
+                            <li>This is more or less what you do when doing regular browsing</li>
+                            <li>BC: URI might change, if you only follow links, you don't care</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
@@ -236,6 +281,11 @@
                         * Conversion to JSON with syntax rules
                         * Example with the root structure
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>XML base format because it's easier to validate</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
@@ -258,6 +308,13 @@
                         </Root>
                         ```
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>Root structure provides links</li>
+                            <li>Incomplete in this version of eZ</li>
+                            <li>Was fixed lately</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
@@ -282,20 +339,35 @@
                         }
                         ```
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>Exactly the same as previoulsy</li>
+                            <li>XML tag becomes a sub object/structure in JSON</li>
+                            <li>XML attribute becomes _attribute</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
                     <script type="text/template">
                         ## XML or JSON
 
-                        * The type of input (if any) is specified in the `Content-Type` header
-                            * `application/vnd.ez.api.ContentCreate+json`
-                            * `application/vnd.ez.api.ContentCreate+xml`
                         * The type of output is specified in the `Accept` header
                             * `application/vnd.ez.api.Content+xml`
                             * `application/vnd.ez.api.Content+json`
                             * `application/json` works too!
+                        * The type of input (if any) is specified in the `Content-Type` header
+                            * `application/vnd.ez.api.ContentCreate+json`
+                            * `application/vnd.ez.api.ContentCreate+xml`
                     </script>
+                    <aside class="notes">
+                        <ul>
+                            <li>Output controlled by Accept</li>
+                            <li>Input describeded by Content-Type</li>
+                            <li>Generic mime type works too</li>
+                            <li>Some resources are able to deliver different output depending on the Accept header</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
@@ -334,8 +406,8 @@
                         ## Hands on!
 
                         * `EzSystems/EzSummerCampRestApiBundle`
-                        * Use the eZ Publish JavaScript REST client:<br>https://github.com/ezsystems/ez-js-rest-client
-                        * build a very rough admin interface
+                        * Uses the eZ Publish JavaScript REST client:<br>https://github.com/ezsystems/ez-js-rest-client
+                        * build a very rough admin interface available at `/summercamp/rest-test`
                             1. display details of a content
                             1. navigate in contents
                             2. delete a content
