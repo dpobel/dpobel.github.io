@@ -68,9 +68,36 @@
                         ## REST API ?
 
                         * REpresentational State Transfer
-                        * In short terms API over HTTP
+                        * In short terms for eZ Publish, an API over HTTP
                         * Manipulate resources (~URI) with HTTP verbs
                         * Get the result through the HTTP response
+                        * so knowing HTTP is important ([RFC 2616](http://www.ietf.org/rfc/rfc2616.txt))
+                    </script>
+                </section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## HTTP 1.1 Request
+
+                        * HTTP verb / method : `GET`, `POST`, `PUT`, `DELETE`, ~~`TRACE`~~, ~~`OPTIONS`~~, ~~`HEAD`~~, ...
+                        * or a custom verb: `PATCH`, `COPY`, ...
+                        * Set of headers
+                        * a body in `POST`, `PUT` or custom verb requests
+                    </script>
+                </section>
+
+				<section data-markdown>
+                    <script type="text/template">
+                        ## HTTP 1.1 Response
+
+                        * status code (by [@stevelosh](https://twitter.com/stevelosh/status/372740571749572610))
+                            * 1XX: *hold on*
+                            * 2XX: *here you go*
+                            * 3XX: *go away*
+                            * 4XX: *you f★★★★d up*
+                            * 5XX: *I f★★★★d up*
+                        * Set of headers
+                        * a body depending on the response
                     </script>
                 </section>
 
@@ -91,7 +118,7 @@
 
                         * read / write
                         * allows to handle almost everything in the repository (Content, Location, Types, ...)
-                        * support Basic Auth and Session auth
+                        * support Basic Auth and Session Auth
                         * XML or JSON support in input and output
                         * Hypermedia as the Engine of Application State (HATEOAS)
                         * Specifications: http://j.mp/ezpublish-rest-spec
@@ -106,7 +133,7 @@
 
 				<section data-markdown>
                     <script type="text/template">
-                        ## Configuration
+                        ## Auth configuration
 
                         * ezpublish/config/security.yml
                         * HTTP Auth by default
@@ -122,6 +149,71 @@
                         * To switch to session auth, just comment out this block
                     </script>
                 </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Session Auth
+
+                        * Authentication done with a POST on `/user/sessions`
+                        * Returns the CSRF Token
+                        * `X-CSRF-Token` header required for *non safe* methods
+                            * POST
+                            * PUT
+                            * DELETE
+                            * custom HTTP verb
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Session Auth request
+
+                        ```http
+                        POST /api/ezp/v2/user/sessions HTTP/1.1
+                        Host: ezpublish.ezsc
+                        Content-Type: application/vnd.ez.api.SessionInput+json
+                        Accept: application/vnd.ez.api.Session+json
+
+                        {
+                            "SessionInput": {
+                                "login": "admin",
+                                "password": "ezsc"
+                            }
+                        }
+                        ```
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Session Auth response
+
+                        ```http
+                        HTTP/1.1 201 Created
+                        Date: Wed, 04 Sep 2013 08:29:57 GMT
+                        Set-Cookie: eZSESSID=0ka4636cvs245lr6t6csgroto2; path=/
+                        Status: 201 Created
+                        Location: /api/ezp/v2/user/sessions/0ka4636cvs245lr6t6csgroto2
+                        Set-Cookie: is_logged_in=true; path=/
+                        Content-Type: application/vnd.ez.api.Session+json
+
+                        {
+                            "Session":{
+                                "_media-type":"application\/vnd.ez.api.Session+json",
+                                "_href":"\/api\/ezp\/v2\/user\/sessions\/0ka4636cvs245lr6t6csgroto2",
+                                "name":"eZSESSID",
+                                "identifier":"0ka4636cvs245lr6t6csgroto2",
+                                "csrfToken":"c66dd36f4ced781c57b1e8407b16a507fb65272e",
+                                "User":{
+                                    "_media-type":"application\/vnd.ez.api.User+json",
+                                    "_href":"\/api\/ezp\/v2\/user\/users\/14"
+                                }
+                            }
+                        }
+                        ```
+                    </script>
+                </section>
+
 
                 <section data-markdown>
                     <script type="text/template">
@@ -211,20 +303,41 @@
                         ## Hands on!
 
                         * Command line with cURL
+
+                        * Base command:<br>
+                          `curl -u "admin:ezsc" -i -H "Accept: application/json" http://ezpublish.ezsc/api/ezp/v2/`
+                        * `-i` to get response HTTP headers
+                        * `-u login:password` for HTTP Basic Auth
+                        * `-H "Http-Header: value"` to add a custom HTTP header
+                        * `-X VERB` to use a specific HTTP verb (GET is the default)
+                        * `-d @file.txt` to use the content of file.txt in the request body
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Hands on!
+
+                        * Command line with cURL
                             1. Get the root structure in XML and JSON
-                            2. Browse the locations
-                            2. Read a content and the content info
+                            2. Display locations under the root location
+                            2. Read the content and the content info of one of those location
                             3. Delete a content
+                            3. Try to delete a content with a user without the required policies
                             4. Create an image content
                             5. Publish the image content
+                            6. Bonus: do the same with the Session Auth
                     </script>
                 </section>
                 <section data-markdown>
                     <script type="text/template">
                         ## Hands on!
 
-                        * `EzSystems/EzSummerCampRestApiBundle`: build a very rough admin interface
-                            1. build a tree menu
+                        * `EzSystems/EzSummerCampRestApiBundle`
+                        * Use the eZ Publish JavaScript REST client:<br>https://github.com/ezsystems/ez-js-rest-client
+                        * build a very rough admin interface
+                            1. display details of a content
+                            1. navigate in contents
                             2. delete a content
                             3. Bonus: copy/move...
                     </script>
