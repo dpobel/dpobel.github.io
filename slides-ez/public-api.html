@@ -284,7 +284,7 @@
                         * `SearchService` to find *contents*
                         * Query object to express requirements
                             * Criterion
-                            * Sort clause
+                            * Sort clauses
 
                         ```php
                         use eZ\Publish\API\Repository\Values\Content\Query;
@@ -353,9 +353,11 @@
                         $searchService = $repository->getSearchService();
                         $query = new Query();
                         $query->criterion = new Criterion\LogicalAnd(
-                            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                            new Criterion\Subtree( '/1/2' ),
-                            new Criterion\ContentTypeIdentifier( array( 'folder' ) )
+                            array(
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\ContentTypeIdentifier( array( 'folder' ) )
+                            )
                         );
                         $query->sortClauses = array( new SortClause\LocationPriority() );
                         /** @var $contents eZ\Publish\API\Repository\Values\Content\Search\SearchResult */
@@ -434,6 +436,7 @@
                             * number of elements
                             * ...
                             * and fix unit tests!
+                        * Re-implement feeds based on legacy objects
                     </script>
                     <aside class="notes">
                         HTML instead of strig_tags(ezxml) in item's description, configurable action: type identifier, number of elements, root location, adapt unit tests
