@@ -209,7 +209,7 @@ body {
 .reveal footer p
 {
     display: inline-block;
-    width: 30%;
+    width: 29%;
     text-align: center;
     padding: 0 1em;
     margin:0;
@@ -221,6 +221,7 @@ body {
 }
 .reveal footer p:last-of-type
 {
+    float:right;
     text-align: right;
 }
 
