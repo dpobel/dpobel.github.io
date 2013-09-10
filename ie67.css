@@ -1,0 +1,20 @@
+.top-menu li
+{
+display:inline;
+}
+.top-menu a
+{
+display:inline-block;
+}
+.tags
+{
+display:inline;
+}
+.tags li
+{
+display:inline;
+}
+.social li
+{
+display:inline;
+}
