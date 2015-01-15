@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+        <title>eZ PlatformUI - Meetup à Lyon le 15 janvier 2015</title>
+
+		<meta name="author" content="Damien Pobel &mdash; eZ Systems">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/ez.css" id="theme">
+		<link rel="stylesheet" href="lib/css/icomoon.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+                    <img src="assets/ez.png" alt="eZ" />
+                    <h1>eZ Platform UI</h1>
+
+                    <p>
+                        L'interface éditoriale et d'administration d'eZ (Publish) Platform<br>
+                        <a href="http://j.mp/platformui-meetup-012015">http://j.mp/platformui-meetup-012015</a>
+                    </p>
+				</section>
+
+				<section>
+                    <h2>Me</h2>
+
+                    <ul>
+                        <li>Membre de la communauté eZ depuis  2005</li>
+                        <li>À l'ingéniérie eZ depuis 2011</li>
+                        <li><em>Lead engineer User Interface</em></li>
+                    </ul>
+
+                    <ul class="social">
+                        <li class="twitter"><a href="https://twitter.com/dpobel" data-icon="&#xe001"><span>@dpobel</span></a></li>
+                        <li class="gplus"><a href="https://plus.google.com/u/0/102664237253121682993/posts?rel=author" data-icon="&#xe000"><span>+Damien Pobel</span></a></li>
+                        <li class="github"><a href="http://github.com/dpobel" data-icon="&#xe003"><span>Github</span></a></li>
+                        <li class="linkedin"><a href="http://fr.linkedin.com/in/dpobel" data-icon="&#xe004"><span>Linkedin</span></a></li>
+                        <li class="blog"><a href="http://damien.pobel.fr" data-icon="&#xe005"><span>Blog</span></a></li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Vocabulaire</h2>
+
+                    <ul>
+                        <li>eZ Publish ➡ eZ (Publish) Platform ➡ eZ Platform</li>
+                        <li>eZ Platform UI&nbsp;: l'interface d'eZ Platform</li>
+                        <li>Abrégée en PlatformUI :-)</li>
+                        <li>Fournie par <a href="https://github.com/ezsystems/PlatformUIBundle">le bundle Symfony PlatformUIBundle</a></li>
+                        <li>eZ Studio ?</li>
+                        <li>eZ Studio UI, StudioUI</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <ul>
+                            <li>Renommage en cours</li>
+                            <li>PlatformUI installé par défaut avec les prochaines versions</li>
+                            <li>Studio vient par dessus Platform</li>
+                            <li>StudioUI vient par dessus PlatformUI</li>
+                        </ul>
+                    </aside>
+				</section>
+
+				<section>
+                    <p class="architecture"><img src="assets/architecture_platform.png" alt="Architecture eZ Platform"></p>
+                    <aside class="notes">
+                        PlatformUI au dessus de la partie REST et eZ Publish 5 Controller
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Architecture (1/5)</h2>
+
+                    <ul>
+                        <li>PlatformUI est une <em>Single Page Application</em></li>
+                        <li>JavaScript, MV*, basée sur YUI</li>
+                        <li>
+                            2 parties d'un point de vue fonctionnelle&nbsp;:
+                            <ul>
+                                <li>Éditoriale&nbsp;: gestion du contenu</li>
+                                <li>Administration&nbsp;: content types, section, users, ...</li>
+                            </ul>
+                        </li>
+                        <li>
+                            2 approches technologiques différentes&nbsp;:
+                            <ul>
+                                <li>Éditoriale&nbsp;: rendu complet dans le navigateur</li>
+                                <li>Administration&nbsp;: rendu en partie côté serveur (PHP, Symfony, Twig, ...)</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <aside class="notes">
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Architecture &gt; Éditoriale (2/5)</h2>
+
+                    <ul>
+                        <li>API REST v2</li>
+                        <li>Logique en JavaScript dans le navigateur</li>
+                        <li>Rendu avec des templates par le navigateur</li>
+                        <li>Application indépendante d'eZ Platform qui n'utilise <em>que</em> l'API REST pour communiquer</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <ul>
+                            <li>Une idée: complètement extraire PlatformUI d'eZ</li>
+                            <li>SAAS</li>
+                        </ul>
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Architecture &gt; Administration (3/5)</h2>
+
+                    <ul>
+                        <li>Organisation plus traditionnelle</li>
+                        <li>Appel(s) à des controleurs/actions Symfony en AJAX</li>
+                        <li>Rendu côté serveur (Twig ou autre)</li>
+                        <li>Amélioration du HTML en JavaScript</li> 
+                    </ul>
+
+                    <aside class="notes">
+                        <ul>
+                            <li>Potentiellement moins axé sur l'interface utilisateur</li>
+                            <li>Cette technique peut parfaitement être utiliser pour enrichir la partie éditoriale</li>
+                        </ul>
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Architecture &gt; Composants (4/5)</h2>
+
+                    <ul>
+                        <li>Application&nbsp;: routing, authentification</li>
+                        <li>Models&nbsp;: Content, Location, Content Type...</li>
+                        <li>Views (et sub-views)&nbsp;: affichage et interactions avec l'utilisateur</li>
+                        <li>View services&nbsp;: ± contrôleurs, logique fonctionnelle</li>
+                        <li>Plugins&nbsp;: extensibilité&nbsp;!</li>
+                    </ul>
+
+                    <aside class="notes">
+                        Cf. schéma
+                    </aside>
+				</section>
+
+				<section>
+                    <p class="architecture"><img src="assets/architecture_platformui.svg" alt="Architecture eZ Platform UI"></p>
+
+                    <aside class="notes">
+                        <ul>
+                            <li>Application&nbsp;: routing, authentification</li>
+                            <li>Models&nbsp;: Content, Location, Content Type...</li>
+                            <li>Views (et sub-views)&nbsp;: affichage et interactions avec l'utilisateur</li>
+                            <li>View services&nbsp;: ± contrôleurs, logique fonctionnelle</li>
+                            <li>Plugins&nbsp;: extensibilité&nbsp;!</li>
+                        </ul>
+                    </aside>
+				</section>
+
+
+				<section>
+                    <h2>Demo!</h2>
+
+                    <p style="text-align: center;"><img src="assets/party.gif" alt="Party hard"></p>
+                    <aside class="notes">
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Extensibilité</h2>
+
+                    <ul>
+                        <li>Extensibilité est au cœur d'eZ (Publish) Platform</li>
+                        <li>eZ Studio UI est une extension de eZ Platform UI</li>
+                        <li>
+                            <a href="https://github.com/ezsystems/PlatformUIBundle/blob/master/docs/extensibility.md">Points d'extensions depuis un bundle externe</a>&nbsp;:
+                            <ul>
+                                <li>Ajout de nouveau(x) composant(s) JavaScript</li>
+                                <li>Alterration du comportement par défaut grâce à des plugins</li>
+                                <li>Ajout de nouveau(x) fichier(s) CSS</li>
+                                <li>Surcharge de template(s)</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <aside class="notes">
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Extensibilité &gt; Fichiers CSS</h2>
+
+                    <ul>
+                        <li><code>css.yml</code> liste les fichiers CSS à inclure</li>
+                        <li>Configuration <em>siteaccess aware</em></li>
+                        <li>Des bundles externes peuvent facilement ajouter des nouveaux fichiers</li>
+                    </ul>
+
+                    <aside class="notes">
+                        CSS super simple
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Extensibilité &gt; Modules JavaScript et templates</h2>
+
+                    <ul>
+                        <li><code>yui.yml</code> liste les modules YUI</li>
+                        <li>Configuration <em>siteaccess aware</em></li>
+                        <li>Les templates sont aussi des modules</li>
+                        <li>Chaque module déclare ses dépendances pour être chargé à la demande</li>
+                        <li>
+                            Des bundles externes peuvent facilement modifier la configuration par défaut&nbsp;:
+                            <ul>
+                                <li>Ajouter des nouveaux modules</li>
+                                <li>Créer des dépendances</li>
+                                <li>(Surcharger le fichier utilisé pour un module)</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <aside class="notes">
+                    </aside>
+				</section>
+
+				<section>
+                    <h2>Extensibilité &gt; Plugins</h2>
+
+                    <ul>
+                        <li>Basé sur le système de <a href="http://yuilibrary.com/yui/docs/plugin/">Plugin de YUI</a></li>
+                        <li>
+                            Un plugin
+                            <ul>
+                                <li>est enregistré pour étendre certaines classes</li>
+                                <li>a accès à l'objet qu'il étend (<code>host</code>)</li>
+                                <li>peut surcharger ou complèter le fonctionnement de son host</li>
+                            </ul>
+                        </li>
+                        <li>Pour les <em>view services</em> le plugin doit étendre une classe pour suivre une API</li>
+                        <li>PlatformUI utilisent des plugins</li>
+                    </ul>
+                </section>
+
+				<section>
+                    <h2>Futur</h2>
+
+                    <ul>
+                        <li>Boucher les trous ;-)</li>
+                        <li>
+                            Afficher et permettre l'édition de tous les types de fields
+                            <ul>
+                                <li>Affichage de Media</li>
+                                <li>Affichage/édition de Country</li>
+                                <li>Édition de Relation et RelationList&nbsp;: <em>Universal Discovery Widget</em></li>
+                                <li>RichText (XmlText)</li>
+                                <li>Corrections de bug et amélioration diverses (drag and drop, ...)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+				<section>
+                    <h2>Futur</h2>
+
+                    <ul>
+                        <li>Partie admin</li>
+                        <li>Sub-items</li>
+                        <li>Prise en compte des droits de l'utilisateur</li>
+                        <li><em>Navigation hub</em> (menu du haut)</li>
+                        <li>...</li>
+                        <li>Performances</li>
+                    </ul>
+                </section>
+
+				<section>
+                    <h2>Envie d'aider ou d'en apprendre plus&nbsp;?</h2>
+
+                    <ul>
+                        <li>Pull requests&nbsp;: <a href="https://github.com/ezsystems/PlatformUIBundle/pulls">https://github.com/ezsystems/PlatformUIBundle/pulls</a></li>
+                        <li>Bugs, suggestions&nbsp;:<a href="https://jira.ez.no/browse/EZP-23893?filter=14206">https://jira.ez.no/issues/?filter=14206</a></li>
+                        <li><em>Un peu</em> de documentations&nbsp;: <a href="https://github.com/ezsystems/PlatformUIBundle/tree/master/docs">https://github.com/ezsystems/PlatformUIBundle/tree/master/docs</a></li>
+                    </ul>
+                </section>
+
+
+				<section>
+                    <h2>The end</h2>
+
+                    <p style="text-align: center;"><img src="assets/done.gif" alt="Done!"></p>
+                    <p class="end">?</p>
+                </section>
+
+
+			</div>
+            <header>
+            <h1>eZ Platform UI</h1>
+            </header>
+            <footer><p>Damien Pobel &lt;dp@ez.no&gt;</p><p>Meetup à Lyon 15/01/2015</p><p>Slide <span class="page-nr">2</span></p></footer>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: false,
+                rollingLinks: false,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+            Reveal.addEventListener('ready', function (e) {
+                var header, footer, sections;
+
+                header = document.querySelector('.reveal header');
+                footer = document.querySelector('.reveal footer');
+                sections = document.querySelectorAll('.slides section');
+
+                for (var i = 1, len = sections.length; i != len; i++) {
+                    sections[i].insertBefore(header.cloneNode(true), sections[i].firstChild);
+                    sections[i].appendChild(footer.cloneNode(true));
+                    sections[i].querySelector('.page-nr').innerHTML = i+1;
+                }
+
+            });
+		</script>
+
+	</body>
+</html>
