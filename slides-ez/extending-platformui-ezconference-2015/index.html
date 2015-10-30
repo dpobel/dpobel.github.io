@@ -55,9 +55,100 @@
                     </ul>
                 </section>
 
-				<section style="text-align: left;">
-					<h1>THE END</h1>
-				</section>
+                <section data-markdown>
+                    <script type="text/template">
+                        # Plan
+
+                        1. Introduction to PlatformUI
+                            1. PlatformUI quick intro
+                            1. Content management vs. Admin part
+                            1. Architecture
+                            1. Quick demo
+                        1. Extending PlatformUI
+                            1. Expected result
+                            2. Steps by steps
+                        1. Questions
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Platform quick intro
+
+                        * Single Page Application
+                        * JavaScript MV\* based on YUI
+                        * 2 different parts
+                            1. Content management part
+                            1. Admin part
+                        * Different feature wise
+                        * Different code wise
+                    </script>
+                </section>
+
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Content management vs. Admin part
+
+                        ## Content management part
+
+                        * Heavily uses the Platform REST API
+                            * Gives JSON data (Location, Content, ...)
+                            * Does the business in the Repository
+                        * Fully rendered in the browser
+                            * JavaScript code (App, View, Models, ...)
+                            * Handlebars template
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Content management vs. Admin part
+
+                        ##  Admin part
+
+                        * Partly rendered server side
+                            * PJAX
+                            * Symfony controllers to generate the HTML code
+                            * Symfony/Twig/Public API or whatever PHP API
+                        * JavaScript
+                            * to integrate the HTML in the application
+                            * to enhance the UI
+
+                        We'll try to analyze/expirement both!
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Architecture
+
+                        * Application
+                            * routing
+                            * authentication
+                        * Models: Content, Location, Content Type, Content Info, ...
+                        * View (and sub-views)
+                            * display and interact with the user
+                        * View services
+                            * ~controllers
+                        * **Plugins**
+                    </script>
+                </section>
+
+
+                <section data-background="assets/architecture_platformui.svg">
+                    <h2>PlatformUI components</h2>
+                </section>
+
+                <section style="text-align: center;">
+                    <h1>Quick demo</h1>
+
+                    <img src="assets/demo.gif" alt="Yeah!">
+                </section>
+
+                <section>
+                    <h1>THE END</h1>
+                </section>
 
             </div>
 
