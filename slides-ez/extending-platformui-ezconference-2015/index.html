@@ -66,7 +66,7 @@
                             1. Quick demo
                         1. Extending PlatformUI
                             1. Expected result
-                            2. Steps by steps
+                            2. 9 steps
                         1. Questions
                     </script>
                 </section>
@@ -146,8 +146,312 @@
                     <img src="assets/demo.gif" alt="Yeah!">
                 </section>
 
-                <section>
-                    <h1>THE END</h1>
+                <section data-markdown>
+                    <script type="text/template">
+                        # Expected extension
+
+                        * *As an editor, I want to be able to browse the content with a flat list*
+                        * *As an editor, I want to be able filter this list by content type*
+
+                        <iframe width="640" height="360" src="https://www.youtube.com/embed/qeww3XBj-is" frameborder="0" allowfullscreen style="margin: 0 auto; display: block"></iframe>
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 9 steps to get there
+
+                        1. Create the Bundle
+                        1. Setup the configuration
+                        1. Alter the application routing
+                        1. Define the view
+                        1. Add the link in the navigation menu
+                        1. Get the content list (2 ways)
+                        1. Pagination
+                        1. Filter by content types
+                        1. Enhancements / bug fixes
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 1. ExtendingPlatformUIConferenceBundle
+
+                        * A *normal* Symfony bundle
+                        * Auto-generated with the bundle generator
+
+                        ```bash
+                        $ ezpublish/console generate:bundle \
+  --namespace=EzSystems/ExtendingPlatformUIConferenceBundle \
+  --dir=src --format=yml --no-interaction
+                        ```
+
+
+                        * Result: [tag 1_bundle](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/1_bundle) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/commit/1_bundle) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/1_bundle)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 2. Configuration
+
+                        ## In PlatformUI
+
+                        * 2 specific configuration files
+                        * `yui.yml` ([View on Github](https://github.com/ezsystems/PlatformUIBundle/blob/master/Resources/config/yui.yml))
+                            * List the available modules
+                            * Module ≃ a file defining a component + its dependencies
+                        * `css.yml` ([View on Github](https://github.com/ezsystems/PlatformUIBundle/blob/master/Resources/config/yui.yml))
+                            * List the CSS files to load
+                        * A typical PlatformUI extension will need both
+
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 2. Configuration
+
+                        ## In ExtendingPlatformUIConferenceBundle
+
+                        * Tweak the ExtendingPlatformUIConferenceExtension class
+                            * to load `yui.yml` and `css.yml`
+                            * to process the configuration
+                        * Configure the bundle to provide assets
+                            * Create the public directory
+                            * Install the assets
+                              ```
+                              $ ezpublish/console assets:install --symlink
+                              ```
+
+
+                        * Result: [tag 2_configuration](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/2_configuration) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/1_bundle..2_configuration) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/2_configuration)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 3. App routing
+
+                        ## In PlatformUI
+
+                        * Takes the hash into account
+                        * Matches a route ([Route list](https://github.com/ezsystems/PlatformUIBundle/blob/master/Resources/public/js/apps/ez-platformuiapp.js#L720))
+                        * Route properties:
+                            * `path` (or regexp) to match
+                            * `view` to use render something in the browser
+                            * list of *middlewares* to execute
+                            * [optionally] `name` to generate links
+                            * [optionally] `sideViews` configuration
+                            * [optionally] view `service`
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 3. App routing
+
+                        ## In ExtendingPlatformUIConferenceBundle
+
+                        * App plugin to add our own route
+                            1. declare the plugin module in `yui.yml`
+                            1. set this module as a `dependencyOf` the application module
+                            1. write a plugin for the application
+                            1. add the route on the application (the `host` object)
+
+
+                        * Result: [tag 3_routing](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/3_routing) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/2_configuration...3_routing) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/3_routing)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 4. Main view
+
+                        ## In PlatformUI
+
+                        * Each route defines a view to render
+                        * View responsibility
+                            * Generating the UI
+                            * Handling user input (click, keyboard, ...)
+                        * This view can have an arbitrary number of sub-views
+                        * Good practice to use small views
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 4. Main view
+
+                        ## In ExtendingPlatformUIConferenceBundle
+
+                        * Create a very basic view for the list
+                        * Make sure the route is configured to use it
+                        * Change the view to use a Handlebars template
+                        * Add a stylesheet
+
+
+                        * Result: [tag 4_view](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/4_view) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/3_routing...4_view) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/4_view)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 5. Navigation
+
+                        ## In PlatformUI
+
+                        * Navigation hub: top menu
+                        * 4 Navigation zones: Content, Page, Performance and Admin Panel
+                        * n Navigation Items in each zone:
+                            * a View
+                            * typically generates a link to a route
+                            * responsible for handling its *selected state*
+                            * 3 existing implementations
+                        * structure defined in the `eZ.NavigationHubViewService`
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 5. Navigation
+
+                        ## In ExtendingPlatformUIConferenceBundle
+
+                        * Add a `eZ.NavigationItemView` for our route
+                        * Plugin for the `NavigationHubViewService` to add it
+                            1. Create the plugin
+                            2. Add the navigation item for our list route
+
+
+                        * Result: [tag 5_navigation](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/5_navigation) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/4_view...5_navigation) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/5_navigation)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 6. Content list
+
+                        ## PlatformUI
+
+                        * 2 ways to build *pages*
+                        * Let's try both
+                            1. Rendered fully in the browser: REST + JavaScript + Handlebars
+                            2. Partially rendered on the server: Symfony/PHP/Public API + Twig + JavaScript
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 6.1. Client side Content list
+
+                        ## In ExtendingPlatformUIConferenceBundle
+
+                        * Add a view service to load the list with the REST API
+                        * Change the route to use this service
+                        * *Location search* with the REST API
+                        * Give this list to the list view
+                        * Render this list in the view
+
+
+                        * Result: [tag 6_1_list_client](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/6_1_list_client) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/5_navigation...6_1_list_client) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/6_1_list_client)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 6.2. Server side Content list
+
+                        ## In PlatformUI
+
+                        * *Regular* AJAX call(s)
+                        * Response is structured to be easily usable in JavaScript
+                            * `title`: to generate the window title
+                            * `html`: to get the HTML code to use in the application
+                            * `notification`: to generate application notification
+                        * This can be reused in extensions
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 6.2. Server side Content list
+
+                        ## In ExtendingPlatformUIConferenceBundle
+
+                        * Implement a Symfony controller/action to generate the list
+                        * Fetch the HTML code in in the view service
+                        * ~~Give the generated code to the view~~
+                        * ~~Render the list inside the view~~
+                        * Handle the links so the list is usable in PlatformUI
+                            * DOM event handler in the view
+                            * Application level event + Event bubbling
+
+
+                        * Result: [tag 6_2_list_server](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/6_2_list_server) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/5_navigation...6_2_list_server) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/6_2_list_server)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 7. Pagination
+
+                        * By default the search returns 25 results
+                        * Need pagination!
+
+
+                        * Add an `offset` parameter to the server side code
+                        * Add an `offset` parameter to the app route
+                        * Pass the client side offset to the server side
+                        * Add the previous/next links in the server response
+                        * Enhance those links to navigate in the application
+
+
+                        * Result: [tag 7_pagination](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/7_pagination) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/6_2_list_server...7_pagination) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/7_pagination)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 8. Filter by Content Type
+
+                        * Add a `type` parameter to the server side code
+                        * Add a `type` parameter to the app route
+                        * Pass the client side type to the server side
+                        * Handle the pagination links
+                        * Add a drop down list to select the content type
+                        * Handle the drop down list selection
+
+
+                        * Result: [tag 8_filter](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/8_filter) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/compare/7_pagination_server...8_filter) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/8_filter)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # 9. Bug (fixes) / Enhancements
+
+                        * Improve the look and feel and output ([13d5a0b2](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/commit/13d5a0b2f4d957425a751a2cc4cbd6566ed0b57a))
+                        * Reload only the table not the full view when filtering
+                        * Sorting
+                        * More filters, more columns ...
+                        * The server side code deserves to be refactored
+                        * Unit tests
+                        * **[bug]** Highlight is buggy in navigation
+                        * **[bug]** 'eng-GB' hardcoded when getting Content Type name
+                    </script>
+                </section>
+
+                <section style="text-align: center;">
+                    <h1>Other than that, it works :)</h1>
+
+                    <img src="assets/working.gif" alt="Working">
+                </section>
+
+                <section style="text-align: center;">
+                    <h1>Question(s) ?</h1>
+
+                    <img src="assets/question.gif" alt="Questions ?">
                 </section>
 
             </div>
