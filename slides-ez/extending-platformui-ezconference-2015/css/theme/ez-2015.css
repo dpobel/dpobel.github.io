@@ -292,7 +292,7 @@ body {
     padding-top: 130px;
     background-size: 30%;
     display: inline-block;
-    margin: 0 auto;
+    margin: 0 auto 10% auto;
 }
 
 .ez .ez-slide-title {
@@ -303,18 +303,20 @@ body {
 }
 
 .ez .ez-slide-meta {
-    margin: 10% auto;
+    margin: 0 auto;
     font-size: 70%;
     list-style-type: none;
     width: 90%;
     display: flex; /* TODO vendor prefixes */
-    background: rgba(255, 255, 255, 0.5);
 }
 
 .ez .ez-slide-meta > * {
     display: inline-block;
     flex: 1;
     text-align: center;
+    background: rgba(255, 255, 255, 0.5);
+    color: #222;
+    margin: 2px;
 }
 
 .ez:before {
