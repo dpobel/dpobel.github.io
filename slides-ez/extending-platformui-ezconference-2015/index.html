@@ -56,7 +56,7 @@
                     <ul class="ez-slide-meta">
                         <li>
                             This presentation is online:
-                            <a href="http://j.mp/extending-platformui">http://j.mp/extending-platformui</a>
+                            <a href="http://j.mp/extending-platformui" style="white-space:nowrap">http://j.mp/extending-platformui</a>
                         </li>
                         <li>
                         <a href="https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle">ExtendingPlatformUIConferenceBundle</a> is available on Github</a>
@@ -102,8 +102,8 @@
                         ## Content management part
 
                         * Heavily uses the Platform REST API
+                            * Calls the Repository
                             * Gives JSON data (Location, Content, ...)
-                            * Does the business in the Repository
                         * Fully rendered in the browser
                             * JavaScript code (App, View, Models, ...)
                             * Handlebars template
@@ -128,7 +128,7 @@
                     </script>
                 </section>
 
-                <section data-markdown>
+                <section data-markdown data-separator-notes="^Note:">
                     <script type="text/template">
                         # Architecture
 
@@ -141,6 +141,9 @@
                         * View services
                             * ~controllers
                         * **Plugins**
+
+                        Note:
+                            * back and forth with the architecture schema
                     </script>
                 </section>
 
@@ -153,6 +156,14 @@
                     <h1>Quick demo</h1>
 
                     <img src="assets/demo.gif" alt="Yeah!" style="height: 60%">
+                    <aside class="notes">
+                       <ul>
+                           <li>Open dev tools</li>
+                           <li>Login</li>
+                           <li>Display a content</li>
+                           <li>Go to the admin part</li>
+                        </ul>
+                    </aside>
                 </section>
 
                 <section data-markdown>
@@ -160,7 +171,7 @@
                         # Expected extension
 
                         * *As an editor, I want to be able to browse the content with a flat list*
-                        * *As an editor, I want to be able filter this list by content type*
+                        * *As an editor, I want to be able to filter this list by content type*
 
                         <iframe width="640" height="360" src="https://www.youtube.com/embed/qeww3XBj-is" frameborder="0" allowfullscreen style="margin: 0 auto; display: block"></iframe>
                     </script>
@@ -193,14 +204,15 @@
   --namespace=EzSystems/ExtendingPlatformUIConferenceBundle \
   --dir=src --format=yml --no-interaction
                         ```
-
+                            * Add the bundle to the kernel
+                            * Import the routing.yml
 
                         * Result: [tag 1_bundle](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/releases/tag/1_bundle) | [See the diff](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/commit/1_bundle) | [Browse the code](https://github.com/ezsystems/ExtendingPlatformUIConferenceBundle/tree/1_bundle)
                     </script>
                 </section>
 
                 <section data-markdown>
-                    <script type="text/template">
+                    <script type="text/template" data-separator-notes="^Note:">
                         # 2. Configuration
 
                         ## In PlatformUI
@@ -213,6 +225,9 @@
                             * List the CSS files to load
                         * A typical PlatformUI extension will need both
 
+                        Note:
+                            * open the files in the browse
+                            * explain modules
                     </script>
                 </section>
 
@@ -237,7 +252,7 @@
                     </script>
                 </section>
 
-                <section data-markdown>
+                <section data-markdown data-separator-notes="^Note:">
                     <script type="text/template">
                         # 3. App routing
 
@@ -252,6 +267,10 @@
                             * [optionally] `name` to generate links
                             * [optionally] `sideViews` configuration
                             * [optionally] view `service`
+
+                        Note:
+                            * open the route definition
+                            * shows the different route + explain middlewares
                     </script>
                 </section>
 
@@ -388,7 +407,7 @@
                         ## In ExtendingPlatformUIConferenceBundle
 
                         * Implement a Symfony controller/action to generate the list
-                        * Fetch the HTML code in in the view service
+                        * Fetch the HTML code in the view service
                         * ~~Give the generated code to the view~~
                         * ~~Render the list inside the view~~
                         * Handle the links so the list is usable in PlatformUI
