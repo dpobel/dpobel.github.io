@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Extending and Customizing the eZ Platform User Interface &ndash; eZ Conference Workshop 2016</title>
+
+        <meta name="description" content="Extending and Customizing the eZ Platform User Interface">
+        <meta name="author" content="Damien Pobel">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+        <link href='https://fonts.googleapis.com/css?family=Maven+Pro:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/ez-2016.css" id="theme">
+
+        <!-- Code syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body class="ez">
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section class="ez-title-slide" data-background="assets/ibex.svg">
+                    <div class="ez-overlay-box">
+                        <h1 class="ez-slide-title">Extending and Customizing<br>the eZ Platform User Interface</h1>
+                    </div>
+
+                    <ul class="ez-slide-meta">
+                        <li>Damien Pobel</li>
+                        <li>Lead Engineer UI</li>
+                        <li><a href="mailto:dp@ez.no">dp@ez.no</a></li>
+                        <li><a href="https://twitter.com/dpobel">@dpobel</a></li>
+                    </ul>
+                    <ul class="ez-slide-meta">
+                        <li>
+                            This presentation is online:
+                            <a href="http://j.mp/extending-platformui-2016" style="white-space:nowrap">http://j.mp/extending-platformui-2016</a>
+                        </li>
+                        <li>
+                        <a href="https://github.com/dpobel/PlatformUIExtensionSkeletonBundle">PlatformUIExtensionSkeletonBundle</a> is available on Github</a>
+                        </li>
+                   </ul>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Lead Engineer UI
+
+                        * 11 years in the eZ ~~Publish~~ Platform community (!)
+                        * Working on PlaformUI for ~3,5 years <!-- .element: class="fragment" data-fragment-index="1" -->
+                        * Examples taken from my previous life when doing projects with eZ&nbsp;Publish <!-- .element: class="fragment" data-fragment-index="2" -->
+                        * AKA JavaScript Gang Leader <!-- .element: class="fragment" data-fragment-index="3" -->
+                        <img src="assets/gang.gif" alt="Gang" style="height: 60%; display: block; margin: 0 auto;"><!-- .element: class="fragment" data-fragment-index="3" -->
+                        * (Yes, I love animated GIF) <!-- .element: class="fragment" data-fragment-index="3" -->
+                    </script>
+                </section>
+
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Plan
+
+                        1. Introduction to PlatformUI
+                            1. Quick intro
+                            1. Architecture
+                            1. Extensibility
+                        1. Extension stories
+                            1. As an editor, I want to have a personalized UI
+                            1. As an editor, I want to have useful information on my dashboard
+                            1. As an editor, I want to access to my custom tools
+                            1. As an editor, I want to a customized UI to fill some fields
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Platform quick intro
+
+                        * Single Page Application
+                        * JavaScript MV\* based on YUI
+                        * 2 different parts
+                            * Content management part
+                            * Admin part
+                        * Different feature wise
+                        * Different code wise
+                    </script>
+                </section>
+
+                <section data-markdown data-separator-notes="^Note:">
+                    <script type="text/template">
+                        # Architecture
+
+                        * Application
+                            * routing
+                            * authentication
+                        * Models: Content, Location, Content Type, Content Info, ...
+                        * Views (and sub-views)
+                            * display and interact with the user
+                        * View services
+                            * ~controllers
+                        * **Plugins**
+
+                        Note:
+                            * back and forth with the architecture schema
+                    </script>
+                </section>
+
+
+                <section data-background="assets/architecture_platformui.svg">
+                    <h2>PlatformUI components</h2>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # PlatformUI Extension
+
+                        * Symfony bundle with [a special Dependency Injection Extension](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/3ccc71cbea54c96f0742aa56106d1a8fd06e46da)
+                        * Plugins to alter existing JavaScript components
+                            * Add routes to the application
+                            * Change a behaviour of a View
+                            * Load different data
+                            * ...
+                        * Custom JavaScript Components to add new features
+                        * Custom CSS to tweak the UI
+                        * Custom JavaScript to replace default ones (override)
+                    </script>
+                </section>
+
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # As an editor, I want to have a personalized UI
+
+                        * Inject a custom CSS file to tweak various "details"
+                            * [Add a custom CSS file to load in `css.yml`](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/0b2ded54402f523354533abdfa6b244e483b00ed)
+                        * Override a template
+                            * [Redefine the corresponding module to point to your template](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/4d1dc0bcb0e3ab25fdd9f1013b9ec4af2d4f304a)
+
+                        Tips:
+
+                        * Reuse the selector syntax in CSS file to avoid side effects
+                        * This is also the way to use to [customize Content Type icons](https://github.com/ezsystems/PlatformUIBundle/blob/master/docs/design/content-type-icon.md)
+
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # As a user, I want to have useful info on my dashboard
+
+                        * PlatformUI has a block based dashboard
+                        * 3 blocks by default
+                        * Custom dashboard block
+                            * a dashboard block is a View
+                            * a plugin for the Dashboard View is needed to add the new block
+                            * a plugin for the Dashboard View Service is needed to asynchronously load the data
+                        * Example: [a block to search for a GIF in Giphy.com](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/2ef823338abfd7c21114d5aa08b35d4511dff1a8)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # As an editor, I want to access to a server side custom tool
+
+                        * Starting point: a PHP API providing any kind of service
+                        * Give access to the corresponding UI in PlatformUI
+                        * 3 main steps:
+                            * [Prepare a Symfony action that PlatformUI is able to handle](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/070a68db4146ba7e88614c9d3b664436bc31a13b) (PJAX)
+                            * [Add a route in the application with a plugin for the App](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/26c87b7b0398d4d9bf2bf4625ff1de0c06c889f2)
+                            * [Add a link in the Navigation Hub with a plugin](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/728117d1482391e5d6cf0ad8d58abdbbc9d91aaf)
+
+
+                        * Full example in the tutorial [Extending PlatformUI with new navigation](https://doc.ez.no/display/DEVELOPER/Extending+PlatformUI+with+new+navigation)
+                        * Server side rendering can be used anywhere (even for a Dashboard block)
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # As an editor, I want a customized UI to fill some fields
+
+                        * A counter with the number of signs in the textarea
+                        * [Plugin for the Text Block Field Edit View](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/8ebfb15c24ad232d8ae2c733823bda982bd5a1a6<Paste>)
+                        * And RichText ? <!-- .element: class="fragment" data-fragment-index="1" -->
+                        * <!-- .element: class="fragment" data-fragment-index="2" -->[Reuse the same plugin with some changes](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/88258611cd5ae312e1dde97b00379906492f29f7)
+                        
+                        Tips:<!-- .element: class="fragment" data-fragment-index="3" -->
+                        * use events, limit API override and markup changes<!-- .element: class="fragment" data-fragment-index="3" -->
+                        * template / component override for extreme cases<!-- .element: class="fragment" data-fragment-index="3" -->
+                    </script>
+                </section>
+
+                <section style="text-align: center;">
+                    <h1><em>Et voilà!</em> :)</h1>
+
+                    <img src="assets/working.gif" alt="Working" style="height: 60%">
+                </section>
+
+                <section style="text-align: center;">
+                    <h1>Question(s) ?</h1>
+
+                    <img src="assets/question.gif" alt="Questions ?" style="height: 60%">
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        # Want to help or to learn more ?
+
+                        * [PlatformUI code](https://github.com/ezsystems/PlatformUIBundle)
+                        * [Pull requests](https://github.com/ezsystems/PlatformUIBundle/pulls), your opinion matters!
+                        * [Bugs, improvements](https://jira.ez.no/issues/?filter=15903) please use JIRA and the "Platform UI (Admin UI & Content UI)" component
+                        * [PlatformUIExtensionSkeletonBundle](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle)
+                        * [Tutorial Extending PlatformUI with new navigation](https://doc.ez.no/display/DEVELOPER/Extending+PlatformUI+with+new+navigation)
+                    </script>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: false,
+                slideNumber: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                width: '100%',
+                height: '100%',
+                margin: 0,
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
