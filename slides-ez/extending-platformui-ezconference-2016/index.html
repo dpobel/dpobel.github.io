@@ -95,7 +95,7 @@
 
                 <section data-markdown>
                     <script type="text/template">
-                        # Platform quick intro
+                        # PlatformUI quick intro
 
                         * Single Page Application
                         * JavaScript MV\* based on YUI
@@ -131,22 +131,32 @@
                     <h2>PlatformUI components</h2>
                 </section>
 
-                <section data-markdown>
+                <section data-markdown data-separator-notes="^Note:">
                     <script type="text/template">
                         # PlatformUI Extension
 
                         * Symfony bundle with [a special Dependency Injection Extension](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/3ccc71cbea54c96f0742aa56106d1a8fd06e46da)
+                            * to read `css.yml` : CSS to include
+                            * and `yui.yml` : JavaScript modules
                         * Plugins to alter existing JavaScript components
                             * Add routes to the application
                             * Change a behaviour of a View
-                            * Load different data
                             * ...
                         * Custom JavaScript Components to add new features
                         * Custom CSS to tweak the UI
                         * Custom JavaScript to replace default ones (override)
+
+                        Note:
+                            * explain the module => component + dependency
+                            * in an extension, reverse dependency
                     </script>
                 </section>
 
+                <section style="text-align: center;">
+                    <h1>Concrete examples</h1>
+
+                    <img src="assets/concrete.gif" alt="Concrete work" style="height: 60%">
+                </section>
 
                 <section data-markdown>
                     <script type="text/template">
@@ -159,6 +169,7 @@
 
                         Tips:
 
+                        * Avoid override if possible
                         * Reuse the selector syntax in CSS file to avoid side effects
                         * This is also the way to use to [customize Content Type icons](https://github.com/ezsystems/PlatformUIBundle/blob/master/docs/design/content-type-icon.md)
 
@@ -167,11 +178,11 @@
 
                 <section data-markdown>
                     <script type="text/template">
-                        # As a user, I want to have useful info on my dashboard
+                        # As an editor, I want to have useful info on my dashboard
 
                         * PlatformUI has a block based dashboard
                         * 3 blocks by default
-                        * Custom dashboard block
+                        * **Custom dashboard block**
                             * a dashboard block is a View
                             * a plugin for the Dashboard View is needed to add the new block
                             * a plugin for the Dashboard View Service is needed to asynchronously load the data
@@ -179,12 +190,12 @@
                     </script>
                 </section>
 
-                <section data-markdown>
+                <section data-markdown data-separator-notes="^Note:">
                     <script type="text/template">
                         # As an editor, I want to access to a server side custom tool
 
-                        * Starting point: a PHP API providing any kind of service
-                        * Give access to the corresponding UI in PlatformUI
+                        * Starting point: a PHP API providing any kind of service ([`/hello` in this example](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/476f55a99aac91983c6682383e8dedeee648875e))
+                        * **Give access to the corresponding UI in PlatformUI**
                         * 3 main steps:
                             * [Prepare a Symfony action that PlatformUI is able to handle](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/070a68db4146ba7e88614c9d3b664436bc31a13b) (PJAX)
                             * [Add a route in the application with a plugin for the App](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/26c87b7b0398d4d9bf2bf4625ff1de0c06c889f2)
@@ -194,6 +205,9 @@
 
                         * Full example in the tutorial [Extending PlatformUI with new navigation](https://doc.ez.no/display/DEVELOPER/Extending+PlatformUI+with+new+navigation)
                         * Server side rendering can be used anywhere (even for a Dashboard block)
+
+                        Note:
+                            starting point API: controller random GIF
                     </script>
                 </section>
 
@@ -201,8 +215,8 @@
                     <script type="text/template">
                         # As an editor, I want a customized UI to fill some fields
 
-                        * A counter with the number of signs in the textarea
-                        * [Plugin for the Text Block Field Edit View](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/8ebfb15c24ad232d8ae2c733823bda982bd5a1a6<Paste>)
+                        * A counter with the number of signs in a Text Block field
+                        * [Plugin for the Text Block Field Edit View](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/8ebfb15c24ad232d8ae2c733823bda982bd5a1a6)
                         * And RichText ? <!-- .element: class="fragment" data-fragment-index="1" -->
                         * <!-- .element: class="fragment" data-fragment-index="2" -->[Reuse the same plugin with some changes](https://github.com/dpobel/PlatformUIExtensionSkeletonBundle/commit/88258611cd5ae312e1dde97b00379906492f29f7)
                         
@@ -217,9 +231,11 @@
                         # Others extension points ?
 
                         * Field View and Field Edit View for custom Field Types
+                        * New buttons in the Discovery Bar and Action Bar
                         * Location Tab
                         * Subitem list display
                         * Universal Discovery Methods
+                        * ...
                     </script>
                 </section>
 
