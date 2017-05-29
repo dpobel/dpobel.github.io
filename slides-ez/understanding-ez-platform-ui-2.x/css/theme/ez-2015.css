@@ -290,7 +290,7 @@ body {
 }
 
 .ez .ez-overlay-box {
-    background: rgba(255, 255, 255, 0.5) url(../../assets/logo.svg) no-repeat center 10px;
+    background: rgba(255, 255, 255, 0.5) url(../../assets/logo-no-text.svg) no-repeat center 10px;
     padding-top: 130px;
     background-size: 30%;
     display: inline-block;
@@ -300,7 +300,7 @@ body {
 .ez .ez-slide-title {
     display: inline-block;
     color: #f05a22;
-    border-bottom: 7px solid #f05a22;
+    border-bottom: 0;
     padding-bottom: 0.08em;
 }
 
