@@ -341,7 +341,7 @@ body {
 
 .ez section ul,
 .ez section ol {
-    list-style-position: inside;
+    list-style-position: outside;
     margin-bottom: 1em;
 }
 
@@ -367,10 +367,8 @@ body {
 }
 
 .ez section h1 {
-    background: url(../../assets/logo-no-text.svg) no-repeat 0 center;
-    background-size: auto 60%;
     color: #f05a22;
-    text-align: center;
+    text-align: left;
     border-bottom: 2px solid #adadad;
     padding: 0.2em 0;
     font-size: 1.2em;
