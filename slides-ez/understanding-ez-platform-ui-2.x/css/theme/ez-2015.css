@@ -396,6 +396,24 @@ body {
     color: #000;
 }
 
+.ez img.main {
+    display: block;
+    margin: 0 auto;
+    height: 50%;
+}
+
+.ez .cols {
+    display: flex;
+}
+
+.ez .cols img.main {
+    height: 70%;
+}
+
+.ez .cols .sidebyside {
+    width: 50%;
+}
+
 .reveal .controls div.navigate-left, .reveal .controls div.navigate-left.enabled {
   border-right-color: #f05a22;
 }

@@ -41,9 +41,10 @@
 
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
-                <section class="ez-title-slide" data-background="assets/ibex.svg">
+                <section id="front" class="ez-title-slide" data-background="assets/ibex.svg">
                     <div class="ez-overlay-box">
                         <h1 class="ez-slide-title">Understanding eZ Platform UI 2.x</h1>
+                        <h2 class="ez-slide-sub-title">aka <strong>Hybrid Platform UI</strong></h2>
                     </div>
 
                     <ul class="ez-slide-meta">
@@ -59,32 +60,286 @@
                    </ul>
                 </section>
 
-                <section>
-                    <h1>Slide title</h1>
+                <section id="platform-ui-1--1">
+                    <h1>Platform UI 1.x?</h1>
 
-                    <h2>sub title</h2>
+                    <h2>Content part</h2>
+                    <div class="cols">
+                        <ul>
+                            <li class="fragment">Viewing, editing Content, Dashboard, Trash, Search</li>
+                            <li class="fragment">Single Page Application</li>
+                            <li class="fragment">JavaScript! (~50k LOC w/o comments)</li>
+                            <li class="fragment">REST API based</li>
+                            <li class="fragment">YUI ☠️</li>
+                            <li class="fragment">Rendered by the browser</li>
+                        </ul>
+                        <img src="assets/content.gif" alt="" class="main" style="width: 40%;">
+                    </div>
+                </section>
+
+                <section id="platform-ui-1--2">
+                    <h1>Platform UI 1.x?</h1>
+
+                    <h2>Admin part</h2>
+                    <div class="cols">
+                        <ul>
+                            <li class="fragment">Admin panel: Section, Languages, Content Types, ...</li>
+                            <li class="fragment">Mostly rendered server side</li>
+                            <li class="fragment">Re-injected into the SPA</li>
+                            <li class="fragment">PJAX: Page AJAX</li>
+                            <li class="fragment">PHP / Twig based</li>
+                            <li class="fragment">JavaScript enhancements</li>
+                        </ul>
+                        <img src="assets/admin.gif" alt="Nerd Zone" class="main" style="width: 40%;">
+                    </div>
+                </section>
+
+                <section id="lessons">
+                    <h1>Lessons from 1.x</h1>
+
+                    <img src="assets/learn.gif" alt="Learn" class="main" style="height: 80%;">
+                </section>
+
+                <section id="lesson--1">
+                    <h1>#1: You don't like JavaScript ;-)</h1>
+
+                    <div class="cols" style="height: 50%;">
+                        <img src="assets/hate.gif" alt="Hate" class="main" style="height: 100%;">
+                        <img src="assets/troll.gif" alt="Troll" class="main fragment" style="height: 100%;">
+                    </div>
                     <ul>
-                        <li>Bullet 1</li>
-                        <li>Bullet with <strong>Strong</strong> 2</li>
-                        <li>Bullet 3</li>
+                        <li class="fragment"><code>&lt;/troll&gt;</code></li>
+                        <li class="fragment">Underestimated effort to adopt the SPA structure</li>
                     </ul>
-                    <h2>sub title 2</h2>
+                </section>
+
+                <section id="lesson--2">
+                    <h1>#2: <strike>Slow</strike> Unoptimized</h1>
+
+                    <!-- todo loader joke -->
+                    <img src="assets/turtle.gif" alt="Slow" class="main" style="height: 70%;">
+                </section>
+
+                <section id="lesson--3">
+                    <h1>#3: Frameworks die</h1>
+
+                    <img src="assets/yui.gif" alt="Time to die" class="main" style="height: 70%;">
+                </section>
+
+                <section id="lesson--4">
+                    <h1>#4: Do not Repeat Yourself</h1>
+
+                    <ul>
+                        <li class="fragment">Server vs. Frontend</li>
+                        <li class="fragment">Duplicated features: display a Content, edit form, ...</li>
+                    </ul>
+
+                    <img src="assets/twins.gif" alt="Twins" class="main fragment">
+                </section>
+
+                <section id="lesson--5">
+                    <h1>#5: Extensibility</h1>
+
+                    <ul>
+                        <li class="fragment">JavaScript code: very extensible</li>
+                        <li class="fragment">Lack of specialization</li>
+                        <li class="fragment">Require simplification</li>
+                    </ul>
+                    <img src="assets/yes-no.gif" alt="Yes but no" class="main fragment">
+                </section>
+
+                <section id="lessons-positive">
+                    <h1>Positive parts</h1>
+
+                    <div class="cols" style="height:80%;">
+                        <ul>
+                            <li class="fragment">Component based before it becomes mainstream</li>
+                            <li class="fragment">Relatively few bugs</li>
+                            <li class="fragment">Universal Discovery Widget</li>
+                            <li class="fragment">Online Editor (ok it lacks some features)</li>
+                            <li class="fragment">...</li>
+                        </ul>
+                        <img src="assets/high-two.gif" alt="Positive parts" class="main">
+                    </div>
+                </section>
+
+                <section id="hybrid">
+                    <h1>Platform UI Bundle 2.x</h1>
+
+                    <ul>
+                        <li class="fragment">Platform UI Bundle 2.x is the new legacy!</li>
+                        <li class="fragment">Reuse components: Subitems, UDW, PJAX...</li>
+                        <li class="fragment">Eventually get rid of it</li>
+                    </ul>
+
+                    <img src="assets/legacy.gif" alt="Legacy!" class="main fragment">
+                </section>
+
+                <section id="hybrid-what">
+                    <h1>Hybrid Platform UI?</h1>
+
+                    <ul>
+                        <li class="fragment" data-fragment-index="1">New set of packages providing the admin</li>
+                        <li class="fragment" data-fragment-index="2"><em>Hybrid</em>?</li>
+                    </ul>
+                    <img src="assets/hybrid.gif" alt="Hybrid" class="main fragment" style="height: 40%;" data-fragment-index="2">
+                    <ul>
+                        <li class="fragment">Server driven + JavaScript Enhancements</li>
+                        <li class="fragment">Back in an <em>admin</em> siteaccess</li>
+                    </ul>
+
+                </section>
+
+                <section id="hybrid-fast">
+                    <h1>Performances?</h1>
+
+                    <ul>
+                        <li class="fragment">Fast by default</li>
+                        <li class="fragment">Still optimizable</li>
+                    </ul>
+
+                    <img src="assets/fast.gif" alt="Fast!" class="main fragment">
+                </section>
+
+                <section id="hybrid-fast-how">
+                    <h1>How does it work?</h1>
+
+                    <img src="assets/how.gif" alt="How?" class="main">
                     <ol>
-                        <li>Number 1</li>
-                        <li>2 with <em>Em</em></li>
-                        <li>Third element</li>
-                    </ol>
-
+                        <li class="fragment">Full page generated with PHP / Symfony / Twig</li>
+                        <li class="fragment">
+                            Enhanced navigation to get a JSON update
+                            <br>
+                            Unless a class is set on the link/form or one of its ancestor
+                        </li>
+                    </ul>
                 </section>
 
-                <section>
-                    <h2>Slide without title</h2>
-                    <p>
-                        if you need the full view to display something that's perfectly possible.
-                    </p>
+                <section id="js-framework">
+                    <h1>Framework?</h1>
+
+                    <img src="assets/nope.gif" alt="Nope" class="main">
+                    <ul>
+                        <li class="fragment">#UseThePlatform (+ libraries?)</li>
+                        <li class="fragment">Custom Elements (aka Web Components) with Polymer v2</li>
+                    </ul>
                 </section>
+
+                <section id="custom-elements">
+                    <h1>Web Components? Custom Elements?</h1>
+
+                    <ul>
+                        <li class="fragment">Imperatively configure a behavior</li>
+                        <li class="fragment">Also used to reuse and sandbox YUI based components</li>
+                    </ul>
+                    <img src="assets/box.gif" alt="Box" class="main fragment">
+                </section>
+
+                <section id="extensibility--1">
+                    <h1>Extensibility?</h1>
+
+                    <h2>Server side extension points</h2>
+                    <div class="cols" style="height: 70%;">
+                        <ul>
+                            <li class="fragment">Template override</li>
+                            <li class="fragment">Zone in the Navigation Hub</li>
+                            <li class="fragment">Link in a zone of the Navigation Hub</li>
+                            <li class="fragment">WIP: Theme</li>
+                            <li class="fragment">...</li>
+                        </ul>
+                        <img src="assets/serverside.gif" alt="Dark side" class="main" style="height: 90%;">
+                    </div>
+                </section>
+
+                <section id="extensibility--2">
+                    <h1>Extensibility?</h1>
+
+                    <h2>Frontend side extension points</h2>
+                    <div class="cols" style="height: 70%;">
+                        <ul>
+                            <li class="fragment">TBD: way to inject custom CSS / custom JS / HTML Import</li>
+                            <li class="fragment">
+                                App dispatches a DOM event after each update
+                                <br>
+                                Allow to boot up JavaScript enhancements
+                            </li>
+                        </ul>
+                        <img src="assets/deco.gif" alt="Decoration" class="main" style="height: 90%;">
+                    </div>
+                </section>
+
+                <section id="extensibility--3">
+                    <h1>Extensibility?</h1>
+
+                    <h2>One last thing on extensibility</h2>
+                    <ul>
+                        <li class="fragment" data-fragment-index="1">Admin panel (PJAX) is integrated</li>
+                        <li class="fragment" data-fragment-index="2">Your own PJAX extensions can <em>easily</em> be integrated!</li>
+                    </ul>
+
+                    <div class="cols" style="height: 50%;">
+                        <div class="sidebyside">
+                            <img src="assets/yeah.gif" alt="Yeah!" class="main fragment" data-fragment-index="2" style="height: 100%;">
+                        </div>
+                        <div class="sidebyside">
+                            <img src="assets/believe.gif" alt="" class="main fragment" style="height: 100%;">
+                        </div>
+                    </div>
+                </section>
+
+                <section id="smile-ez-ui-cron-bundle">
+                    <h1>Examples #1: smile/ez-uicron-bundle</h1>
+
+                    <img src="assets/easy.gif" alt="Easy" class="main" style="height: 40%;">
+                    <h2 class="fragment"><a href="https://github.com/Smile-SA/EzUICronBundle/compare/master...dpobel:hybrid_platform_ui">Diff</a>: 19 additions and 8 deletions</h2>
+                    <ul class="fragment">
+                        <li>Make YML files valid for Symfony 3.x</li>
+                        <li>Change URL to start with <code>/pjax</code></li>
+                        <li>Add a link the admin panel (<a href="https://github.com/ezsystems/hybrid-platform-ui/blob/master/docs/howto/add_navigation_hub_items.md">documentation</a>)</li>
+                    </ul>
+                </section>
+
+                <section id="netgen-tagsbundle">
+                    <h1>Examples #2: netgen/tagsbundle</h1>
+
+                    <h2><a href="https://github.com/netgen/TagsBundle/compare/master...dpobel:hybrid_platform_ui">Diff</a>: 32 additions and 8 deletions</h2>
+                    <div class="cols">
+                        <ul class="fragment">
+                            <li>Same as for previous example</li>
+                            <li>Added a new zone</li>
+                            <li>Change an Event Listener to properly detect Hybrid Platform UI request</li>
+                            <li>Apply (some) JavaScript enhancements</li>
+                        </ul>
+                        <img src="assets/do-it.gif" alt="Do it!" class="main fragment">
+                </section>
+
+                <section id="questions">
+                    <h1>Question?</h1>
+
+                    <div class="cols" style="height: 70%;">
+                        <img src="assets/question.gif" alt="Question" class="main" style="height: 100%;">
+                        <img src="assets/trick-question.gif" alt="Question" class="fragment main" style="height: 100%;">
+                    </div>
+                </section>
+
+                <section id="install-links">
+                    <h1>Install, links, ...</h1>
+
+                    <h2>Code</h2>
+                    <ul>
+                        <li><a href="https://github.com/ezsystems/ezplatform/pull/177">Hybrid UI integration PR on ezsystems/ezplatform</a></li>
+                        <li><a href="https://github.com/ezsystems/hybrid-platform-ui">ezsystems/hybrid-platform-ui</a></li>
+                        <li><a href="https://github.com/ezsystems/hybrid-platform-ui-core-components">ezsystems/hybrid-platform-ui-core-components</a></li>
+                    </ul>
+                    <h2>Install</h2>
+                    <ul>
+                        <li><code>$ composer install</code></li>
+                        <li><code>$ php bin/console ezplatform:install clean</code></li>
+                        <li>Go to http://host/admin</li>
+                    </ul>
+                </section>
+
             </div>
-
         </div>
 
         <script src="lib/js/head.min.js"></script>
