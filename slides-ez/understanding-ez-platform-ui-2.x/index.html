@@ -113,11 +113,13 @@
                     </ul>
                 </section>
 
-                <section id="lesson--2">
+                <section id="lesson--2" data-ez-slow>
                     <h1>#2: <strike>Slow</strike> Unoptimized</h1>
 
-                    <!-- todo loader joke -->
-                    <img src="assets/turtle.gif" alt="Slow" class="main" style="height: 70%;">
+                    <div class="cols" style="height: 80%;">
+                        <video data-src="assets/loader.mp4" data-autoplay loop class="main fragment" style="width: 50%;"></video>
+                        <img src="assets/turtle.gif" alt="Unoptimized" class="main fragment" style="height: 100%">
+                    </div>
                 </section>
 
                 <section id="lesson--3">
@@ -371,6 +373,18 @@
                     { src: 'plugin/zoom-js/zoom.js', async: true },
                     { src: 'plugin/notes/notes.js', async: true }
                 ]
+            });
+
+            Reveal.addEventListener('slidechanged', function(event) {
+                var currentSlide = event.currentSlide;
+
+                if ( currentSlide.hasAttribute('data-ez-slow') ) {
+                    currentSlide.classList.add('slow');
+                    setTimeout(function () {
+                        currentSlide.classList.remove('slow');
+                        Reveal.nextFragment();
+                    }, 5000);
+                }
             });
 
         </script>
