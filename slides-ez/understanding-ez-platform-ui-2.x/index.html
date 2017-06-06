@@ -75,17 +75,17 @@
                 <section id="platform-ui-1--1">
                     <h1>Platform UI 1.x?</h1>
 
-                    <h2>Content part</h2>
+                    <h2 class="fragment" data-fragment-index="1">Content part</h2>
                     <div class="cols">
                         <ul>
                             <li class="fragment">Viewing, editing Content, Dashboard, Trash, Search</li>
                             <li class="fragment">Single Page Application</li>
                             <li class="fragment">JavaScript! (~50k LOC w/o comments)</li>
-                            <li class="fragment">REST API based</li>
                             <li class="fragment">YUI ☠️</li>
+                            <li class="fragment">REST API based</li>
                             <li class="fragment">Rendered by the browser</li>
                         </ul>
-                        <img src="assets/content.gif" alt="" class="main" style="width: 40%;">
+                        <img src="assets/content.gif" alt="" class="fragment main" data-fragment-index="1" style="width: 40%;">
                     </div>
                 </section>
 
@@ -98,7 +98,7 @@
                             <li class="fragment">Admin panel: Section, Languages, Content Types, ...</li>
                             <li class="fragment">Mostly rendered server side</li>
                             <li class="fragment">Re-injected into the SPA</li>
-                            <li class="fragment">PJAX: Page AJAX</li>
+                            <li class="fragment">PJAX: <code>pushState</code> + AJAX</li>
                             <li class="fragment">PHP / Twig based</li>
                             <li class="fragment">JavaScript enhancements</li>
                         </ul>
@@ -130,7 +130,7 @@
 
                     <div class="cols" style="height: 80%;">
                         <video data-src="assets/loader.mp4" data-autoplay loop class="main fragment" style="width: 50%;"></video>
-                        <img src="assets/turtle.gif" alt="Unoptimized" class="main fragment" style="height: 100%">
+                        <img src="assets/turtle.gif" alt="Unoptimized" class="main fragment" style="height: 100%; width: auto;">
                     </div>
                 </section>
 
@@ -144,7 +144,8 @@
                     <h1>#4: Do not Repeat Yourself</h1>
 
                     <ul>
-                        <li class="fragment">Server vs. Frontend</li>
+                        <li class="fragment">JavaScript app in the PHP app</li>
+                        <li class="fragment">JavaScript app <strong>next to</strong> the PHP app</li>
                         <li class="fragment">Duplicated features: display a Content, edit form, ...</li>
                     </ul>
 
@@ -181,12 +182,12 @@
                     <h1>Platform UI Bundle 2.x</h1>
 
                     <ul>
-                        <li class="fragment">Platform UI Bundle 2.x is the new legacy!</li>
-                        <li class="fragment">Reuse components: Subitems, UDW, PJAX...</li>
-                        <li class="fragment">Eventually get rid of it</li>
+                        <li class="fragment" data-fragment-index="1">🎉 Platform UI Bundle 2.x is the new legacy! 🎉</li>
+                        <li class="fragment" data-fragment-index="2">Reuse components: Subitems, UDW, PJAX...</li>
+                        <li class="fragment" data-fragment-index="3">Eventually get rid of it</li>
                     </ul>
 
-                    <img src="assets/legacy.gif" alt="Legacy!" class="main fragment">
+                    <img src="assets/legacy.gif" alt="Legacy!" class="main fragment" data-fragment-index="3">
                 </section>
 
                 <section id="hybrid-what">
@@ -208,11 +209,11 @@
                     <h1>Performances?</h1>
 
                     <ul>
-                        <li class="fragment">Fast by default</li>
-                        <li class="fragment">Still optimizable</li>
+                        <li>Fast by default</li>
+                        <li>Still optimizable</li>
                     </ul>
 
-                    <img src="assets/fast.gif" alt="Fast!" class="main fragment">
+                    <img src="assets/fast.gif" alt="Fast!" class="main">
                 </section>
 
                 <section id="hybrid-fast-how">
@@ -259,7 +260,7 @@
 
                     <img src="assets/nope.gif" alt="Nope" class="main">
                     <ul>
-                        <li class="fragment">#UseThePlatform (+ libraries?)</li>
+                        <li class="fragment">#UseThePlatform + libraries</li>
                         <li class="fragment">Custom Elements (aka Web Components) with Polymer v2</li>
                     </ul>
                 </section>
@@ -269,6 +270,7 @@
 
                     <ul>
                         <li class="fragment">Imperatively configure a behavior</li>
+                        <li class="fragment">A way for the server to drive the browser</li>
                         <li class="fragment">Also used to reuse and sandbox YUI based components</li>
                     </ul>
                     <img src="assets/box.gif" alt="Box" class="main fragment">
@@ -286,7 +288,7 @@
                             <li class="fragment">WIP: Theme</li>
                             <li class="fragment">...</li>
                         </ul>
-                        <img src="assets/serverside.gif" alt="Dark side" class="main" style="height: 90%;">
+                        <img src="assets/serverside.gif" alt="Dark side" class="main">
                     </div>
                 </section>
 
@@ -303,7 +305,7 @@
                                 Allow to boot up JavaScript enhancements
                             </li>
                         </ul>
-                        <img src="assets/deco.gif" alt="Decoration" class="main" style="height: 90%;">
+                        <img src="assets/deco.gif" alt="Decoration" class="main">
                     </div>
                 </section>
 
@@ -356,8 +358,8 @@
                     <h1>Question?</h1>
 
                     <div class="cols" style="height: 70%;">
-                        <img src="assets/question.gif" alt="Question" class="main" style="height: 100%;">
-                        <img src="assets/trick-question.gif" alt="Question" class="fragment main" style="height: 100%;">
+                        <img src="assets/question.gif" alt="Question" class="main" style="height: 80%;">
+                        <img src="assets/trick-question.gif" alt="Question" class="fragment main" style="height: 80%;">
                     </div>
                 </section>
 
