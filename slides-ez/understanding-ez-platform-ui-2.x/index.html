@@ -222,11 +222,36 @@
                     <ol>
                         <li class="fragment">Full page generated with PHP / Symfony / Twig</li>
                         <li class="fragment">
-                            Enhanced navigation to get a JSON update
+                            Once in app, enhanced navigation to get a JSON update structure
                             <br>
-                            Unless a class is set on the link/form or one of its ancestor
+                            (Unless a specific class is set on the link/form or one of its ancestor)
                         </li>
                     </ul>
+                </section>
+
+                <section id="hybrid-fast-how-2">
+                    <h1>JSON Update structure ?</h1>
+
+                    <pre><code>{
+  "selector": "ez-platform-ui-app",
+  "update": {
+    "properties": {"pageTitle": "Dashboard"},
+    "children": [
+      {
+        "selector": "#discovery",
+        "update": {"properties": {"visible": false}}
+      },
+      {
+        "selector": "ez-navigation-hub",
+        "update": {"attributes": {"active-zone": "", "matched-link-url": ""}}
+      },
+      {
+        "selector": "main",
+        "update": "&lt;ez-dashboard&gt;&lt;h1&gt;Dashboard&lt;\/h1&gt;&lt;\/ez-dashboard&gt;"
+      }
+    ]
+  }
+}</code></pre>
                 </section>
 
                 <section id="js-framework">
