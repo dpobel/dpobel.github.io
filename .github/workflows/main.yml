@@ -1,0 +1,20 @@
+name: Pull Github page
+
+on:
+  # Allows you to run this workflow manually from the Actions tab or by API request
+  workflow_dispatch:
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Fetching github page
+        run: wget https://damien.pobel.fr/github/page/ -O - | sed s@=/@=https://damien.pobel.fr/@g > index.html
+      - name: Commiting if needed
+        run: |
+          git config --global user.email "damien@pobel.fr"
+          git config --global user.name "Damien Pobel"
+          git diff --quiet || (git add index.html && git commit -m "chore: automatic github page update")
+          git push 
