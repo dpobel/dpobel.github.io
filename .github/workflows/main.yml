@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Fetching github page
         run: wget https://damien.pobel.fr/github/page/ -O - | sed s@=/@=https://damien.pobel.fr/@g > index.html
       - name: Commiting if needed
